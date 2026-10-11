@@ -339,7 +339,7 @@ async function fetchAllSectionsWithHybridAuth(username, password) {
 
 const allowedOrigins = parseAllowedOrigins(
   process.env.CORS_ORIGINS,
-  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://talli.jaybulb.com,https://tally.jaybulb.com'
+  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://talli.jaybulb.com,https://tally.jaybulb.com,https://talli.heyitsmejosh.com,https://tally.heyitsmejosh.com'
 );
 
 // Federal-only mode (src/programs/finder.js, scope federal): the federal half of the benefit

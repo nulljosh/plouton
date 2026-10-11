@@ -339,7 +339,7 @@ async function fetchAllSectionsWithHybridAuth(username, password) {
 
 const allowedOrigins = parseAllowedOrigins(
   process.env.CORS_ORIGINS,
-  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://talli.heyitsmejosh.com,https://tally.heyitsmejosh.com'
+  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://talli.jaybulb.com,https://tally.jaybulb.com'
 );
 
 // Federal-only mode (src/programs/finder.js, scope federal): the federal half of the benefit
@@ -556,11 +556,11 @@ app.use((req, res, next) => {
 // compiles its JSX in the browser with @babel/standalone -- without it the whole
 // dashboard silently fails to boot, which is prod-only because this header is
 // only set when IS_PRODUCTION.
-// style-src must allow heyitsmejosh.com: portfolio-tokens.css @imports the
+// style-src must allow jaybulb.com: portfolio-tokens.css @imports the
 // canonical tokens.css from there, and blocking it takes the whole design system
 // with it -- serif fallback, no colours, and a dark-mode toggle that does nothing
 // because [data-theme="dark"] never defines a single variable.
-const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://heyitsmejosh.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'self' https://heyitsmejosh.com; object-src 'none'; base-uri 'self'";
+const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://jaybulb.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'self' https://jaybulb.com; object-src 'none'; base-uri 'self'";
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -1729,8 +1729,8 @@ app.post('/api/stripe-checkout', requireAuth, async (req, res) => {
     const session = await getStripe().checkout.sessions.create({
       mode: 'payment',
       line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
-      success_url: 'https://talli.heyitsmejosh.com/app?pro=1',
-      cancel_url: 'https://talli.heyitsmejosh.com/app',
+      success_url: 'https://talli.jaybulb.com/app?pro=1',
+      cancel_url: 'https://talli.jaybulb.com/app',
       client_reference_id: req.session.userId,
       customer_creation: 'always',
       allow_promotion_codes: true,

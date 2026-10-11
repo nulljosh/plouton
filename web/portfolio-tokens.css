@@ -9,7 +9,7 @@
    Do not re-declare a colour the canonical file owns -- that shadows the
    design system and is the bug this file was rewritten to remove. */
 
-@import url("https://heyitsmejosh.com/tokens.css");
+@import url("https://jaybulb.com/tokens.css");
 
 :root {
   /* legacy palette names still referenced by privacy.html and older markup */

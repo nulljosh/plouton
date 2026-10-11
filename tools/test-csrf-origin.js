@@ -22,8 +22,8 @@ function run() {
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://talli-production.vercel.app',
-    'https://talli.heyitsmejosh.com',
-    'https://tally.heyitsmejosh.com'
+    'https://talli.jaybulb.com',
+    'https://tally.jaybulb.com'
   ];
   const ALLOWED_ORIGINS = new Set(allowedOrigins);
 
@@ -56,11 +56,11 @@ function run() {
   });
 
   test('POST from production origin passes', () => {
-    assert.strictEqual(checkOrigin('POST', 'https://talli.heyitsmejosh.com'), 'pass');
+    assert.strictEqual(checkOrigin('POST', 'https://talli.jaybulb.com'), 'pass');
   });
 
   test('POST from old tally domain still passes (not yet decommissioned)', () => {
-    assert.strictEqual(checkOrigin('POST', 'https://tally.heyitsmejosh.com'), 'pass');
+    assert.strictEqual(checkOrigin('POST', 'https://tally.jaybulb.com'), 'pass');
   });
 
   test('POST from Vercel preview passes', () => {
@@ -72,11 +72,11 @@ function run() {
   });
 
   test('POST from similar domain is blocked', () => {
-    assert.strictEqual(checkOrigin('POST', 'https://tally.heyitsmejosh.com.evil.com'), 'blocked');
+    assert.strictEqual(checkOrigin('POST', 'https://tally.jaybulb.com.evil.com'), 'blocked');
   });
 
   test('POST from http instead of https is blocked', () => {
-    assert.strictEqual(checkOrigin('POST', 'http://tally.heyitsmejosh.com'), 'blocked');
+    assert.strictEqual(checkOrigin('POST', 'http://tally.jaybulb.com'), 'blocked');
   });
 
   console.log(`\nResults: ${passed} passed, ${failed} failed`);

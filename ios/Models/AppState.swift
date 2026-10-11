@@ -293,7 +293,7 @@ final class AppState {
             let profile = try await APIClient.shared.getProfile()
             if let avatarUrl = profile.avatarUrl, !avatarUrl.isEmpty {
                 // Relative URLs resolve against the API host; async so the main actor never blocks.
-                if let url = URL(string: avatarUrl, relativeTo: URL(string: "https://talli.heyitsmejosh.com")),
+                if let url = URL(string: avatarUrl, relativeTo: URL(string: "https://talli.jaybulb.com")),
                    let (svgData, _) = try? await URLSession.shared.data(from: url),
                    let svgString = String(data: svgData, encoding: .utf8),
                    let img = Self.renderSVGToImage(svgString) {

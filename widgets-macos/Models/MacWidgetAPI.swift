@@ -1,7 +1,7 @@
 import Foundation
 
 struct MacWidgetAPI {
-    static let baseURL = "https://talli.heyitsmejosh.com"
+    static let baseURL = "https://talli.jaybulb.com"
     private nonisolated(unsafe) static let defaults = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
 
     private static var session: URLSession {

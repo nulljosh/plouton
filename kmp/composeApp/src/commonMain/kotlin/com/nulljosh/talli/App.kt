@@ -186,7 +186,7 @@ private fun LoginScreen(busy: Boolean, error: String?, onSubmit: (String, String
             // per platform (EncryptedSharedPreferences / DPAPI / libsecret). Add when the
             // sign-in-every-launch friction is actually a complaint.
             Text(
-                "Credentials go to talli.heyitsmejosh.com and are never stored on this device.",
+                "Credentials go to talli.jaybulb.com and are never stored on this device.",
                 fontSize = 12.sp,
                 modifier = Modifier.padding(top = 16.dp),
             )
@@ -300,7 +300,7 @@ private fun SettingsScreen(onSignOut: () -> Unit) {
         Text("Settings", fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(16.dp))
         Text("Talli 3.5.13")
-        Text("talli.heyitsmejosh.com", fontSize = 12.sp)
+        Text("talli.jaybulb.com", fontSize = 12.sp)
         Spacer(Modifier.height(24.dp))
         TextButton(onClick = onSignOut) { Text("Sign out") }
     }

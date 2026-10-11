@@ -22,7 +22,7 @@ class TalliApiException(message: String) : Exception(message)
  * URLSession's shared cookie storage does on Apple.
  */
 class TalliApi(
-    private val baseUrl: String = "https://talli.heyitsmejosh.com",
+    private val baseUrl: String = "https://talli.jaybulb.com",
     private val http: HttpClient = defaultClient(),
 ) {
     companion object {

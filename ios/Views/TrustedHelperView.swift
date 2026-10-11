@@ -33,7 +33,7 @@ struct TrustedHelperAPI: Sendable {
 struct TrustedHelperView: View {
     let api: TrustedHelperAPI
     /// Where the helper page lives; the token path is appended to it.
-    var origin = "https://talli.heyitsmejosh.com"
+    var origin = "https://talli.jaybulb.com"
 
     @State private var data: TrustedHelpers?
     @State private var name = ""

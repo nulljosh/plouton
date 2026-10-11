@@ -9,4 +9,4 @@ The Mac app matches the web dashboard: payment countdown, recent payments as a b
 
 Free, no ads, no analytics, no third-party trackers beyond BC Self-Serve itself, since the people using this app are already dealing with the Ministry watching their finances.
 
-Live on the App Store and at talli.heyitsmejosh.com. If you've shipped a menu-bar or dashboard-style Mac app from a shared web codebase, I'd like to hear how you handled it.
+Live on the App Store and at talli.jaybulb.com. If you've shipped a menu-bar or dashboard-style Mac app from a shared web codebase, I'd like to hear how you handled it.

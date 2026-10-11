@@ -6,7 +6,7 @@ Name: Talli
 One-liner: Disability assistance payments and applications, tracked in one place.
 Description: Talli reads BC's Self-Serve portal for you and shows income assistance payments, a countdown to the next payment, PWD and DTC application status, and government messages in one dashboard. It files the monthly report for you too. Free, always, for the people who rely on it.
 Category: Finance / Utilities / Health & Disability
-Links: Web talli.heyitsmejosh.com · App Store apps.apple.com/app/talli/id6782366555 · GitHub github.com/nulljosh/talli
+Links: Web talli.jaybulb.com · App Store apps.apple.com/app/talli/id6782366555 · GitHub github.com/nulljosh/talli
 
 ## Where this goes
 

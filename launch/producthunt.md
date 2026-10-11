@@ -11,7 +11,7 @@ Topics: Finance, Productivity, Health
 Pricing: Free. Web accounts can upgrade for document storage.
 
 Links
-Web: https://talli.heyitsmejosh.com
+Web: https://talli.jaybulb.com
 App Store: https://apps.apple.com/app/id6782366555
 GitHub: https://github.com/nulljosh/talli
 

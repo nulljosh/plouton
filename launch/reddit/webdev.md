@@ -7,4 +7,4 @@ BC's income assistance portal, Self-Serve, has no public API and no simple way t
 
 No framework, vanilla HTML/CSS/JS, because a dashboard this size didn't need one. Express API on Vercel serverless, Vercel Blob for persistence, and a `visibilityInterval()` helper that pauses all polling when the tab is hidden so a backgrounded tab doesn't burn serverless invocations. It's also a PWA with offline mode, so a payment date is still visible without signal, and it's translated into English, French, Chinese and Punjabi from one source.
 
-Free, always, for the people who need it. Live at talli.heyitsmejosh.com, source on GitHub. Curious how others have handled scraping a portal with no API without it turning into a maintenance nightmare.
+Free, always, for the people who need it. Live at talli.jaybulb.com, source on GitHub. Curious how others have handled scraping a portal with no API without it turning into a maintenance nightmare.

@@ -9,4 +9,4 @@ I built Talli to answer that in one glance. It logs into Self-Serve for you and 
 
 Built with a Puppeteer scraper on an Express API (Vercel serverless), vanilla JS on the frontend so it stays a fast PWA, and native iOS, macOS and watchOS companions. Available in English, French, Chinese and Punjabi.
 
-It's free, always, for the people who rely on it. Live at talli.heyitsmejosh.com and on the App Store. Feedback welcome, especially from anyone who has actually used BC Self-Serve and knows where it hurts.
+It's free, always, for the people who rely on it. Live at talli.jaybulb.com and on the App Store. Feedback welcome, especially from anyone who has actually used BC Self-Serve and knows where it hurts.

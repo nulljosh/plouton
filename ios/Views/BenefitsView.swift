@@ -85,7 +85,7 @@ struct BenefitsView: View {
             .padding()
         }
         .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }
-        .navigationTitle("Benefits")
+        .navigationTitle("Status")
     }
 
     private func benefitRow(_ title: String, _ amount: String, _ how: String) -> some View {

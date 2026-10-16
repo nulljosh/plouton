@@ -42,28 +42,20 @@ private struct AuthenticatedTabShell: View {
             DashboardScreen()
                 .tabItem { Label("Home", systemImage: "house.fill") }
                 .tag(0)
-            if !appState.pwdApproved {
-                ReportView()
-                    .tabItem { Label("Reports", systemImage: "list.bullet.clipboard.fill") }
-                    .tag(1)
-            }
-            BenefitsView()
-                .tabItem { Label("Benefits", systemImage: "heart.text.clipboard.fill") }
-                .tag(2)
+            StatusView()
+                .tabItem { Label("Status", systemImage: "list.bullet.clipboard.fill") }
+                .tag(1)
             MessagesView()
                 .tabItem { Label("Messages", systemImage: "message.fill") }
-                .tag(3)
+                .tag(2)
                 .badge(appState.unreadMessageCount)
-            SettingsView()
-                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
-                .tag(4)
         }
         .onChange(of: appState.selectedTabIndex) { _, newTab in
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             // Every tab stays alive inside this TabView, so onAppear only ever
             // fires once -- opening Messages has to refetch explicitly or the
             // list keeps showing whatever was loaded at launch.
-            if newTab == 3 {
+            if newTab == 2 {
                 Task { await appState.refreshDashboard() }
             }
         }
@@ -179,6 +171,7 @@ private struct TimelineCard: View {
 private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
     @State private var now = Date()
+    @State private var showSettings = false
 
     var body: some View {
         ScrollView {
@@ -217,9 +210,12 @@ private struct DashboardScreen: View {
             await appState.loadDashboardIfNeeded()
         }
         .navigationTitle("Home")
+        .sheet(isPresented: $showSettings) {
+            NavigationStack { SettingsView() }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button { appState.selectedTabIndex = 4 } label: {
+                Button { showSettings = true } label: {
                     AvatarView(size: 32)
                 }
                 .buttonStyle(.plain)

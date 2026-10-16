@@ -242,20 +242,16 @@ function Skel({w, h=16, r=4, dark}) {
 // ── icons ─────────────────────────────────────────────
 const Icon = {
   home:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill={f?c:'none'} stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1v-9.5z"/></svg>,
-  calendar:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="3" fill={f?c:'none'} fillOpacity={f?.15:0}/><path d="M3 9h18M8 2v4M16 2v4"/></svg>,
   status:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round"><circle cx="6" cy="6" r="2" fill={c} stroke="none"/><circle cx="6" cy="12" r="2" fill={c} stroke="none"/><circle cx="6" cy="18" r="2" stroke={c} strokeWidth="1.7"/><path d="M10 6h9M10 12h9M10 18h9" strokeLinecap="round"/></svg>,
   messages:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill={f?c:'none'} stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" fillOpacity={f?.15:0}/></svg>,
-  legal:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v18M5 21h14M12 6l6 8H6l6-8z" fill={f?c:'none'} fillOpacity={f?.15:0}/></svg>,
   settings:(c,f)=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>,
 };
 
 // ── tab bar ───────────────────────────────────────────
 const TABS = [
   {id:'home',     label:'Home',     icon:Icon.home},
-  {id:'calendar', label:'Calendar', icon:Icon.calendar},
   {id:'status',   label:'Status',   icon:Icon.status},
   {id:'messages', label:'Messages', icon:Icon.messages},
-  {id:'legal',    label:'Legal',    icon:Icon.legal},
 ];
 
 function TabBar({tab, setTab, dark, msgBadge}) {
@@ -1298,162 +1294,6 @@ function SupplementsManage({dark, data, onSave}) {
   );
 }
 
-function CalendarTab({dark, payDateObj, amount, daysUntil}) {
-  const t = tk(dark);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const nextPayment = payDateObj || new Date(today.getFullYear(), today.getMonth(), 28);
-  const [viewMonth, setViewMonth] = useState(new Date(nextPayment.getFullYear(), nextPayment.getMonth(), 1));
-  const [dir, setDir] = useState(null);
-  const [animKey, setAnimKey] = useState(0);
-  const [supp, setSupp] = useState(null);
-  useEffect(() => { fetch('/api/supplements', {credentials:'include'}).then(r=>r.json()).then(setSupp).catch(()=>{}); }, []);
-  const saveSupp = async (next) => {
-    try { const r = await fetch('/api/supplements', {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(next)}); if (r.ok) setSupp(await r.json()); } catch (e) {}
-  };
-  const [bud, setBud] = useState(null);
-  useEffect(() => { fetch('/api/budget', {credentials:'include'}).then(r=>r.json()).then(setBud).catch(()=>{}); }, []);
-  const suppEvents = supp?.derived?.upcoming || [];
-  const key = (d) => `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  const suppDay = (d) => suppEvents.filter(e => e.date === key(d));
-  const billDay = (d) => (bud?.upcoming || []).filter(e => e.date === key(d));
-  const go = (d) => { setDir(d>0?'left':'right'); setAnimKey(k=>k+1); setViewMonth(m=>new Date(m.getFullYear(),m.getMonth()+d,1)); };
-  const year=viewMonth.getFullYear(), month=viewMonth.getMonth();
-  const name=viewMonth.toLocaleString('en-CA',{month:'long',year:'numeric'});
-  const firstDay=new Date(year,month,1).getDay(), daysInMonth=new Date(year,month+1,0).getDate();
-  const cells=[]; for(let i=0;i<firstDay;i++)cells.push(null); for(let d=1;d<=daysInMonth;d++)cells.push(d);
-  const isToday_=(d)=>d&&new Date(year,month,d).toDateString()===today.toDateString();
-  const isNextPay=(d)=>d&&new Date(year,month,d).getTime()===nextPayment.getTime();
-  const pastPay=(d)=>d?pastPayments(amount||'$0').find(p=>p.year===year&&p.month===month&&p.day===d):null;
-  const isPast=(d)=>d&&new Date(year,month,d)<today;
-  const animStyle=dir?{animation:`${dir==='left'?'slideInLeft':'slideInRight'} 0.28s cubic-bezier(0.4,0,0.2,1) both`}:{animation:'fadeIn 0.25s ease both'};
-
-  const viewedPast = pastPayments(amount||'$0').find(p=>p.year===year&&p.month===month);
-  const viewedIsNext = nextPayment.getFullYear()===year&&nextPayment.getMonth()===month;
-  const monthPayment = viewedIsNext
-    ? {type:'upcoming',amount:amount||'$1,060',date:nextPayment.toLocaleString('en-CA',{month:'short',day:'numeric'})}
-    : viewedPast
-    ? {type:'received',amount:viewedPast.amount,date:new Date(viewedPast.year,viewedPast.month,viewedPast.day).toLocaleString('en-CA',{month:'short',day:'numeric'})}
-    : null;
-
-  const schedule=[];
-  for(let i=1;i<=4;i++){
-    const d=new Date(nextPayment.getFullYear(),nextPayment.getMonth()+i,nextPayment.getDate());
-    schedule.push({label:d.toLocaleString('en-CA',{month:'short',year:'numeric'}),date:d.toLocaleString('en-CA',{month:'short',day:'numeric'}),amount:'$1,000'});
-  }
-
-  return (
-    <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden'}}>
-      <div style={{display:'flex',alignItems:'center',padding:'16px 20px 10px',flexShrink:0}}>
-        <button onClick={()=>go(-1)} style={{background:'none',border:'none',cursor:'pointer',padding:'4px 8px',color:t.muted,fontFamily:'inherit',fontSize:20,lineHeight:1,WebkitTapHighlightColor:'transparent'}}>‹</button>
-        <div style={{flex:1,textAlign:'center',fontSize:15,fontWeight:600,letterSpacing:'-0.3px',color:t.text}}>{name}</div>
-        <button onClick={()=>go(1)}  style={{background:'none',border:'none',cursor:'pointer',padding:'4px 8px',color:t.muted,fontFamily:'inherit',fontSize:20,lineHeight:1,WebkitTapHighlightColor:'transparent'}}>›</button>
-      </div>
-      <div style={{flex:1,overflowY:'auto',padding:'0 20px 24px'}}>
-        <div key={animKey} style={animStyle}>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',textAlign:'center',marginBottom:2}}>
-            {['S','M','T','W','T','F','S'].map((d,i)=><div key={i} style={{fontSize:11,fontWeight:600,color:t.muted,padding:'0 0 6px'}}>{d}</div>)}
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)'}}>
-            {cells.map((d,i)=>{
-              const next=isNextPay(d),past=pastPay(d),tod=isToday_(d),isP=isPast(d),isFilingDay=d&&d>=1&&d<=5,sup=d?suppDay(d):[],bil=d?billDay(d):[];
-              return (
-                <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'center',height:44}}>
-                  <div style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:2,background:next?t.accent:'transparent',border:next?'none':tod?`1px solid ${t.border2}`:isFilingDay?`1px solid ${t.accent}50`:'none',animation:next?'pulseRing 2.5s ease-out infinite':'none','--pc':'rgba(91,155,213,0.2)',position:'relative'}}>
-                    <span style={{fontSize:14,fontWeight:(next||past)?600:400,lineHeight:1,color:d===null?'transparent':next?t.bg:isP&&!past?t.text:t.text,opacity:d===null?0:isP&&!past&&!tod?0.25:1}}>{d}</span>
-                    {past&&!next&&<div style={{width:3,height:3,borderRadius:'50%',background:t.success,opacity:0.8,position:'absolute',bottom:5}}/>}
-                    {sup.length>0&&<div title={sup.map(e=>e.name).join(', ')} style={{width:4,height:4,borderRadius:'50%',background:next?t.bg:t.warning,position:'absolute',bottom:3,left:bil.length?'38%':'calc(50% - 2px)'}}/>}
-                    {bil.length>0&&<div title={bil.map(e=>e.name).join(', ')} style={{width:4,height:4,borderRadius:'50%',background:t.error,position:'absolute',bottom:3,left:sup.length?'56%':'calc(50% - 2px)'}}/>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {!monthPayment&&(
-          <div style={{marginTop:20,padding:'20px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`,display:'flex',flexDirection:'column',alignItems:'center',gap:6,animation:'fadeUp 0.3s ease both'}}>
-            <div style={{width:32,height:32,borderRadius:'50%',background:t.bg3,display:'flex',alignItems:'center',justifyContent:'center'}}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={t.muted} strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-            </div>
-            <span style={{fontSize:13,fontWeight:500,color:t.mutedMid}}>No payment this month</span>
-            <span style={{fontSize:11,color:t.muted}}>Navigate to a payment month to see details</span>
-          </div>
-        )}
-        {monthPayment&&(
-          <div style={{marginTop:20,padding:'14px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`,display:'flex',justifyContent:'space-between',alignItems:'center',animation:'fadeUp 0.3s ease both'}}>
-            <div>
-              <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:monthPayment.type==='upcoming'?t.warning:t.success,marginBottom:5}}>{monthPayment.type==='upcoming'?'Upcoming':'Received'}</div>
-              <div style={{fontSize:26,fontWeight:700,letterSpacing:'-1.2px',color:t.text}}>{monthPayment.amount}</div>
-            </div>
-            <div style={{textAlign:'right'}}>
-              <div style={{fontSize:13,color:t.muted}}>{monthPayment.date}</div>
-              <div style={{marginTop:6,fontSize:11,fontWeight:500,color:monthPayment.type==='upcoming'?t.warning:t.success,background:monthPayment.type==='upcoming'?`${t.warning}18`:`${t.success}18`,padding:'2px 8px',borderRadius:100,display:'inline-block'}}>
-                {monthPayment.type==='upcoming'?`in ${daysUntil}d`:'deposited'}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {suppEvents.filter(e => e.date.startsWith(`${year}-${String(month+1).padStart(2,'0')}`)).length>0&&(
-          <div style={{marginTop:12,padding:'12px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`}}>
-            <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.warning,marginBottom:6}}>Supplements</div>
-            {suppEvents.filter(e => e.date.startsWith(`${year}-${String(month+1).padStart(2,'0')}`)).map(e=>(
-              <div key={e.id+e.date} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'4px 0',color:t.text}}>
-                <span>{e.name}</span><span style={{fontWeight:600}}>${e.amount}<span style={{fontWeight:400,color:t.muted,marginInlineStart:8}}>{new Date(e.date+'T12:00:00').toLocaleString('en-CA',{month:'short',day:'numeric'})}</span></span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div style={{height:1,background:t.border,margin:'24px 0 20px'}}/>
-
-        <div>
-          <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:14}}>Upcoming schedule</div>
-          {schedule.map((s,i)=>(
-            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:i<schedule.length-1?`1px solid ${t.border}`:'none'}}>
-              <div style={{display:'flex',alignItems:'center',gap:10}}>
-                <div style={{width:6,height:6,borderRadius:'50%',background:t.border2,flexShrink:0}}/>
-                <span style={{fontSize:14,color:t.mutedMid,letterSpacing:'-0.2px'}}>{s.label}</span>
-              </div>
-              <div style={{textAlign:'right'}}>
-                <span style={{fontSize:14,fontWeight:500,color:t.text,letterSpacing:'-0.5px'}}>{s.amount}</span>
-                <span style={{fontSize:11,color:t.muted,marginLeft:8}}>{s.date}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{marginTop:24}}>
-          <FoldTool dark={dark} title="Your supplements" url="/api/supplements" summarize={d=>d.derived.monthly>0?'+$'+Math.round(d.derived.monthly).toLocaleString()+' a month on top of your cheque':'Add the ones you get'}>
-            <SupplementsManage dark={dark} data={supp} onSave={saveSupp}/>
-          </FoldTool>
-        </div>
-
-        <div style={{display:'flex',gap:14,paddingTop:20,flexWrap:'wrap'}}>
-          {[{fill:true,small:false,label:'Payment day'},{fill:false,small:false,label:'Today'},{fill:true,small:true,label:'Past payment'}].map(({fill,small,label},i)=>(
-            <div key={i} style={{display:'flex',alignItems:'center',gap:5}}>
-              <div style={{width:small?5:9,height:small?5:9,borderRadius:'50%',flexShrink:0,background:fill?(small?t.success:t.accent):'transparent',border:fill?'none':`1px solid ${t.border2}`}}/>
-              <span style={{fontSize:10,color:t.muted}}>{label}</span>
-            </div>
-          ))}
-          <div style={{display:'flex',alignItems:'center',gap:5}}>
-            <div style={{width:9,height:9,borderRadius:'50%',flexShrink:0,background:'transparent',border:`1px solid ${t.accent}50`}}/>
-            <span style={{fontSize:10,color:t.muted}}>Filing window</span>
-          </div>
-          <div style={{display:'flex',alignItems:'center',gap:5}}>
-            <div style={{width:5,height:5,borderRadius:'50%',flexShrink:0,background:t.warning}}/>
-            <span style={{fontSize:10,color:t.muted}}>Supplement</span>
-          </div>
-          <div style={{display:'flex',alignItems:'center',gap:5}}>
-            <div style={{width:5,height:5,borderRadius:'50%',flexShrink:0,background:t.error}}/>
-            <span style={{fontSize:10,color:t.muted}}>Bill</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ════════════════════════════════════════════════════
 // PIN SHEET
 // ════════════════════════════════════════════════════
@@ -2366,68 +2206,6 @@ function MessagesTab({dark, messages, readIds, onRead, onRefresh}) {
 }
 
 // ════════════════════════════════════════════════════
-// LEGAL TAB (was web/js/legal.js, never mounted)
-// ════════════════════════════════════════════════════
-function LegalTab({dark}) {
-  const t = tk(dark);
-  const [text, setText] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState(null);
-  const [res, setRes] = useState(null);
-  const [lawyers, setLawyers] = useState([]);
-  const analyze = async () => {
-    const description = text.trim();
-    if (!description || busy) return;
-    setBusy(true); setErr(null); setRes(null);
-    try {
-      const r = await fetch('/api/legal', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({description})});
-      const data = await r.json();
-      if (!r.ok) throw new Error(data.error || 'Analysis failed');
-      const cats = Array.isArray(data.categories) ? data.categories : [];
-      let dir = [];
-      try { dir = (await (await fetch('/data/lawyers.json')).json()).directory || []; } catch {}
-      const wanted = new Set(cats.map(c => String(c.name).toLowerCase()));
-      setLawyers(dir.filter(e => (e.categories||[]).some(c => wanted.has(String(c).toLowerCase()))));
-      setRes({cats, steps: Array.isArray(data.nextSteps) ? data.nextSteps : [], resources: Array.isArray(data.resources) ? data.resources : []});
-    } catch (e) { setErr(e.message || 'Failed to analyze issue.'); }
-    finally { setBusy(false); }
-  };
-  const H = ({children}) => <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,margin:'18px 0 8px'}}>{children}</div>;
-  const Row = ({title, meta, children}) => (
-    <div style={{padding:'12px 0',borderBottom:`1px solid ${t.border}`}}>
-      <div style={{fontSize:14,fontWeight:600,color:t.text,display:'flex',justifyContent:'space-between',gap:8}}>{title}{children}</div>
-      {meta&&<div style={{fontSize:13,color:t.muted,lineHeight:1.45,marginTop:2}}>{meta}</div>}
-    </div>
-  );
-  return (
-    <div style={{flex:1,overflowY:'auto',padding:'20px 24px 40px',animation:'fadeIn 0.2s ease both'}}>
-      <span style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted}}>{window.I18N.t("Legal")}</span>
-      <div style={{fontSize:13,color:t.muted,lineHeight:1.45,margin:'8px 0 12px'}}>{window.I18N.t("Describe a problem with a landlord, an employer, a benefit decision, or anything else. You get the category, next steps, and who in BC can help for free.")}</div>
-      <textarea value={text} onChange={e=>setText(e.target.value)} rows={5} maxLength={5000} placeholder={window.I18N.t("What happened?")}
-        style={{width:'100%',fontSize:14,lineHeight:1.45,padding:12,borderRadius:12,border:`1px solid ${t.border2}`,background:t.bg2,color:t.text,resize:'vertical',fontFamily:'inherit'}}/>
-      <button onClick={analyze} disabled={busy||!text.trim()} style={{marginTop:10,width:'100%',padding:'12px 0',borderRadius:100,border:'none',background:t.text,color:t.bg,fontSize:14,fontWeight:600,opacity:busy||!text.trim()?0.5:1,cursor:'pointer'}}>
-        {busy ? window.I18N.t("Analyzing...") : window.I18N.t("Analyze")}
-      </button>
-      {err&&<div style={{fontSize:13,color:t.error,marginTop:10}}>{err}</div>}
-      {res&&<div>
-        <H>{window.I18N.t("Matched categories")}</H>
-        {res.cats.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No clear match. Add more detail.")}</div>
-          : res.cats.map((c,i)=><Row key={i} title={c.name} meta={c.description}><span style={{fontSize:11,color:t.muted,flexShrink:0}}>{Math.round((Number(c.confidence)||0)*100)}%</span></Row>)}
-        <H>{window.I18N.t("Next steps")}</H>
-        {res.steps.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No specific steps.")}</div>
-          : <ol style={{paddingLeft:18,fontSize:13,lineHeight:1.6,color:t.text}}>{res.steps.map((s,i)=><li key={i}>{s}</li>)}</ol>}
-        <H>{window.I18N.t("Resources")}</H>
-        {res.resources.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No resources matched.")}</div>
-          : res.resources.map((r,i)=><Row key={i} title={<a href={r.url} target="_blank" rel="noopener noreferrer" style={{color:t.accent,textDecoration:'none'}}>{r.name}</a>} meta={r.description}/>)}
-        <H>{window.I18N.t("Legal help near you")}</H>
-        {lawyers.length===0 ? <div style={{fontSize:13,color:t.muted}}>{window.I18N.t("No matching legal help for this issue.")}</div>
-          : lawyers.map((e,i)=><Row key={i} title={e.name} meta={<span>{e.description}{e.phone?` · ${e.phone}`:''}{e.url?<span> · <a href={e.url} target="_blank" rel="noopener noreferrer" style={{color:t.accent,textDecoration:'none'}}>{e.url.replace(/^https?:\/\//,'')}</a></span>:null}</span>}/>)}
-      </div>}
-    </div>
-  );
-}
-
-// ════════════════════════════════════════════════════
 // SETTINGS TAB
 // ════════════════════════════════════════════════════
 function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, avatarError, setAvatarError, onLogout, onAvatarBroken}) {
@@ -2478,7 +2256,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // ════════════════════════════════════════════════════
 // SCREEN SHELL
 // ════════════════════════════════════════════════════
-const TAB_ORDER = ['home','calendar','status','messages'];
+const TAB_ORDER = ['home','status','messages'];
 
 function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, assets, onAddAssets, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, onAvatarBroken, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
@@ -2518,10 +2296,8 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
       </div>
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} onAddEarnings={onAddEarnings} assets={assets} onAddAssets={onAddAssets} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
-      {tab==='calendar' &&<CalendarTab dark={dark} payDateObj={payDateObj} amount={amount} daysUntil={daysUntil}/>}
       {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
-      {tab==='legal'    &&<LegalTab dark={dark}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarBroken={onAvatarBroken} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
       <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread}/>

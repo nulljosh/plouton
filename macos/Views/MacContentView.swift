@@ -16,6 +16,7 @@ struct MacContentView: View {
 
 private struct AuthenticatedShell: View {
     @Environment(MacAppState.self) private var appState
+    @State private var showSettings = false
 
     var body: some View {
         @Bindable var state = appState
@@ -35,7 +36,17 @@ private struct AuthenticatedShell: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .navigationTitle(appState.selectedSection.rawValue)
+        .sheet(isPresented: $showSettings) {
+            MacSettingsView()
+                .frame(minWidth: 420, minHeight: 360)
+        }
         .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button { showSettings = true } label: {
+                    Image(systemName: "gearshape")
+                }
+                .help("Settings")
+            }
             ToolbarItem(placement: .automatic) {
                 Button {
                     Task { await appState.refresh() }
@@ -65,8 +76,6 @@ private struct AuthenticatedShell: View {
             MacBenefitsView()
         case .messages:
             MacMessagesView()
-        case .settings:
-            MacSettingsView()
         }
     }
 }

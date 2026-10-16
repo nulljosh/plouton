@@ -2,7 +2,9 @@ import SwiftUI
 
 private let whatsNewVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
 private let whatsNewBullets = [
-    "Fixed What's New sheet getting cut off at the bottom on some devices",
+    "A simpler Home: your next payment fills the screen and the rest sits under Details",
+    "Three tabs: Home, Status and Messages",
+    "A cleaner app icon",
 ]
 
 struct WhatsNewSheet: View {

@@ -252,9 +252,9 @@ private struct DashboardScreen: View {
                 .ltrTracking(1.5)
                 .foregroundStyle(.secondary)
 
-            Text(appState.paymentAmountText)
-                .font(.system(size: 112, weight: .bold))
-                .tracking(-5)
+            Text(appState.paymentAmountText.replacingOccurrences(of: ".00", with: ""))
+                .font(.system(size: 96, weight: .bold))
+                .tracking(-3)
                 .minimumScaleFactor(0.3)
                 .lineLimit(1)
                 .contentTransition(.numericText())

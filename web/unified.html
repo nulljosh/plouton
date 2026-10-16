@@ -1748,8 +1748,9 @@ function BenniesSection({dark}) {
   // Same derivation as deriveIncome() in src/programs/profiles.js -- keep the
   // fallback rates in sync with DEFAULT_MONTHLY_RATES there. ?? not ||, so a real
   // recorded 0 survives.
-  const pwdMonthly = pwd?.monthlyAmount ?? 1450;
-  const cdbMonthly = cdb?.monthlyAmount ?? 200;
+  // The server's derived income is the real figure (it matches Home); recorded and default rates are fallbacks.
+  const pwdMonthly = yearIncome?.pwdMonthly ?? pwd?.monthlyAmount ?? 1450;
+  const cdbMonthly = yearIncome?.cdbMonthly ?? cdb?.monthlyAmount ?? 200;
   const totalMonthly = pwdMonthly + cdbMonthly;
   const backpay = 2800;
   const totalDebt = debt?.totalDebt || 6000;
@@ -1867,7 +1868,7 @@ function BenniesSection({dark}) {
 // ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
-function StatusTab({dark, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
+function StatusTab({dark, yearIncome, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
   const t = tk(dark);
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -2295,7 +2296,7 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
       </div>
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} onAddEarnings={onAddEarnings} assets={assets} onAddAssets={onAddAssets} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
-      {tab==='status'   &&<StatusTab   dark={dark} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} yearIncome={yearIncome} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarBroken={onAvatarBroken} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 

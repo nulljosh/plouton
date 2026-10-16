@@ -1716,7 +1716,7 @@ function RdspTracker({dark}) {
   );
 }
 
-function BenniesSection({dark}) {
+function BenniesSection({dark, yearIncome}) {
   const t = tk(dark);
   const [dtc, setDtc] = useState(null);
   const [pwd, setPwd] = useState(null);
@@ -1780,7 +1780,7 @@ function BenniesSection({dark}) {
       </div>
 
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:1,marginBottom:28,border:`1px solid ${t.border}`,borderRadius:10,overflow:'hidden'}}>
-        {[['PWD monthly',`$${pwdMonthly.toLocaleString()}`],['CDB monthly',`$${cdbMonthly.toLocaleString()}`],['Total monthly',`$${totalMonthly.toLocaleString()}`]].map(([label,val],i)=>(
+        {[['PWD monthly',(n=>'$'+n.toLocaleString('en-CA',{minimumFractionDigits:Number.isInteger(n)?0:2,maximumFractionDigits:2}))(pwdMonthly)],['CDB monthly',(n=>'$'+n.toLocaleString('en-CA',{minimumFractionDigits:Number.isInteger(n)?0:2,maximumFractionDigits:2}))(cdbMonthly)],['Total monthly',(n=>'$'+n.toLocaleString('en-CA',{minimumFractionDigits:Number.isInteger(n)?0:2,maximumFractionDigits:2}))(totalMonthly)]].map(([label,val],i)=>(
           <div key={i} style={{padding:'14px 12px',background:t.bg2}}>
             <div style={{fontSize:9,fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{label}</div>
             <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.5px',color:t.text}}>{val}</div>
@@ -2019,7 +2019,7 @@ function StatusTab({dark, yearIncome, pwdApproved, pwdMedicalDone, pwdStatus, pw
       </Fold>
       </Fold>
 
-      <BenniesSection dark={dark}/>
+      <BenniesSection dark={dark} yearIncome={yearIncome}/>
 
       {cgeb&&cgeb.status!=='pending'&&(<>
         <div style={{height:1,background:t.border,marginBottom:24}}/>

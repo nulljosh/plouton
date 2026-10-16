@@ -58,7 +58,7 @@ struct MacDashboardView: View {
                 .foregroundStyle(.secondary)
                 .ltrTracking(0.5)
 
-            Text(appState.paymentAmountText)
+            Text(appState.paymentAmountText.replacingOccurrences(of: ".00", with: ""))
                 .font(.system(size: 112, weight: .bold))
                 .tracking(-5)
                 .minimumScaleFactor(0.3)

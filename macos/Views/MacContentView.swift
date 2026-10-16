@@ -21,19 +21,29 @@ private struct AuthenticatedShell: View {
     var body: some View {
         @Bindable var state = appState
 
-        NavigationSplitView {
-            List(MacAppState.AppSection.allCases, selection: Binding(
-                get: { appState.selectedSection },
-                set: { appState.selectedSection = $0 }
-            )) { section in
-                Label(section.rawValue, systemImage: section.icon)
-                    .tag(section)
-            }
-            .listStyle(.sidebar)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 240)
-        } detail: {
+        VStack(spacing: 0) {
             detailView
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Divider()
+            HStack(spacing: 0) {
+                ForEach(MacAppState.AppSection.allCases) { section in
+                    let selected = appState.selectedSection == section
+                    Button {
+                        appState.selectedSection = section
+                    } label: {
+                        VStack(spacing: 4) {
+                            Image(systemName: section.icon)
+                                .font(.system(size: 18))
+                            Text(section.rawValue)
+                                .font(.footnote)
+                        }
+                        .foregroundStyle(selected ? Color.accentColor : Color.secondary)
+                        .frame(maxWidth: .infinity, minHeight: 56)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
         }
         .navigationTitle(appState.selectedSection.rawValue)
         .sheet(isPresented: $showSettings) {

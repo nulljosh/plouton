@@ -200,5 +200,8 @@ a scratch dir and diff; the `actions[].status` field is the only truth.
 ## Ingested 2026-10-03
 - [ ] Design system. (Note was just the two words "Design system". Build one for Talli, shared tokens like the other apps? Or apply the house one? Clarify scope.)
 
-## Ingested 2026-10-05
-- [x] Clean up second tab. It's cutting off. (Reports and Benefits shrank the list with .padding(.bottom, 90); now safeAreaInset like Messages/Settings, 2026-10-05, not yet checked on device)
+## Ingested 2026-10-16
+- [ ] Double-check our account. I think PWD is 1,450? And 200 for CDB. (Q: confirm both contribution figures against the real account)
+
+## Cleanup, 2026-10-16
+- [ ] Delete dead CSS: `web/design-tokens.css` and `web/css/styles.css` are referenced only by the `web/sw.js` precache list and `docs/ARCHITECTURE.md`. Drop them from the precache, bump the service worker cache version, update ARCHITECTURE.md, and confirm nothing loads them.

@@ -1,4 +1,4 @@
-# Talli loop handoff (2026-10-02, STOPPED at goal)
+# Talli loop handoff (2026-10-16, 08:00, STOPPED at goal)
 
 ## What the loop is
 
@@ -7,6 +7,8 @@ Roadmap 3.7 to 10.0 complete except payday push (APNs blocked). Version 10.0.0 r
 ## Where things stand
 
 Eighteen releases shipped (roadmap sections 3.7.0 through 3.21.0): report from notification, Watch app, year-in-review CSV, four languages, benefit finder, RDSP tracker, supplements calendar, missed-payment alert, simplified UI (one-line folds), document vault, reconsideration helper, message replies, service requests, household tracker, trusted helper, what-if job calculator, simpler Status tab (2064px to 1026px), turning 65 or moving out of BC, budget against paydays, six new entitlements, provinces as data files (Alberta AISH, Ontario ODSP), open data API at /api/open, federal-only mode at /api/federal-finder. Ministry rate tables and earnings limits now live in code. Alberta and Ontario figures checked against public guides and official links, flagged on screen. GitHub tests green. Status tab tools all fold to one-line. Sections 7.0 and 8.0 complete. Payday push (4.0) blocked on Joshua's APNs key. App Store still has 3.6.0 (native features since 3.7.0 not in users' hands).
+
+Since then: the landing, login, lawyers and privacy pages use plain white and off-white surfaces instead of the Jaybulb cream (an override in `web/portfolio-tokens.css`), and the hero's ghost-number wall is dimmed behind a stronger scrim. Deployed to talli.jaybulb.com. Two dead CSS files (`web/design-tokens.css`, `web/css/styles.css`) are still on disk and listed as an open roadmap item.
 
 ## Next steps
 

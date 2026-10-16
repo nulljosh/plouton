@@ -6,14 +6,13 @@
 <title>Talli Brand Kit</title>
 <link rel="stylesheet" href="tokens.css">
 <style>
-@font-face { font-family: "Talli Sans"; src: url("fonts/TalliSans-Regular.woff") format("woff"); font-display: swap; }
 * { box-sizing: border-box; margin: 0; }
 body { background: var(--paper); color: var(--ink); font: var(--size-body)/1.5 var(--font-ui); -webkit-font-smoothing: antialiased; }
 main { max-width: 760px; margin: 0 auto; padding: var(--space-8) var(--gutter); }
 section { margin-top: var(--section); }
 section > * + * { margin-top: var(--stack); }
 .label { font-size: var(--size-label); letter-spacing: .14em; text-transform: uppercase; color: var(--quiet); font-weight: 700; }
-h1, h2, .brand { font-family: var(--font-brand); font-weight: 400; letter-spacing: 0; line-height: 1; }
+h1, h2, .brand { font-family: var(--font-brand); font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
 h1 { font-size: 96px; }
 h2 { font-size: var(--size-title); }
 .dot { color: var(--blue); }
@@ -24,16 +23,15 @@ p { max-width: var(--measure); color: var(--quiet); }
 .swatch i { display: block; height: 72px; border-radius: var(--radius); border: 1px solid var(--hairline); margin-bottom: var(--space-2); }
 .swatch b { display: block; font-size: var(--size-small); }
 .swatch span { font-size: var(--size-label); color: var(--quiet); }
-.glyphs { font-family: var(--font-brand); font-size: 44px; line-height: 1.25; word-break: break-all; }
-.prop { font-family: var(--font-brand); font-size: 44px; line-height: 1.2; }
+.prop { font-family: var(--font-brand); font-size: 76px; line-height: 1; }
 .scale { display: grid; gap: var(--space-2); }
 .scale div { display: flex; align-items: center; gap: var(--space-4); font-size: var(--size-small); color: var(--quiet); }
 .scale i { display: block; height: 16px; background: var(--accent); border-radius: 2px; }
 .scale span { width: 140px; }
 .rules { padding-left: var(--space-5); color: var(--quiet); display: grid; gap: var(--space-2); max-width: var(--measure); }
 .phone { width: var(--shell); max-width: 100%; border: 1px solid var(--hairline); border-radius: 28px; padding: var(--space-6) var(--gutter); background: var(--paper); }
-.phone .hero { font-family: var(--font-brand); font-size: var(--size-hero); line-height: .9; margin-top: var(--space-4); }
-.phone .days { font-family: var(--font-brand); font-size: var(--size-title); color: var(--accent); margin-top: var(--space-4); }
+.phone .hero { font-family: var(--font-brand); font-weight: 700; letter-spacing: -4px; font-size: var(--size-hero); line-height: .9; margin-top: var(--space-4); }
+.phone .days { font-family: var(--font-brand); font-weight: 600; letter-spacing: -1.5px; font-size: var(--size-title); color: var(--accent); margin-top: var(--space-4); }
 .phone .date { color: var(--quiet); margin-top: var(--space-1); }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: var(--target); padding: 0 var(--space-5); border-radius: var(--radius-pill); background: var(--accent-deep); color: #fff; font-weight: 600; margin-top: var(--space-5); }
 </style>
@@ -50,7 +48,7 @@ p { max-width: var(--measure); color: var(--quiet); }
       <img class="icon" src="../ios/Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Talli icon">
       <img class="icon" src="../ios/Assets.xcassets/AppIcon.appiconset/AppIcon-dark.png" alt="Talli dark icon">
     </div>
-    <p>Four strokes and a diagonal: a tally of five. The strokes are the typeface's stroke, so the icon and the letters are drawn with the same pen. Wordmark is lowercase with a blue full stop.</p>
+    <p>Four strokes and a diagonal: a tally of five. Wordmark is lowercase, bold, with a blue full stop.</p>
   </section>
 
   <section>
@@ -67,10 +65,11 @@ p { max-width: var(--measure); color: var(--quiet); }
   </section>
 
   <section>
-    <div class="label">Typeface: Talli Sans</div>
-    <div class="prop">iiiii mmmmm WWWWW</div>
-    <div class="glyphs">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 $.,:;!?-+=/()%#&amp;</div>
-    <p>Monoline, round terminals, 80 units of stroke. Proportionally spaced: an i is 220 units wide and an m is 820, set by each letter's shape, not a fixed cell. Used for the wordmark, the hero number and titles. Body text stays on the system font.</p>
+    <div class="label">Typeface</div>
+    <div class="prop" style="font-weight:700;letter-spacing:-0.04em">$1,736</div>
+    <div class="prop" style="font-weight:600;font-size:28px">in 12 days</div>
+    <div class="prop" style="font-weight:400;font-size:16px;line-height:1.5">Wed, Oct 28. Next payment arrives on time.</div>
+    <p>San Francisco on Apple devices, Helvetica Neue everywhere else. Bold for the hero number, semibold for titles, regular for everything you read. No webfonts.</p>
   </section>
 
   <section>

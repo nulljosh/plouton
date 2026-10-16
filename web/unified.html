@@ -26,7 +26,6 @@
       width: 100%; height: 100dvh; overflow: hidden;
     }
     @keyframes countUp   { from { opacity:0; transform:translateY(14px) scale(0.94); } to { opacity:1; transform:translateY(0) scale(1); } }
-    @font-face { font-family: "Talli Sans"; src: url("/fonts/TalliSans-Regular.woff") format("woff"); font-display: swap; }
     .home-details>summary::-webkit-details-marker{display:none}
     @keyframes fadeUp    { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
@@ -510,17 +509,18 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
       </div>}
       <MissedPayment dark={dark} onPaidChange={onPaidChange}/>
 
+      <div style={{flex:'1 0 auto',display:'flex',flexDirection:'column',justifyContent:'center',paddingBottom:16}}>
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:18,animation:'fadeUp 0.45s 0s ease both'}}>
         Next payment
       </div>
 
-      <div style={{fontSize:76,fontFamily:"'Talli Sans',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:400,letterSpacing:0,lineHeight:0.9,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
+      <div style={{fontSize:'min(112px,24vw)',whiteSpace:'nowrap',fontWeight:700,letterSpacing:'-0.05em',lineHeight:0.9,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
         {formatted}
       </div>
 
       <div style={{marginTop:16,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.45s 0.1s ease both'}}>
         {(urgent||isToday)&&<div style={{width:8,height:8,borderRadius:'50%',flexShrink:0,background:isToday?t.success:t.warning,animation:isToday?'pulseRing 1.8s ease-out infinite':'urgentBlink 0.9s ease-in-out infinite','--pc':isToday?'rgba(45,158,95,0.3)':'rgba(255,133,27,0.3)'}}/>}
-        <span style={{fontSize:36,fontFamily:"'Talli Sans',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:400,letterSpacing:0,lineHeight:1,color:isToday?t.success:t.accent,transition:'color 0.3s'}}>
+        <span style={{fontSize:36,fontWeight:600,letterSpacing:'-1.5px',lineHeight:1,color:isToday?t.success:t.accent,transition:'color 0.3s'}}>
           {isToday?'today':`in ${daysUntil} day${daysUntil!==1?'s':''}`}
         </span>
       </div>
@@ -551,7 +551,8 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         </button>
       </div>
 
-      <details className="home-details" style={{marginTop:32}}>
+      </div>
+      <details className="home-details" style={{marginTop:0}}>
         <summary style={{minHeight:44,display:'flex',alignItems:'center',cursor:'pointer',fontSize:13,color:t.muted,listStyle:'none',WebkitTapHighlightColor:'transparent'}}>Details</summary>
       {/* Monthly amount -- always visible */}
       <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
@@ -2278,7 +2279,7 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
 
       {/* Header */}
       <div style={{padding:'4px 24px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <span style={{fontSize:22,fontFamily:"'Talli Sans',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:400,letterSpacing:0,color:t.text}}>
+        <span style={{fontSize:15,fontWeight:700,letterSpacing:'-0.04em',color:t.text}}>
           talli<span style={{color:t.accent}}>.</span>
         </span>
         <button onClick={()=>setTab('settings')} title="Settings" style={{width:28,height:28,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0,animation:refreshing?'spin 0.8s linear infinite':'none'}}>

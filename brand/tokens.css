@@ -34,7 +34,7 @@
   --target: 44px;                /* smallest tappable thing */
 
   /* type: one family, five sizes */
-  --font-brand: "Talli Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, sans-serif;
+  --font-brand: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, sans-serif;
   --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, sans-serif;
   --size-hero: 76px;
   --size-title: 28px;

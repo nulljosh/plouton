@@ -9,7 +9,7 @@ v3.5.12 (iOS, live) · v3.5.6 (macOS, live), Personal finance tracker.
 - `src/_blob.js` is the storage layer (Workers KV), not `@vercel/blob`. `web/` is served by the assets binding; only `/` is `run_worker_first`.
 - Jaybulb design system: `web/portfolio-tokens.css` @imports the canonical https://heyitsmejosh.com/tokens.css and adds ONLY an alias layer for names canonical lacks. Never re-declare a colour the system owns in a page's own `:root` -- that shadows the system and is the drift bug fixed 2026-08-28.
 - Accent is Talli blue #5B9BD5, set in `web/portfolio-tokens.css` as a deliberate per-app override of the canonical yellow (the logo and the whole app UI are blue). Text on the accent stays #000; accent-as-text uses `--bulb-deep`, which is a darker blue on light and a lighter blue on dark.
-- Fonts: system SF Pro / Helvetica stack for body. The one exception is Talli Sans (`brand/fonts/`, built by `brand/fonts/build.py`), used only for the wordmark, the hero number and titles. Served from `web/fonts/`.
+- Fonts: system SF Pro / Helvetica stack (`-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica`), no webfonts. Hero is 76 bold, title 36 semibold.
 - Brand kit and design system: `brand/index.html` and `brand/tokens.css`. Padding, margin and gap come only from the `--space` scale (4, 8, 12, 16, 24, 32, 48, 64). A screen has one number, one line about it and at most one action; everything else sits under Details. Tappable things are at least 44 tall.
 - Backgrounds pure white (#ffffff), matching other projects.
 - 430px max-width shell centered on desktop

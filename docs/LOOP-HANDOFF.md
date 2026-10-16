@@ -2,7 +2,7 @@
 
 ## What the loop is
 
-Roadmap 3.7 to 10.0 complete; payday push dropped. Version 10.0.0 released: all features shipped, native builds (iPhone/Watch, Mac) archived and valid on TestFlight interny group. Loop stopped at goal reached. Keep the UI super simple: every tool is one folded line that opens on tap.
+Roadmap 3.7 to 10.0 complete; payday push dropped. Version 10.0.0 was a planning milestone and was never shipped to the stores. The native builds are now iOS 3.6.2 and Mac 3.6.1, both submitted and Waiting for Review at Apple. The GitHub release v3.6.2 stays a pre-release until Apple approves. Loop stopped at goal reached. Keep the UI super simple: every tool is one folded line that opens on tap.
 
 ## Where things stand
 
@@ -25,7 +25,7 @@ Payday push dropped.
 When 3.6.0 clears App Store review:
 
 ```
-/loop Talli: real-account test with cookie jar (Joshua logs in from .env, reads real cheque, checks household/alert/budget/finder/helper/RDSP/supplements), create 10.0.0 App Store version, attach TestFlight build, write review notes (steps: open app, tap Money tools, tap What If), write App Privacy for vault, submit iPhone and Mac, run read-only checks from asc web UI, real-device checks (reminders, Watch, vault). Payday push dropped. Keep UI super simple.
+/loop Talli: real-account test with cookie jar (Joshua logs in from .env, reads real cheque, checks household/alert/budget/finder/helper/RDSP/supplements), create the next App Store version (iOS 3.6.2 and Mac 3.6.1 are already in review), attach TestFlight build, write review notes (steps: open app, tap Money tools, tap What If), write App Privacy for vault, submit iPhone and Mac, run read-only checks from asc web UI, real-device checks (reminders, Watch, vault). Payday push dropped. Keep UI super simple.
 ```
 
 ## Release cadence

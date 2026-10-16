@@ -195,14 +195,28 @@ private struct DashboardScreen: View {
                     arrived: { await appState.markPaid(month: $0) }
                 )
 
-                paymentCard
-                if appState.daysUntilPayment != nil {
-                    paymentProgress
+                VStack(spacing: 32) {
+                    paymentCard
+                    if appState.daysUntilPayment != nil {
+                        paymentProgress
+                    }
+                    paidToggle
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                incomeBreakdown
-                dateCard
+                .frame(maxHeight: .infinity, alignment: .center)
+                .containerRelativeFrame(.vertical) { length, _ in length * 0.78 }
+
+                DisclosureGroup("Details") {
+                    VStack(spacing: 18) {
+                        incomeBreakdown
+                        dateCard
+                    }
+                    .padding(.top, 12)
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             }
-            .padding()
+            .padding(.horizontal, 20)
         }
         .refreshable { await appState.refreshDashboard() }
         .task {
@@ -239,14 +253,15 @@ private struct DashboardScreen: View {
                 .foregroundStyle(.secondary)
 
             Text(appState.paymentAmountText)
-                .font(.system(size: 52, weight: .bold))
-                .minimumScaleFactor(0.7)
+                .font(.system(size: 112, weight: .bold))
+                .tracking(-5)
+                .minimumScaleFactor(0.3)
                 .lineLimit(1)
                 .contentTransition(.numericText())
 
             if let days = appState.daysUntilPayment {
                 Text("in \(days) days")
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.system(size: 34, weight: .semibold))
                     .foregroundStyle(Color.talliBlue)
             }
 
@@ -255,10 +270,6 @@ private struct DashboardScreen: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .overlay(alignment: .topTrailing) { paidToggle.padding(12) }
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 
     /// PWD + CDB breakdown, mirroring the web dashboard's Bennies income block so
@@ -389,8 +400,8 @@ private struct DashboardScreen: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(appState.isPaid ? Color.talliBlue : .primary)
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
+                .padding(.horizontal, 24)
+                .frame(minHeight: 48)
                 .background(Capsule().strokeBorder(appState.isPaid ? Color.talliBlue.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
             }
             .buttonStyle(.plain)

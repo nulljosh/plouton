@@ -373,6 +373,11 @@ app.set('trust proxy', 1);
 app.use('/api/open', openRouter);
 
 app.use(cors(createCorsOptionsDelegate(allowedOrigins)));
+// A disallowed origin is a client error, not a server fault.
+app.use((err, req, res, next) => {
+  if (err && err.message === 'CORS origin not allowed') return res.status(403).json({ error: 'Origin not allowed' });
+  next(err);
+});
 
 // Stripe webhook needs the raw body for signature verification, so it must be
 // registered with express.raw() before the global express.json() below --

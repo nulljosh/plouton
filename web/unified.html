@@ -493,7 +493,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
   );
 
   return (
-    <div style={{flex:1,display:'flex',flexDirection:'column',overflowY:'auto',padding:'32px 24px 24px',animation:'fadeIn 0.3s ease both'}}>
+    <div style={{flex:1,display:'flex',flexDirection:'column',overflowY:'auto',padding:'32px 20px 24px',animation:'fadeIn 0.3s ease both'}}>
       {isReportingWindow&&!reportFiled&&<div style={{background:`${t.warning}14`,border:`1px solid ${t.warning}40`,borderRadius:10,padding:'11px 14px',marginBottom:18,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.3s ease both'}}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.warning} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
         <div style={{flex:1}}>
@@ -509,12 +509,13 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
       </div>}
       <MissedPayment dark={dark} onPaidChange={onPaidChange}/>
 
-      <div style={{flex:'1 0 auto',display:'flex',flexDirection:'column',justifyContent:'center',paddingBottom:16}}>
+      <div style={{flex:'1 0 auto',display:'flex',flexDirection:'column',justifyContent:'space-between',paddingBottom:16}}>
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:18,animation:'fadeUp 0.45s 0s ease both'}}>
         Next payment
       </div>
 
-      <div style={{fontSize:'min(112px,24vw)',whiteSpace:'nowrap',fontWeight:700,letterSpacing:'-0.05em',lineHeight:0.9,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
+      <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center'}}>
+      <div style={{fontSize:`min(calc((min(100vw,430px) - 40px) / ${(Math.max(formatted.length,5)*0.52).toFixed(2)}),30vh)`,whiteSpace:'nowrap',fontWeight:700,letterSpacing:'-0.05em',lineHeight:0.9,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
         {formatted}
       </div>
 
@@ -529,6 +530,8 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         {paymentDate}
       </div>
 
+      </div>
+      <div>
       {/* Progress bar */}
       <div style={{marginTop:32,animation:'fadeUp 0.45s 0.26s ease both'}}>
         <div style={{height:1.5,background:t.border,borderRadius:2,position:'relative'}}>
@@ -543,7 +546,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
 
       {/* Paid toggle */}
       <div style={{marginTop:32,animation:'fadeUp 0.45s 0.34s ease both'}}>
-        <button onClick={handlePaid} style={{display:'inline-flex',alignItems:'center',gap:8,minHeight:44,padding:'0 24px',borderRadius:100,border:`1px solid ${paid?t.success:t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:paid?t.success:t.muted,fontFamily:'inherit',transform:bounce?'scale(1.15)':'scale(1)',transition:'transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.2s,color 0.2s',WebkitTapHighlightColor:'transparent'}}>
+        <button onClick={handlePaid} style={{display:'inline-flex',alignItems:'center',gap:8,minHeight:48,padding:'0 24px',borderRadius:100,border:`1px solid ${paid?t.success:t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:paid?t.success:t.muted,fontFamily:'inherit',transform:bounce?'scale(1.15)':'scale(1)',transition:'transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.2s,color 0.2s',WebkitTapHighlightColor:'transparent'}}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
             {paid?<><circle cx="7" cy="7" r="6.5" stroke="currentColor"/><path d="M4 7l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></>:<circle cx="7" cy="7" r="6.5" stroke="currentColor" strokeDasharray="2 2"/>}
           </svg>
@@ -551,6 +554,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         </button>
       </div>
 
+      </div>
       </div>
       <details className="home-details" style={{marginTop:0}}>
         <summary style={{minHeight:44,display:'flex',alignItems:'center',cursor:'pointer',fontSize:13,color:t.muted,listStyle:'none',WebkitTapHighlightColor:'transparent'}}>Details</summary>

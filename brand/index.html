@@ -7,39 +7,40 @@
 <link rel="stylesheet" href="tokens.css">
 <style>
 * { box-sizing: border-box; margin: 0; }
-body { background: var(--paper); color: var(--ink); font: var(--size-body)/1.5 var(--font-ui); -webkit-font-smoothing: antialiased; }
-main { max-width: 760px; margin: 0 auto; padding: var(--space-8) var(--gutter); }
+body { background: var(--paper); color: var(--ink); font: var(--body)/var(--body-lh) var(--font); -webkit-font-smoothing: antialiased; }
+main { max-width: var(--column); margin: 0 auto; padding: var(--space-7) var(--gutter); }
 section { margin-top: var(--section); }
 section > * + * { margin-top: var(--stack); }
-.label { font-size: var(--size-label); letter-spacing: .14em; text-transform: uppercase; color: var(--quiet); font-weight: 700; }
-h1, h2, .brand { font-family: var(--font-brand); font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
-h1 { font-size: 96px; }
-h2 { font-size: var(--size-title); }
+.label { font-size: var(--footnote); line-height: var(--footnote-lh); letter-spacing: .08em; text-transform: uppercase; color: var(--quiet); font-weight: 600; }
+h1 { font-size: 96px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; margin-top: var(--space-4); }
 .dot { color: var(--blue); }
 p { max-width: var(--measure); color: var(--quiet); }
-.icon { width: 120px; height: 120px; border-radius: 27px; display: block; }
-.row { display: flex; gap: var(--space-5); flex-wrap: wrap; align-items: flex-start; }
-.swatch { width: 104px; }
-.swatch i { display: block; height: 72px; border-radius: var(--radius); border: 1px solid var(--hairline); margin-bottom: var(--space-2); }
-.swatch b { display: block; font-size: var(--size-small); }
-.swatch span { font-size: var(--size-label); color: var(--quiet); }
-.prop { font-family: var(--font-brand); font-size: 76px; line-height: 1; }
-.scale { display: grid; gap: var(--space-2); }
-.scale div { display: flex; align-items: center; gap: var(--space-4); font-size: var(--size-small); color: var(--quiet); }
-.scale i { display: block; height: 16px; background: var(--accent); border-radius: 2px; }
-.scale span { width: 140px; }
-.rules { padding-left: var(--space-5); color: var(--quiet); display: grid; gap: var(--space-2); max-width: var(--measure); }
-.phone { width: var(--shell); max-width: 100%; border: 1px solid var(--hairline); border-radius: 28px; padding: var(--space-6) var(--gutter); background: var(--paper); }
-.phone .hero { font-family: var(--font-brand); font-weight: 700; letter-spacing: -4px; font-size: var(--size-hero); line-height: .9; margin-top: var(--space-4); }
-.phone .days { font-family: var(--font-brand); font-weight: 600; letter-spacing: -1.5px; font-size: var(--size-title); color: var(--accent); margin-top: var(--space-4); }
-.phone .date { color: var(--quiet); margin-top: var(--space-1); }
-.btn { display: inline-flex; align-items: center; justify-content: center; min-height: var(--target); padding: 0 var(--space-5); border-radius: var(--radius-pill); background: var(--accent-deep); color: #fff; font-weight: 600; margin-top: var(--space-5); }
+.icon { width: 120px; height: 120px; border-radius: 22%; display: block; }
+.row { display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: flex-start; }
+.swatch { width: 96px; }
+.swatch i { display: block; height: 64px; border-radius: var(--radius-list); box-shadow: inset 0 0 0 1px var(--hairline); margin-bottom: var(--space-2); }
+.swatch b { display: block; font-size: var(--footnote); line-height: var(--footnote-lh); }
+.swatch span { font-size: var(--footnote); line-height: var(--footnote-lh); color: var(--quiet); }
+.type { display: grid; gap: var(--space-2); }
+.type > div { display: flex; align-items: baseline; gap: var(--space-4); }
+.type small { width: 112px; flex: none; font-size: var(--footnote); color: var(--quiet); }
+.list { background: var(--group); border-radius: var(--radius-list); overflow: hidden; }
+.list div { display: flex; justify-content: space-between; padding: var(--row-pad); font-size: var(--subhead); line-height: var(--subhead-lh); }
+.list div + div { box-shadow: inset 0 1px 0 var(--hairline); margin-left: 0; }
+.list span { color: var(--quiet); }
+.phone { container-type: inline-size; width: var(--shell); max-width: 100%; background: var(--group); border-radius: var(--radius-card); padding: var(--space-6) var(--gutter) var(--card-pad); }
+.hero { font-size: min(calc((100cqw - 40px) / 3.1), 30vh); line-height: .9; font-weight: 700; letter-spacing: -0.05em; margin-top: var(--space-4); white-space: nowrap; }
+.days { font-size: var(--large-title); line-height: var(--large-title-lh); font-weight: 600; letter-spacing: -0.022em; color: var(--accent); margin-top: var(--space-4); }
+.date { color: var(--quiet); margin-top: var(--space-1); }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: var(--control); padding: 0 var(--space-5); border-radius: var(--radius-pill); background: var(--accent-deep); color: var(--on-accent); font-weight: 600; margin-top: var(--space-5); transition: opacity var(--ease); }
+.btn:active { opacity: .8; }
+@media (max-width: 480px) { h1 { font-size: 72px; } }
 </style>
 </head>
 <body>
 <main>
   <div class="label">Brand kit</div>
-  <h1 class="brand" style="margin-top:var(--space-4)">talli<span class="dot">.</span></h1>
+  <h1>talli<span class="dot">.</span></h1>
   <p style="margin-top:var(--space-5)">Know what is coming and when. One number, one date, nothing else asking for attention.</p>
 
   <section>
@@ -48,53 +49,50 @@ p { max-width: var(--measure); color: var(--quiet); }
       <img class="icon" src="../ios/Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Talli icon">
       <img class="icon" src="../ios/Assets.xcassets/AppIcon.appiconset/AppIcon-dark.png" alt="Talli dark icon">
     </div>
-    <p>Four strokes and a diagonal: a tally of five. Wordmark is lowercase, bold, with a blue full stop.</p>
+    <p>Four strokes and a diagonal: a tally of five. One bold flat glyph, no text. The wordmark is lowercase, bold, with a blue full stop.</p>
   </section>
 
   <section>
     <div class="label">Colour</div>
     <div class="row">
-      <div class="swatch"><i style="background:#0074D9"></i><b>Blue</b><span>#0074D9 icon</span></div>
-      <div class="swatch"><i style="background:#5B9BD5"></i><b>Accent</b><span>#5B9BD5 in app</span></div>
-      <div class="swatch"><i style="background:#2C6BA8"></i><b>Deep</b><span>#2C6BA8 text</span></div>
-      <div class="swatch"><i style="background:#1a1a1a"></i><b>Ink</b><span>#1A1A1A</span></div>
-      <div class="swatch"><i style="background:#f5f5f5"></i><b>Mist</b><span>#F5F5F5</span></div>
+      <div class="swatch"><i style="background:#0074D9"></i><b>Blue</b><span>#0074D9</span></div>
+      <div class="swatch"><i style="background:#5B9BD5"></i><b>Accent</b><span>#5B9BD5</span></div>
+      <div class="swatch"><i style="background:#2C6BA8"></i><b>Deep</b><span>#2C6BA8</span></div>
+      <div class="swatch"><i style="background:#1d1d1f"></i><b>Ink</b><span>#1D1D1F</span></div>
+      <div class="swatch"><i style="background:#f5f5f7"></i><b>Group</b><span>#F5F5F7</span></div>
       <div class="swatch"><i style="background:#d68910"></i><b>Warn</b><span>#D68910</span></div>
     </div>
-    <p>White paper, near-black ink, one blue. Warn and error appear only when something needs the person.</p>
+    <p>One accent. Near-black on white, near-white on true black, grouped surfaces on #1C1C1E in dark. Warn and error appear only when something needs the person.</p>
   </section>
 
   <section>
-    <div class="label">Typeface</div>
-    <div class="prop" style="font-weight:700;letter-spacing:-0.04em">$1,736</div>
-    <div class="prop" style="font-weight:600;font-size:28px">in 12 days</div>
-    <div class="prop" style="font-weight:400;font-size:16px;line-height:1.5">Wed, Oct 28. Next payment arrives on time.</div>
-    <p>San Francisco on Apple devices, Helvetica Neue everywhere else. Bold for the hero number, semibold for titles, regular for everything you read. No webfonts.</p>
-  </section>
-
-  <section>
-    <div class="label">Space</div>
-    <div class="scale">
-      <div><span>space-1 &middot; 4</span><i style="width:4px"></i></div>
-      <div><span>space-2 &middot; 8</span><i style="width:8px"></i></div>
-      <div><span>space-3 &middot; 12</span><i style="width:12px"></i></div>
-      <div><span>space-4 &middot; 16</span><i style="width:16px"></i></div>
-      <div><span>space-5 &middot; 24</span><i style="width:24px"></i></div>
-      <div><span>space-6 &middot; 32</span><i style="width:32px"></i></div>
-      <div><span>space-7 &middot; 48</span><i style="width:48px"></i></div>
-      <div><span>space-8 &middot; 64</span><i style="width:64px"></i></div>
+    <div class="label">Type</div>
+    <div class="type">
+      <div><small>Hero</small><span style="font-size:76px;line-height:76px;font-weight:700;letter-spacing:-0.05em">$1,736</span></div>
+      <div><small>Large title 34</small><span style="font-size:var(--large-title);line-height:var(--large-title-lh);font-weight:700;letter-spacing:-0.022em">in 12 days</span></div>
+      <div><small>Title 22</small><span style="font-size:var(--title);line-height:var(--title-lh);font-weight:600">Next payment</span></div>
+      <div><small>Body 17</small><span>Wed, Oct 28</span></div>
+      <div><small>Subhead 15</small><span style="font-size:var(--subhead);line-height:var(--subhead-lh)">Mark as paid</span></div>
+      <div><small>Footnote 13</small><span style="font-size:var(--footnote);line-height:var(--footnote-lh);color:var(--quiet)">last payment</span></div>
     </div>
-    <ul class="rules">
-      <li>Padding, margin and gap come only from the scale. No raw pixel values.</li>
-      <li>Screen edge to content is 24. Between sections is 48. Between blocks inside a section is 16.</li>
-      <li>A card has 24 of padding on every side. Inner padding is never larger than the outer.</li>
-      <li>Anything tappable is at least 44 tall. Body text never runs past 60 characters.</li>
-      <li>Five type sizes: 76, 28, 16, 13, 11. Nothing in between.</li>
-    </ul>
+    <p>The system font: San Francisco on Apple devices, Helvetica Neue elsewhere. No webfonts.</p>
   </section>
 
   <section>
-    <div class="label">The one screen rule</div>
+    <div class="label">Space and shape</div>
+    <div class="list">
+      <div>Side margin<span>20</span></div>
+      <div>Between sections<span>48</span></div>
+      <div>Between blocks<span>16</span></div>
+      <div>Card padding<span>24</span></div>
+      <div>Control height<span>48</span></div>
+      <div>Radii<span>28 card, 20 list, round control</span></div>
+    </div>
+    <p>Gaps are 4, 8, 12, 16, 24, 32 or 48 and nothing else. Controls in a row share one height. Reading text never runs past 60 characters.</p>
+  </section>
+
+  <section>
+    <div class="label">One screen, one number</div>
     <div class="phone">
       <div class="label">Next payment</div>
       <div class="hero">$1,736</div>
@@ -102,7 +100,7 @@ p { max-width: var(--measure); color: var(--quiet); }
       <div class="date">Wed, Oct 28</div>
       <span class="btn">Mark as paid</span>
     </div>
-    <p>A screen has one number, one line about it and at most one action. Everything else lives one tap deeper.</p>
+    <p>A screen has one number, one line about it and at most one action. Everything else sits one tap deeper.</p>
   </section>
 </main>
 </body>

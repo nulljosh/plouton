@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talli Brand Kit</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+@font-face { font-family: "Talli Sans"; src: url("fonts/TalliSans-Regular.woff") format("woff"); font-display: swap; }
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--paper); color: var(--ink); font: var(--size-body)/1.5 var(--font-ui); -webkit-font-smoothing: antialiased; }
+main { max-width: 760px; margin: 0 auto; padding: var(--space-8) var(--gutter); }
+section { margin-top: var(--section); }
+section > * + * { margin-top: var(--stack); }
+.label { font-size: var(--size-label); letter-spacing: .14em; text-transform: uppercase; color: var(--quiet); font-weight: 700; }
+h1, h2, .brand { font-family: var(--font-brand); font-weight: 400; letter-spacing: 0; line-height: 1; }
+h1 { font-size: 96px; }
+h2 { font-size: var(--size-title); }
+.dot { color: var(--blue); }
+p { max-width: var(--measure); color: var(--quiet); }
+.icon { width: 120px; height: 120px; border-radius: 27px; display: block; }
+.row { display: flex; gap: var(--space-5); flex-wrap: wrap; align-items: flex-start; }
+.swatch { width: 104px; }
+.swatch i { display: block; height: 72px; border-radius: var(--radius); border: 1px solid var(--hairline); margin-bottom: var(--space-2); }
+.swatch b { display: block; font-size: var(--size-small); }
+.swatch span { font-size: var(--size-label); color: var(--quiet); }
+.glyphs { font-family: var(--font-brand); font-size: 44px; line-height: 1.25; word-break: break-all; }
+.prop { font-family: var(--font-brand); font-size: 44px; line-height: 1.2; }
+.scale { display: grid; gap: var(--space-2); }
+.scale div { display: flex; align-items: center; gap: var(--space-4); font-size: var(--size-small); color: var(--quiet); }
+.scale i { display: block; height: 16px; background: var(--accent); border-radius: 2px; }
+.scale span { width: 140px; }
+.rules { padding-left: var(--space-5); color: var(--quiet); display: grid; gap: var(--space-2); max-width: var(--measure); }
+.phone { width: var(--shell); max-width: 100%; border: 1px solid var(--hairline); border-radius: 28px; padding: var(--space-6) var(--gutter); background: var(--paper); }
+.phone .hero { font-family: var(--font-brand); font-size: var(--size-hero); line-height: .9; margin-top: var(--space-4); }
+.phone .days { font-family: var(--font-brand); font-size: var(--size-title); color: var(--accent); margin-top: var(--space-4); }
+.phone .date { color: var(--quiet); margin-top: var(--space-1); }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: var(--target); padding: 0 var(--space-5); border-radius: var(--radius-pill); background: var(--accent-deep); color: #fff; font-weight: 600; margin-top: var(--space-5); }
+</style>
+</head>
+<body>
+<main>
+  <div class="label">Brand kit</div>
+  <h1 class="brand" style="margin-top:var(--space-4)">talli<span class="dot">.</span></h1>
+  <p style="margin-top:var(--space-5)">Know what is coming and when. One number, one date, nothing else asking for attention.</p>
+
+  <section>
+    <div class="label">Mark</div>
+    <div class="row">
+      <img class="icon" src="../ios/Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Talli icon">
+      <img class="icon" src="../ios/Assets.xcassets/AppIcon.appiconset/AppIcon-dark.png" alt="Talli dark icon">
+    </div>
+    <p>Four strokes and a diagonal: a tally of five. The strokes are the typeface's stroke, so the icon and the letters are drawn with the same pen. Wordmark is lowercase with a blue full stop.</p>
+  </section>
+
+  <section>
+    <div class="label">Colour</div>
+    <div class="row">
+      <div class="swatch"><i style="background:#0074D9"></i><b>Blue</b><span>#0074D9 icon</span></div>
+      <div class="swatch"><i style="background:#5B9BD5"></i><b>Accent</b><span>#5B9BD5 in app</span></div>
+      <div class="swatch"><i style="background:#2C6BA8"></i><b>Deep</b><span>#2C6BA8 text</span></div>
+      <div class="swatch"><i style="background:#1a1a1a"></i><b>Ink</b><span>#1A1A1A</span></div>
+      <div class="swatch"><i style="background:#f5f5f5"></i><b>Mist</b><span>#F5F5F5</span></div>
+      <div class="swatch"><i style="background:#d68910"></i><b>Warn</b><span>#D68910</span></div>
+    </div>
+    <p>White paper, near-black ink, one blue. Warn and error appear only when something needs the person.</p>
+  </section>
+
+  <section>
+    <div class="label">Typeface: Talli Sans</div>
+    <div class="prop">iiiii mmmmm WWWWW</div>
+    <div class="glyphs">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 $.,:;!?-+=/()%#&amp;</div>
+    <p>Monoline, round terminals, 80 units of stroke. Proportionally spaced: an i is 220 units wide and an m is 820, set by each letter's shape, not a fixed cell. Used for the wordmark, the hero number and titles. Body text stays on the system font.</p>
+  </section>
+
+  <section>
+    <div class="label">Space</div>
+    <div class="scale">
+      <div><span>space-1 &middot; 4</span><i style="width:4px"></i></div>
+      <div><span>space-2 &middot; 8</span><i style="width:8px"></i></div>
+      <div><span>space-3 &middot; 12</span><i style="width:12px"></i></div>
+      <div><span>space-4 &middot; 16</span><i style="width:16px"></i></div>
+      <div><span>space-5 &middot; 24</span><i style="width:24px"></i></div>
+      <div><span>space-6 &middot; 32</span><i style="width:32px"></i></div>
+      <div><span>space-7 &middot; 48</span><i style="width:48px"></i></div>
+      <div><span>space-8 &middot; 64</span><i style="width:64px"></i></div>
+    </div>
+    <ul class="rules">
+      <li>Padding, margin and gap come only from the scale. No raw pixel values.</li>
+      <li>Screen edge to content is 24. Between sections is 48. Between blocks inside a section is 16.</li>
+      <li>A card has 24 of padding on every side. Inner padding is never larger than the outer.</li>
+      <li>Anything tappable is at least 44 tall. Body text never runs past 60 characters.</li>
+      <li>Five type sizes: 76, 28, 16, 13, 11. Nothing in between.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="label">The one screen rule</div>
+    <div class="phone">
+      <div class="label">Next payment</div>
+      <div class="hero">$1,736</div>
+      <div class="days">in 12 days</div>
+      <div class="date">Wed, Oct 28</div>
+      <span class="btn">Mark as paid</span>
+    </div>
+    <p>A screen has one number, one line about it and at most one action. Everything else lives one tap deeper.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,49 @@
+/* Talli design tokens. One file, every constraint.
+   Space only ever comes from the --space scale. Nothing on screen uses a raw px
+   for padding, margin or gap. */
+:root {
+  /* colour */
+  --ink: #1a1a1a;
+  --paper: #ffffff;
+  --mist: #f5f5f5;
+  --hairline: #e8e8e8;
+  --quiet: rgba(0,0,0,0.50);
+  --blue: #0074D9;        /* the icon and wordmark dot */
+  --accent: #5B9BD5;      /* in-app accent, numbers and links */
+  --accent-deep: #2C6BA8; /* accent as text or a filled button on white */
+  --warn: #d68910;
+  --error: #d94f3d;
+
+  /* space: 4pt base, eight steps */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* layout constraints */
+  --gutter: var(--space-5);      /* screen edge to content, left and right */
+  --section: var(--space-7);     /* between sections */
+  --stack: var(--space-4);       /* between sibling blocks inside a section */
+  --card-pad: var(--space-5);    /* inside a card, every side */
+  --shell: 430px;                /* app max width */
+  --measure: 60ch;               /* longest line of body text */
+  --target: 44px;                /* smallest tappable thing */
+
+  /* type: one family, five sizes */
+  --font-brand: "Talli Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, sans-serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, sans-serif;
+  --size-hero: 76px;
+  --size-title: 28px;
+  --size-body: 16px;
+  --size-small: 13px;
+  --size-label: 11px;
+
+  /* shape and motion */
+  --radius: 14px;
+  --radius-pill: 999px;
+  --spring: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}

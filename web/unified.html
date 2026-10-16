@@ -26,6 +26,8 @@
       width: 100%; height: 100dvh; overflow: hidden;
     }
     @keyframes countUp   { from { opacity:0; transform:translateY(14px) scale(0.94); } to { opacity:1; transform:translateY(0) scale(1); } }
+    @font-face { font-family: "Talli Sans"; src: url("/fonts/TalliSans-Regular.woff") format("woff"); font-display: swap; }
+    .home-details>summary::-webkit-details-marker{display:none}
     @keyframes fadeUp    { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
     @keyframes pulseRing { 0% { box-shadow:0 0 0 0 var(--pc,rgba(255,255,255,0.2)); } 60% { box-shadow:0 0 0 6px transparent; } 100% { box-shadow:0 0 0 0 transparent; } }
@@ -492,7 +494,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
   );
 
   return (
-    <div style={{flex:1,display:'flex',flexDirection:'column',overflowY:'auto',padding:'32px 28px 24px',animation:'fadeIn 0.3s ease both'}}>
+    <div style={{flex:1,display:'flex',flexDirection:'column',overflowY:'auto',padding:'32px 24px 24px',animation:'fadeIn 0.3s ease both'}}>
       {isReportingWindow&&!reportFiled&&<div style={{background:`${t.warning}14`,border:`1px solid ${t.warning}40`,borderRadius:10,padding:'11px 14px',marginBottom:18,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.3s ease both'}}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.warning} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
         <div style={{flex:1}}>
@@ -512,36 +514,36 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         Next payment
       </div>
 
-      <div style={{fontSize:76,fontWeight:700,letterSpacing:'-4px',lineHeight:0.9,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
+      <div style={{fontSize:76,fontFamily:"'Talli Sans',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:400,letterSpacing:0,lineHeight:0.9,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
         {formatted}
       </div>
 
-      <div style={{marginTop:20,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.45s 0.1s ease both'}}>
+      <div style={{marginTop:16,display:'flex',alignItems:'center',gap:10,animation:'fadeUp 0.45s 0.1s ease both'}}>
         {(urgent||isToday)&&<div style={{width:8,height:8,borderRadius:'50%',flexShrink:0,background:isToday?t.success:t.warning,animation:isToday?'pulseRing 1.8s ease-out infinite':'urgentBlink 0.9s ease-in-out infinite','--pc':isToday?'rgba(45,158,95,0.3)':'rgba(255,133,27,0.3)'}}/>}
-        <span style={{fontSize:36,fontWeight:600,letterSpacing:'-1.5px',lineHeight:1,color:isToday?t.success:t.accent,transition:'color 0.3s'}}>
+        <span style={{fontSize:36,fontFamily:"'Talli Sans',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:400,letterSpacing:0,lineHeight:1,color:isToday?t.success:t.accent,transition:'color 0.3s'}}>
           {isToday?'today':`in ${daysUntil} day${daysUntil!==1?'s':''}`}
         </span>
       </div>
 
-      <div style={{marginTop:7,fontSize:17,color:t.mutedMid,fontWeight:400,letterSpacing:'-0.3px',animation:'fadeUp 0.45s 0.18s ease both'}}>
+      <div style={{marginTop:8,fontSize:17,color:t.mutedMid,fontWeight:400,letterSpacing:'-0.3px',animation:'fadeUp 0.45s 0.18s ease both'}}>
         {paymentDate}
       </div>
 
       {/* Progress bar */}
-      <div style={{marginTop:34,animation:'fadeUp 0.45s 0.26s ease both'}}>
+      <div style={{marginTop:32,animation:'fadeUp 0.45s 0.26s ease both'}}>
         <div style={{height:1.5,background:t.border,borderRadius:2,position:'relative'}}>
           <div style={{position:'absolute',left:0,top:0,height:'100%',borderRadius:2,width:`${pct}%`,background:t.accent,transition:'width 1.1s cubic-bezier(0.4,0,0.2,1)'}}/>
           <div style={{position:'absolute',right:-3,top:-3,width:7,height:7,borderRadius:'50%',background:urgent?t.warning:t.text,animation:'pulseRing 2.5s ease-out infinite','--pc':urgent?'rgba(255,133,27,0.3)':dark?'rgba(245,245,245,0.15)':'rgba(23,23,23,0.15)'}}/>
         </div>
-        <div style={{display:'flex',justifyContent:'space-between',marginTop:7}}>
+        <div style={{display:'flex',justifyContent:'space-between',marginTop:8}}>
           <span style={{fontSize:11,color:t.muted}}>last payment</span>
           <span style={{fontSize:11,color:urgent?t.warning:t.muted,fontWeight:urgent?600:400}}>{isToday?'today':`${daysUntil}d`}</span>
         </div>
       </div>
 
       {/* Paid toggle */}
-      <div style={{marginTop:28,animation:'fadeUp 0.45s 0.34s ease both'}}>
-        <button onClick={handlePaid} style={{display:'inline-flex',alignItems:'center',gap:8,padding:'6px 14px',borderRadius:100,border:`1px solid ${paid?t.success:t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:paid?t.success:t.muted,fontFamily:'inherit',transform:bounce?'scale(1.15)':'scale(1)',transition:'transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.2s,color 0.2s',WebkitTapHighlightColor:'transparent'}}>
+      <div style={{marginTop:32,animation:'fadeUp 0.45s 0.34s ease both'}}>
+        <button onClick={handlePaid} style={{display:'inline-flex',alignItems:'center',gap:8,minHeight:44,padding:'0 24px',borderRadius:100,border:`1px solid ${paid?t.success:t.border}`,background:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:paid?t.success:t.muted,fontFamily:'inherit',transform:bounce?'scale(1.15)':'scale(1)',transition:'transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.2s,color 0.2s',WebkitTapHighlightColor:'transparent'}}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
             {paid?<><circle cx="7" cy="7" r="6.5" stroke="currentColor"/><path d="M4 7l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></>:<circle cx="7" cy="7" r="6.5" stroke="currentColor" strokeDasharray="2 2"/>}
           </svg>
@@ -549,17 +551,8 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         </button>
       </div>
 
-      {/* Streak */}
-      <div style={{marginTop:20,animation:'fadeUp 0.45s 0.42s ease both'}}>
-        <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'5px 12px',borderRadius:100,background:t.accentBg,border:`1px solid ${t.accent}30`}}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill={t.accent} stroke="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-          <span style={{fontSize:11,fontWeight:600,color:t.accent,letterSpacing:'-0.1px'}}>5 months on time</span>
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div style={{height:1,background:t.border,margin:'24px 0 0'}}/>
-
+      <details className="home-details" style={{marginTop:32}}>
+        <summary style={{minHeight:44,display:'flex',alignItems:'center',cursor:'pointer',fontSize:13,color:t.muted,listStyle:'none',WebkitTapHighlightColor:'transparent'}}>Details</summary>
       {/* Monthly amount -- always visible */}
       <div style={{marginTop:24,animation:'fadeUp 0.45s 0.5s ease both'}}>
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>Monthly amount</div>
@@ -651,6 +644,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
           {checkoutError && <p role="alert" style={{fontSize:12,color:t.text,marginTop:10}}>{checkoutError}</p>}
         </div>
       )}
+      </details>
 
     </div>
   );
@@ -2284,7 +2278,7 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
 
       {/* Header */}
       <div style={{padding:'4px 24px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <span style={{fontSize:15,fontWeight:700,letterSpacing:'-0.04em',color:t.text}}>
+        <span style={{fontSize:22,fontFamily:"'Talli Sans',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:400,letterSpacing:0,color:t.text}}>
           talli<span style={{color:t.accent}}>.</span>
         </span>
         <button onClick={()=>setTab('settings')} title="Settings" style={{width:28,height:28,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0,animation:refreshing?'spin 0.8s linear infinite':'none'}}>

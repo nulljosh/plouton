@@ -556,7 +556,7 @@ app.use((req, res, next) => {
 // compiles its JSX in the browser with @babel/standalone -- without it the whole
 // dashboard silently fails to boot, which is prod-only because this header is
 // only set when IS_PRODUCTION.
-// style-src must allow jaybulb.com: portfolio-tokens.css @imports the
+// style-src must allow jaybulb.com: tokens.css @imports the
 // canonical tokens.css from there, and blocking it takes the whole design system
 // with it -- serif fallback, no colours, and a dark-mode toggle that does nothing
 // because [data-theme="dark"] never defines a single variable.

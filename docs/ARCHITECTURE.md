@@ -29,9 +29,7 @@ Talli helps people in BC track and manage their disability benefits. It pulls a 
 
 | File | What it owns |
 |---|---|
-| `web/portfolio-tokens.css` | Jaybulb design system alias layer. Imports canonical heyitsmejosh.com/tokens.css, adds Talli-specific overrides (accent is blue #5B9BD5, not yellow). Theme toggle: light/dark via CSS variables and `[data-theme="dark"]`. |
-| `web/design-tokens.css` | Duplicate design tokens (benefits page). Should consolidate into portfolio-tokens. |
-| `web/css/styles.css` | Benefits page styling (main, card, list, form, responsive). |
+| `web/tokens.css` | Jaybulb design system alias layer. Imports canonical jaybulb.com/tokens.css, adds Talli-specific overrides (accent is blue #5B9BD5, not yellow). Theme toggle: light/dark via CSS variables and `[data-theme="dark"]`. |
 
 ### JavaScript & Utilities
 
@@ -168,7 +166,7 @@ Test suite covering scraper, parsing, date logic, session store, payment dates, 
 |---|---|
 | `project.yml` | iOS xcodegen config (targets: app + widgets). |
 | `Package.swift` | watchOS Package manifest (not shown in digest, but present). |
-| `package.json` | npm scripts: `npm start` (local dev on port 3000), `npm run check` (run scraper), `npm run deploy` (wrangler pages deploy), `npm test` (run test suite), `npm run upload-blob` (upload to Vercel Blob). |
+| `package.json` | npm scripts: `npm start` (local dev on port 3000), `npm run check` (run scraper), `npm run deploy` (wrangler deploy), `npm test` (run test suite). |
 | `wrangler.jsonc` | Cloudflare Workers config. Binds KV (BLOB), static assets (ASSETS). `run_worker_first` for all routes. |
 
 ## Storage & Sync
@@ -186,7 +184,7 @@ Test suite covering scraper, parsing, date logic, session store, payment dates, 
 - **App Group sharing**: iOS app + widgets share data via UserDefaults(suiteName: "group.com.heyitsmejosh.talli"). macOS uses the same pattern. watchOS reads from API only (no local sync).
 - **Date parsing**: Portal returns inconsistent date formats. DateParsing.swift/MacDateParsing.swift handle multiple patterns with fallbacks.
 - **Reporting window**: Days 1-5 every month. Banner auto-shows, auto-scrapes (6h gate via localStorage), fields auto-populate. Deadline is hardcoded (not computed) due to ministry extension.
-- **Design system sync**: web/portfolio-tokens.css imports canonical heyitsmejosh.com/tokens.css live (no copy-paste drift). Talli adds only the blue accent override.
+- **Design system sync**: web/tokens.css imports canonical jaybulb.com/tokens.css live (no copy-paste drift). Talli adds only the blue accent override.
 - **Widgets on iOS/macOS**: Share the same TimelineProvider pattern but fetch independently (no shared state, each polls the same API endpoint).
 - **KMP Android**: Stub. Shared code is in place (Models, API client); UI (Compose) not yet feature-complete.
 
@@ -194,6 +192,6 @@ Test suite covering scraper, parsing, date logic, session store, payment dates, 
 
 - Portal credentials encrypted before KV storage (handled by scraper, not shown in digest).
 - CSRF protection on all session-modifying routes (/api/submit-report, etc.).
-- No raw setInterval for API polling; use visibilityInterval() helper (pauses when tab hidden to save Vercel invocations).
+- No raw setInterval for API polling; use visibilityInterval() helper (pauses when tab hidden to save Worker requests).
 - Biometric unlock on iOS (LocalAuthentication framework) + Keychain fallback.
 - Stripe webhook validation (webhook signature checked before processing).

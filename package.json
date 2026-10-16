@@ -1,6 +1,6 @@
 {
   "name": "talli",
-  "version": "10.0.0",
+  "version": "3.6.2",
   "description": "Talli - BC Self-Serve Portal Scraper - Automated scraping of notifications, messages, payment info, and service requests",
   "main": "src/scraper.js",
   "scripts": {
@@ -16,7 +16,6 @@
     "dev": "nodemon src/api.js",
     "watch": "concurrently \"nodemon src/api.js\" \"browser-sync start --proxy localhost:3000 --files 'web/**/*.html' --no-open\"",
     "start": "node src/api.js",
-    "upload-blob": "node scripts/upload-to-blob.js",
     "info": "bash scripts/talli-info.sh",
     "monthly-report": "python3 tools/monthly_report.py",
     "screenshot:preview": "node scripts/preview-screenshot.js",

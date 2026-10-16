@@ -1,8 +1,8 @@
 # Talli API
 
-Base URL: `https://talli.heyitsmejosh.com`
+Base URL: `https://talli.jaybulb.com`
 
-An Express app (`src/api.js`) deployed as a Vercel Node function. It scrapes the
+An Express app (`src/api.js`) running on Cloudflare Workers. It scrapes the
 BC self-serve portal on the user's behalf and caches results per user. Responses
 are JSON; errors are `{ "error": "message" }` with the matching status.
 
@@ -12,17 +12,17 @@ Server-side sessions (`express-session`) over a cookie. BCeID credentials are
 encrypted at rest and never returned by any endpoint.
 
 ```bash
-curl -c jar.txt -X POST https://talli.heyitsmejosh.com/api/login \
+curl -c jar.txt -X POST https://talli.jaybulb.com/api/login \
   -H 'Content-Type: application/json' \
   -d '{"username":"…","password":"…"}'
 
-curl -b jar.txt https://talli.heyitsmejosh.com/api/summary
+curl -b jar.txt https://talli.jaybulb.com/api/summary
 ```
 
 From the browser, `fetch(url, { credentials: 'same-origin' })` is enough. Routes
 marked **auth** return `401` without a session.
 
-Note the CSP in `vercel.json`: `script-src 'self' 'unsafe-inline'` plus
+Note the CSP in `web/_headers`: `script-src 'self' 'unsafe-inline'` plus
 `unpkg.com` and `cdn.jsdelivr.net` only. Same-origin scripts are fine; other
 CDNs are blocked.
 

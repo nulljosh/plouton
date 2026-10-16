@@ -1,11 +1,9 @@
-const STATIC_CACHE = 'talli-static-v3';
+const STATIC_CACHE = 'talli-static-v4';
 const API_CACHE = 'talli-api-v2';
 
 const STATIC_ASSETS = [
   '/landing.html',
   '/manifest.json',
-  '/design-tokens.css',
-  '/css/styles.css',
   '/icon-192.svg',
   '/icon-512.svg'
 ];

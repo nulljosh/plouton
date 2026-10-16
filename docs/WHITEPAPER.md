@@ -1,6 +1,6 @@
 # Talli Technical Whitepaper
 
-**v3.5.12 iOS / 3.5.6 macOS** | August 2026
+**v3.6** | October 2026
 
 When does the money come, and how much?
 
@@ -9,7 +9,7 @@ not the people waiting on the payment. Talli answers it directly for people
 on BC disability assistance. It reads BC Self-Serve, tracks income and
 payment dates, follows PWD and DTC applications, and shows government
 messages. Everything the Ministry makes you dig for, in one glance. Live at
-[talli.heyitsmejosh.com](https://talli.heyitsmejosh.com), with an iOS companion
+[talli.jaybulb.com](https://talli.jaybulb.com), with an iOS companion
 app and a watchOS complication.
 
 ## Core Mechanic: The Scraper
@@ -36,7 +36,7 @@ On top of the scrape:
   because a granted extension is a one-off exception the portal itself won't
   reflect and the deadline still has to show correctly.
 - **Message sync**: read state loads on mount and persists on tap
-  (Vercel Blob), so web and iOS agree on what's been seen, since a message
+  (Workers KV), so web and iOS agree on what's been seen, since a message
   read on one device but still flagged unread on another defeats the point of
   a shared inbox.
 
@@ -47,11 +47,11 @@ On top of the scrape:
   authed dashboard; `web/landing.html` and `web/benefits.html` are public.
   430px centered shell, PWA with offline mode so a payment date is still
   visible without signal, dark mode auto-detect.
-- **API**: Express (`src/api.js`) on Vercel serverless, auth, session
+- **API**: Express (`src/api.js`) on Cloudflare Workers, auth, session
   handling, scrape orchestration.
-- **Persistence**: Vercel Blob for paid/report status and message read state.
+- **Persistence**: Workers KV for paid/report status and message read state.
 - **Polling**: all API polling goes through a `visibilityInterval()` helper
-  that pauses when the tab is hidden, capping serverless invocation burn,
+  that pauses when the tab is hidden, capping Worker request volume,
   since a backgrounded tab has no one watching for the data to refresh.
 - **i18n**: one master string source generates both the web i18next bundle and
   the Xcode String Catalog (en, fr, zh, pa), because disability assistance
@@ -63,8 +63,8 @@ On top of the scrape:
 | Platform | Status |
 |---|---|
 | Web (PWA) | Live |
-| iOS | v3.5.12 Live |
-| macOS | v3.5.6 Live |
+| iOS | 3.6 Live |
+| macOS | 3.6 Live |
 | watchOS | Bundled complication |
 
 The iOS app matches the web visual language (parchment palette, orange accent,

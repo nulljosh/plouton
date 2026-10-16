@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#0074D9" rx="36"/>
-  <!-- group 1: four verticals -->
-  <line x1="70" y1="62" x2="70" y2="138" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
-  <line x1="90" y1="58" x2="90" y2="142" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
-  <line x1="110" y1="62" x2="110" y2="138" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
-  <line x1="130" y1="58" x2="130" y2="142" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
-  <!-- diagonal cross-out (the 5th tally mark) -->
-  <line x1="62" y1="132" x2="138" y2="68" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" rx="36" fill="#0074D9"/><line x1="59.57" y1="54.10" x2="59.57" y2="145.90" stroke="#ffffff" stroke-width="11.33" stroke-linecap="round"/><line x1="86.52" y1="54.10" x2="86.52" y2="145.90" stroke="#ffffff" stroke-width="11.33" stroke-linecap="round"/><line x1="113.48" y1="54.10" x2="113.48" y2="145.90" stroke="#ffffff" stroke-width="11.33" stroke-linecap="round"/><line x1="140.43" y1="54.10" x2="140.43" y2="145.90" stroke="#ffffff" stroke-width="11.33" stroke-linecap="round"/><line x1="41.60" y1="136.72" x2="158.40" y2="63.28" stroke="#ffffff" stroke-width="11.33" stroke-linecap="round"/></svg>

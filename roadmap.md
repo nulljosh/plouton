@@ -197,9 +197,6 @@ edited at this time". **The next version bump must push this dir**, which applie
 Note: `asc metadata push` prints a full JSON result even when it applied nothing. Always re-pull to
 a scratch dir and diff; the `actions[].status` field is the only truth.
 
-## Ingested 2026-10-03
-- [ ] Design system. (Note was just the two words "Design system". Build one for Talli, shared tokens like the other apps? Or apply the house one? Clarify scope.)
-
 ## Ingested 2026-10-16
 - [ ] Verify account contribution figures against the real account
 

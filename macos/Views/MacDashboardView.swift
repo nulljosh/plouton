@@ -24,19 +24,27 @@ struct MacDashboardView: View {
                     arrived: { try? await MacAPIClient.shared.markPaid(month: $0) }
                 )
 
-                // Payment hero card
-                paymentCard
-
-                HStack(spacing: 16) {
-                    countdownCard
-                    calendarCard
+                VStack(spacing: 32) {
+                    paymentCard
+                    progressBar
                 }
+                .frame(maxHeight: .infinity, alignment: .center)
+                .containerRelativeFrame(.vertical) { length, _ in length * 0.78 }
 
-                if !appState.statusMessages.isEmpty {
-                    recentMessagesCard
+                DisclosureGroup("Details") {
+                    VStack(spacing: 20) {
+                        calendarCard
+                        if !appState.statusMessages.isEmpty {
+                            recentMessagesCard
+                        }
+                    }
+                    .padding(.top, 12)
                 }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             }
-            .padding(24)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
@@ -45,59 +53,28 @@ struct MacDashboardView: View {
 
     private var paymentCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("PAYMENT AMOUNT")
+            Text("NEXT PAYMENT")
                 .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
                 .ltrTracking(0.5)
 
             Text(appState.paymentAmountText)
-                .font(.system(size: 48, weight: .bold))
+                .font(.system(size: 112, weight: .bold))
+                .tracking(-5)
+                .minimumScaleFactor(0.3)
+                .lineLimit(1)
                 .foregroundStyle(Color.bcPrimary)
                 .contentTransition(.numericText())
 
-            HStack(spacing: 8) {
-                Text("Next: \(appState.nextPaymentDateText)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text("·")
-                    .foregroundStyle(.secondary)
-                Text(appState.countdownText)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color.bcLight)
-            }
+            Text(appState.countdownText)
+                .font(.system(size: 34, weight: .semibold))
+                .foregroundStyle(Color.bcLight)
+
+            Text(appState.nextPaymentDateText)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
-        .background {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(colorScheme == .dark ? .regularMaterial : .ultraThinMaterial)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(Color.bcLight.opacity(colorScheme == .dark ? 0.14 : 0.08))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .strokeBorder(Color.bcLight.opacity(colorScheme == .dark ? 0.4 : 0.2), lineWidth: colorScheme == .dark ? 1 : 0.5)
-                )
-        }
-    }
-
-    // MARK: - Countdown
-
-    private var countdownCard: some View {
-        VStack(spacing: 8) {
-            Text("\(appState.daysUntilPayment)")
-                .font(.system(size: 52, weight: .bold))
-                .foregroundStyle(Color.bcPrimary)
-            Text("days until payment")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            progressBar
-        }
-        .frame(maxWidth: .infinity)
-        .padding(20)
-        .background(macCard)
     }
 
     private var progressBar: some View {

@@ -339,7 +339,7 @@ async function fetchAllSectionsWithHybridAuth(username, password) {
 
 const allowedOrigins = parseAllowedOrigins(
   process.env.CORS_ORIGINS,
-  'http://localhost:3000,http://127.0.0.1:3000,https://talli-production.vercel.app,https://talli.jaybulb.com,https://tally.jaybulb.com,https://talli.heyitsmejosh.com,https://tally.heyitsmejosh.com'
+  'http://localhost:3000,http://127.0.0.1:3000,https://talli.jaybulb.com'
 );
 
 // Federal-only mode (src/programs/finder.js, scope federal): the federal half of the benefit
@@ -525,7 +525,6 @@ app.use((req, res, next) => {
 
 // CSRF origin check -- derives from the same CORS allowedOrigins list
 const ALLOWED_ORIGINS = new Set(allowedOrigins);
-if (process.env.VERCEL_URL) ALLOWED_ORIGINS.add(`https://${process.env.VERCEL_URL}`);
 
 app.use((req, res, next) => {
   if (req.method === 'GET' || req.method === 'HEAD' || req.method === 'OPTIONS') return next();

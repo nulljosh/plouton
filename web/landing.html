@@ -108,7 +108,7 @@
     .hero-wall {
       position: absolute; inset: -10%; z-index: 0;
       display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px;
-      opacity: 0.5; pointer-events: none; user-select: none;
+      opacity: 0.3; pointer-events: none; user-select: none;
     }
     .wall-col { display: flex; min-width: 0; flex-direction: column; gap: 10px; }
     .wall-col span {
@@ -127,7 +127,7 @@
     .hero-band::after {
       content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background:
-        radial-gradient(ellipse 60% 65% at 40% 45%, var(--bg) 25%, transparent 85%),
+        radial-gradient(ellipse 65% 75% at 35% 45%, var(--bg) 45%, transparent 90%),
         linear-gradient(var(--bg), transparent 25%, transparent 60%, var(--bg) 97%),
         color-mix(in srgb, var(--bg) 55%, transparent);
     }

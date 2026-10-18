@@ -1,64 +1,7 @@
-/* Talli design tokens. Every constraint lives here.
-   Padding, margin and gap come only from the --space scale. No raw px. */
+/* Talli brand tokens. The accent is the only colour this app owns; spacing, radii and type come from the shared system. */
 :root {
-  /* colour: light */
-  --ink: #1d1d1f;
-  --paper: #ffffff;
-  --group: #f5f5f7;          /* grouped surfaces */
-  --hairline: rgba(0,0,0,0.12);
-  --quiet: rgba(0,0,0,0.60); /* secondary text */
-  --blue: #0074D9;           /* icon, wordmark dot */
-  --accent: #5B9BD5;         /* numbers, links */
-  --accent-deep: #2C6BA8;    /* accent as text, filled buttons (white on it is 5.9:1) */
-  --warn: #d68910;
-  --error: #d94f3d;
-  --focus: rgba(91,155,213,0.30);
-  --on-accent: #ffffff;
-
-  /* space: 4pt grid, seven steps */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-
-  /* layout constraints */
-  --gutter: 20px;               /* screen edge to content */
-  --section: var(--space-7);    /* between sections */
-  --stack: var(--space-4);      /* between blocks inside a section */
-  --card-pad: var(--space-5);   /* inside a card, every side */
-  --row-pad: 12px 16px;         /* inside a list row */
-  --column: 680px;              /* reading column */
-  --shell: 430px;               /* app width */
-  --measure: 60ch;
-  --control: 48px;              /* every control, one height */
-
-  /* type: the system font, five steps */
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --large-title: 34px;  --large-title-lh: 41px;
-  --title: 22px;        --title-lh: 28px;
-  --body: 17px;         --body-lh: 24px;
-  --subhead: 15px;      --subhead-lh: 20px;
-  --footnote: 13px;     --footnote-lh: 18px;
-  --hero: min(calc((min(100vw, var(--shell)) - 40px) / 3.1), 30vh); /* the one number, as big as the screen allows */
-
-  /* shape: one set of radii */
-  --radius-card: 28px;
-  --radius-list: 20px;
-  --radius-pill: 999px;
-  --ease: 0.2s ease;
+  --accent: #2150c8;
+  --accent-light: #5c9ef2;
+  --accent-deep: #2150c8;
+  --accent-ring: color-mix(in srgb, #2150c8 30%, transparent);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #f5f5f7;
-    --paper: #000000;
-    --group: #1c1c1e;
-    --hairline: rgba(255,255,255,0.16);
-    --quiet: rgba(255,255,255,0.60);
-    --accent-deep: #7FB6E3;
-    --on-accent: #000000;
-  }
-}
-@media (prefers-reduced-motion: reduce) { :root { --ease: 0s; } }

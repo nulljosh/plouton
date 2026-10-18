@@ -11,4 +11,3 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 ## Ingested 2026-10-17
 - [ ] The app doesn't even load on the phone. (Triage 2026-10-17: source already points at talli.jaybulb.com and the site returns 200; the build on the phone is the old store build that still calls the lapsed heyitsmejosh.com host. Expected to clear when iOS 3.6.2 is approved. Confirm on the new build.) Home shows "NEXT PAYMENT" as black blocks with "--" and a "Paid yet?" toggle, nothing else. (screenshot: notes/attachments/2026-10-17/talli-1.png)
 - [ ] Where is settings? (Likely the same dead build; Settings is a sheet from the avatar in the new one. Confirm.) There is nowhere to sign out or check prefs.
-- [ ] Favicon needs refreshing.

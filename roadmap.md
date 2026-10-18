@@ -1,5 +1,7 @@
 # Talli Roadmap
 
+> Priority tier 1 (2026-10-17): live blocker, work first. Order: live blockers, ship pushes, active features, portfolio, exploratory. See ~/Documents/Code/LOOP-HANDOFF.md.
+
 Talli is free and stays free. The job is accuracy: what lands, when, and what you are allowed to earn. History lives in git.
 
 ## Next

@@ -31,3 +31,6 @@ When 3.6.0 clears App Store review:
 ## Release cadence
 
 Latest: 3.21.0 shipped 2026-10-02. Next: fresh native build to App Store (all features since 3.7.0 included).
+
+## Update 2026-10-17
+Phone report (blank home, no settings) is the old store build calling the lapsed heyitsmejosh.com host. Source is fine. Confirm on iOS 3.6.2 once approved. Open: favicon refresh.

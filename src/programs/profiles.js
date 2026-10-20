@@ -182,14 +182,15 @@ function deriveYearReview({ pwd, cdb, cgeb, earnings, portalPwd = null }, now = 
 // Add each year when BC posts it (gov.bc.ca "Annual earnings exemption").
 const EARNINGS_EXEMPTION = { 2026: { single: 16200, couple_one: 23400, couple_both: 32400 } };
 
-// Entries are {date: 'YYYY-MM-DD', amount}. Null exemption = year not posted yet.
+// Entries are {date: 'YYYY-MM-DD', amount}. Null exemption = year not posted yet. `over` is dollars past the
+// exemption (the native apps decode it as a number; a boolean here blanked their whole dashboard).
 function deriveEarnings(earningsProfile, now = new Date(), household = 'single') {
   const year = now.getFullYear();
   const earned = Math.round((earningsProfile?.entries || [])
     .filter((e) => String(e.date).startsWith(String(year)))
     .reduce((a, e) => a + (Number(e.amount) || 0), 0) * 100) / 100;
   const exemption = EARNINGS_EXEMPTION[year]?.[household] ?? null;
-  return { year, earned, exemption, left: exemption == null ? null : Math.max(0, exemption - earned), over: exemption != null && earned > exemption };
+  return { year, earned, exemption, left: exemption == null ? null : Math.max(0, exemption - earned), over: exemption == null ? null : Math.max(0, Math.round((earned - exemption) * 100) / 100) };
 }
 
 // BC PWD single person asset limit; RDSP and exempt accounts don't count.

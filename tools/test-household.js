@@ -64,8 +64,8 @@ test('a cheque that matches the table, or the table plus the bus supplement, is 
 
 test('the earnings tracker uses the household exemption', () => {
   const e = { entries: [{ date: '2026-03-01', amount: 20000 }] };
-  assert.strictEqual(deriveEarnings(e, now).over, true);                      // single: 16,200
-  assert.strictEqual(deriveEarnings(e, now, 'couple_one').over, false);       // couple: 23,400
+  assert.strictEqual(deriveEarnings(e, now).over, 3800);                      // single: 16,200
+  assert.strictEqual(deriveEarnings(e, now, 'couple_one').over, 0);           // couple: 23,400
   assert.strictEqual(deriveEarnings(e, now, 'couple_both').left, 12400);
   assert.strictEqual(deriveEarnings(e, now, 'single_parent').exemption, null);
 });

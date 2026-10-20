@@ -100,9 +100,10 @@ struct MacDashboardData: Codable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         paymentAmount = try container.decodeIfPresent(String.self, forKey: .paymentAmount)
         nextPaymentDate = try container.decodeIfPresent(String.self, forKey: .nextPaymentDate)
-        income = try container.decodeIfPresent(Income.self, forKey: .income)
-        earnings = try container.decodeIfPresent(Earnings.self, forKey: .earnings)
-        assets = try container.decodeIfPresent(Assets.self, forKey: .assets)
+        // try?: one malformed block must not blank the whole dashboard (earnings.over once came as a Bool).
+        income = try? container.decodeIfPresent(Income.self, forKey: .income)
+        earnings = try? container.decodeIfPresent(Earnings.self, forKey: .earnings)
+        assets = try? container.decodeIfPresent(Assets.self, forKey: .assets)
         yearReview = try? container.decodeIfPresent(YearReview.self, forKey: .yearReview)
 
         if let stringMessages = try? container.decode([String].self, forKey: .statusMessages) {

@@ -1,27 +1,26 @@
-# Talli loop handoff (2026-10-20, running to 4.0.0)
+# Talli loop handoff (2026-10-20, morning)
 
 ## What the loop is
 
-Roadmap 3.7 to 10.0 complete; payday push dropped. Version 10.0.0 was a planning milestone and was never shipped to the stores. The native builds are now iOS 3.6.2 and Mac 3.6.1, both submitted and Waiting for Review at Apple. The GitHub release v3.6.2 stays a pre-release until Apple approves. Loop stopped at goal reached. Keep the UI super simple: every tool is one folded line that opens on tap.
+Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybulb.com. The loop is driving native 4.0.0, the first store release with everything since 3.6.2. The name stays Talli everywhere. Keep the UI simple: every tool is one folded line that opens on tap, and Home is one number, one line and one action. A git push deploys nothing; ship the web with `npm run deploy`.
 
 ## Where things stand
 
-Eighteen releases shipped (roadmap sections 3.7.0 through 3.21.0): report from notification, Watch app, year-in-review CSV, four languages, benefit finder, RDSP tracker, supplements calendar, missed-payment alert, simplified UI (one-line folds), document vault, reconsideration helper, message replies, service requests, household tracker, trusted helper, what-if job calculator, simpler Status tab (2064px to 1026px), turning 65 or moving out of BC, budget against paydays, six new entitlements, provinces as data files (Alberta AISH, Ontario ODSP), open data API at /api/open, federal-only mode at /api/federal-finder. Ministry rate tables and earnings limits now live in code. Alberta and Ontario figures checked against public guides and official links, flagged on screen. GitHub tests green. Status tab tools all fold to one-line. Sections 7.0 and 8.0 complete. Payday push (4.0) dropped. App Store still has 3.6.0 (native features since 3.7.0 not in users' hands).
+- The cheque table was wrong: the dashboard and both widget sets showed the 2026 dates wrong and said the next payment was October 28, when BC issues it on the 21st. The dashboard now uses the server's official date, the tables match gov.bc.ca for 2026 and 2027, and a test fails if any copy drifts.
+- The site's CSP now allows the Cloudflare Web Analytics beacon, which was blocked on every page.
+- iOS: Settings and Sign Out are reachable again, since each tab owns its own NavigationStack. Liquid Glass and Jony Ive pass: no redundant tab titles, Home built around one number with a full-width 48 pt glass action, money tiles, calendar and Details; Status is one inset grouped list; one radius set. Mac has a native sidebar instead of a phone-style tab bar.
+- Landing page in the Hermes style (thin caps, grainy blue bands, public domain halftone art, engraved glyph footer). Brand kit at /brand. The tally icon was redone in Icon Composer and centred, and the iOS app target uses Talli.icon.
+- Versions: iOS 4.0.0 is being archived and submitted. Mac 3.6.1's review was pulled, and that build was relabelled 4.0.0 and is also being submitted. Waiting for Review on either is not yet confirmed.
+- QA 2026-10-20: npm test passes. The live API on talli.jaybulb.com returns 200 with a session and 401 without on every path the iOS app calls. Landing, privacy, manifest, robots and sitemap are 200.
+- Open in roadmap.md: verify the contribution figures against the real account; confirm the store build on the phone; flip the GitHub release when Apple approves the Mac build.
 
-Since then: the landing, login, lawyers and privacy pages use plain white and off-white surfaces instead of the Jaybulb cream (an override in `web/tokens.css`), and the hero's ghost-number wall is dimmed behind a stronger scrim. Deployed to talli.jaybulb.com. Two dead CSS files (`web/design-tokens.css`, `web/css/styles.css`) are still on disk and listed as an open roadmap item. Also since then: the app is three tabs everywhere (Home, Status, Messages). Web dropped Calendar and Legal; iOS folds Reports and Benefits into Status and moved Settings behind the avatar; macOS has a gear button for Settings. Home on web, iOS and macOS shows one number, one line and one action, with the rest under a collapsed Details row. A brand kit lives in `brand/` (tokens.css and index.html, system font, Apple spacing and type scale). A new app icon (lighter strokes, steeper tally) is in the repo but not in any build yet. iOS and macOS compile clean. iOS 3.6.2 and Mac 3.6.1 are in Apple review. GitHub release v3.6.2 is a pre-release to flip to Latest when Apple approves. The web Status tab now uses the server's real income, so Home and Status agree.
+## Next, in order
 
-## Next steps
-
-1. Confirm on the phone that the updated store build loads Home and opens Settings. The earlier blank-home report was the old 3.6.0 build calling the lapsed host.
-2. Real-account test: Joshua logs in from .env once, read-only checks on real data (household vs cheque, missed-payment alert, budget, finder prefill, helper view, contribution figures).
-3. Cut native 4.0.0, the first store release with everything since 3.6.2: ship-ios, ship-mac, review notes with exact steps to reach the new tools, App Privacy for the vault, submit both.
-4. Real-device checks: reminders firing, Watch token handoff, vault encryption.
-5. When Apple approves, flip the GitHub release to Latest.
-6. Federal-only mode and the open data API are web only.
-
-## QA 2026-10-20
-
-npm test passes. Live API on talli.jaybulb.com: every path the iOS app calls returns 200 with a session and 401 without. Landing, privacy, manifest, robots and sitemap are 200. No bugs found; /terms, /support and /favicon.ico 404 but nothing links to them (the icons come from link tags).
+1. Confirm both 4.0.0 builds reach Waiting for Review (`asc versions list --app 6782366555` for the real state). If either is rejected, read the reason, fix it in the loop and resubmit.
+2. When Apple approves, flip the GitHub release for 4.0.0 from pre-release to Latest (check `gh release list` first).
+3. Joshua checks the new build on his phone with his real login: Home loads, Settings opens from the avatar, Sign Out works. The earlier blank-home report came from the old build calling the lapsed host; 3.6.2 already carries the fix.
+4. Real-account read-only checks and real-device checks (reminders, Watch handoff, vault encryption) are Joshua's to do. List them here, do not wait on them.
+5. Then pick the 5.0.0 candidates from ~/.claude/loops/talli.md, bugs first.
 
 ## Restart prompt
 

@@ -2,22 +2,24 @@
   "code": "ab",
   "name": "Alberta",
   "program": "AISH, and ADAP for new applicants",
-  "asOf": "2026-10-02",
+  "asOf": "2026-10-20",
   "monthlySingle": 1940,
   "monthlyNote": "AISH living allowance. New applicants since July 2, 2026 may be placed in ADAP, whose core benefit is $1,740 a month. People moved from AISH to ADAP get a $200 monthly transition benefit until December 31, 2027.",
   "children": "AISH adds $232 a month for the first child and $117 for each one after.",
   "earnings": {
     "kind": "monthly",
-    "tiers": [{ "upTo": 1072, "keep": 1 }, { "upTo": 2009, "keep": 0.5 }, { "upTo": null, "keep": 0 }],
-    "familyTiers": [{ "upTo": 2612, "keep": 1 }, { "upTo": 3349, "keep": 0.5 }, { "upTo": null, "keep": 0 }]
+    "tiers": [{ "upTo": 350, "keep": 1 }, { "upTo": null, "keep": 0 }]
   },
   "paid": "Four business days before the 1st by direct deposit.",
   "payDates": ["2025-12-22", "2026-01-27", "2026-02-24", "2026-03-26", "2026-04-27", "2026-05-26", "2026-06-25", "2026-07-28", "2026-08-26", "2026-09-24", "2026-10-27", "2026-11-25", "2026-12-22"],
   "apply": "https://www.alberta.ca/aish-how-to-apply",
   "payments": "https://www.alberta.ca/aish-adap-and-income-support-payment-dates",
-  "confidence": "official links, amounts from news and benefit guides: check the official page",
-  "sources": [
-    "https://www.alberta.ca/alberta-disability-assistance-program",
-    "https://www.alberta.ca/aish-how-to-apply"
-  ]
+  "confidence": "official: earnings and reporting from the Alberta DIA policy manual and alberta.ca, checked 2026-10-20; amounts from news and benefit guides",
+  "sources": ["https://manuals.alberta.ca/dia-policy-manual/aish-adap-program-policy/income/employment-and-self-employment-income/", "https://www.alberta.ca/alberta-disability-assistance-program", "https://www.alberta.ca/report-a-change-to-aish-or-adap"],
+  "earningsNote": "Since July 2, 2026 AISH keeps the first $350 a month of work income, then takes the rest. ADAP keeps the first $700, or $1,100 with dependants, then reduces benefits gradually; Alberta's benefit estimator has the exact figure. A cohabiting partner keeps their own first $1,500.",
+  "report": {
+    "dueDay": null,
+    "text": "Report income and job changes to your AISH or ADAP worker as soon as they happen. Your worker sets you up to report monthly or yearly, and income is updated at least once a year.",
+    "source": "https://manuals.alberta.ca/dia-policy-manual/aish-adap-program-policy/income/income-reporting/"
+  }
 }

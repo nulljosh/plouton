@@ -226,19 +226,18 @@ const TABS = [
   {id:'messages', label:'Messages', icon:Icon.messages},
 ];
 
-// Hold a tab for HOLD_MS to run its action (Messages: mark everything read). The click that follows the hold is swallowed.
+// Hold a tab for HOLD_MS to run its action: Messages marks everything read, Home refreshes. The click that follows the hold is swallowed.
 const HOLD_MS = 800;
-function TabBar({tab, setTab, dark, msgBadge, onMessagesHold}) {
+function TabBar({tab, setTab, dark, msgBadge, holds}) {
   const t = tk(dark);
   const hold = useRef({timer:null, fired:false});
   const startHold = (id) => {
-    if (id !== 'messages' || !onMessagesHold) return;
+    if (!holds[id]) return;
     hold.current.fired = false;
-    hold.current.timer = setTimeout(() => { hold.current.fired = true; navigator.vibrate?.(12); onMessagesHold(); }, HOLD_MS);
+    hold.current.timer = setTimeout(() => { hold.current.fired = true; navigator.vibrate?.(12); holds[id](); }, HOLD_MS);
   };
   const endHold = () => clearTimeout(hold.current.timer);
   const press = (id) => { if (hold.current.fired) { hold.current.fired = false; return; } setTab(id); };
-  // Floats over the content like the native FloatingTabBar; the tabs' scroll areas leave room for it.
   return (
     <div style={{position:'absolute',left:0,right:0,bottom:0,padding:'0 20px max(env(safe-area-inset-bottom,0px),16px)',pointerEvents:'none',zIndex:10}}>
       <div style={{...glass(t,999),pointerEvents:'auto',maxWidth:420,margin:'0 auto',height:64,padding:4,display:'flex',gap:4}}>
@@ -448,6 +447,17 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
       setCheckoutError('Checkout is unavailable. Please try again.');
     } finally { setUnlocking(false); }
   };
+  // Hold the amount to blur it (screenshots, shoulder surfers); remembered on this device.
+  const [hidden, setHidden] = useState(() => { try { return localStorage.getItem('talliHideAmount') === '1'; } catch { return false; } });
+  const holdAmount = useRef(null);
+  const toggleHidden = () => setHidden(h => { const n = !h; try { localStorage.setItem('talliHideAmount', n ? '1' : '0'); } catch {} navigator.vibrate?.(12); return n; });
+  // PWA shortcut "Mark as paid" lands here once, after the data is in.
+  useEffect(() => {
+    if (loaded && urlParam('action') === 'paid') {
+      const url = new URL(window.location.href); url.searchParams.delete('action'); window.history.replaceState(window.history.state, '', url);
+      if (!paid) onPaidChange(true);
+    }
+  }, [loaded]);
   const counted   = useCountUp(loaded ? parseDollar(amount) : 0, 750);
   const digits    = Math.round(counted).toLocaleString('en-CA');
   const urgent    = daysUntil !== null && daysUntil <= 3;
@@ -498,7 +508,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
           Next payment
         </div>
 
-        <div style={{fontSize:`min(calc((100vw - 40px) / ${(digits.length*0.46+0.6).toFixed(2)}), 32vh)`,whiteSpace:'nowrap',fontWeight:200,fontVariantNumeric:'tabular-nums',letterSpacing:'-0.045em',lineHeight:1,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease',textDecoration:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}}>
+        <div style={{fontSize:`min(calc((100vw - 40px) / ${(digits.length*0.46+0.6).toFixed(2)}), 32vh)`,whiteSpace:'nowrap',fontWeight:200,fontVariantNumeric:'tabular-nums',letterSpacing:'-0.045em',lineHeight:1,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease, filter 0.25s ease',filter:hidden?'blur(22px)':'none',userSelect:'none',WebkitUserSelect:'none',WebkitTouchCallout:'none',textDecorationLine:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}} onPointerDown={()=>{holdAmount.current=setTimeout(toggleHidden,HOLD_MS);}} onPointerUp={()=>clearTimeout(holdAmount.current)} onPointerLeave={()=>clearTimeout(holdAmount.current)} onPointerCancel={()=>clearTimeout(holdAmount.current)} onContextMenu={e=>e.preventDefault()}>
           <span style={{position:'relative',display:'inline-block'}}><span style={{position:'absolute',right:'100%',top:'0.2em',marginRight:'0.04em',fontSize:'0.36em',fontWeight:300,color:t.accent,letterSpacing:0,lineHeight:1}}>$</span>{digits}</span>
         </div>
 
@@ -2253,10 +2263,11 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // SCREEN SHELL
 // ════════════════════════════════════════════════════
 const TAB_ORDER = ['home','status','messages'];
+const urlParam = (k) => new URLSearchParams(window.location.search).get(k);
 
 function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, assets, onAddAssets, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, onAvatarBroken, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
   const t = tk(dark);
-  const [tab, setTab] = useState('home');
+  const [tab, setTab] = useState(() => TAB_ORDER.includes(urlParam('tab')) ? urlParam('tab') : 'home');
   const [showSubmit, setShowSubmit] = useState(false);
   const [showPwdResubmit, setShowPwdResubmit] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -2278,6 +2289,16 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
     onRead(ids);
     fetch('/api/read-messages', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({readIds: ids})}).catch(()=>{});
   };
+  // Desktop keys: 1 2 3 switch tabs, R refreshes. Ignored while typing or with a modifier held.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+      if (TAB_ORDER[+e.key - 1]) setTab(TAB_ORDER[+e.key - 1]);
+      else if (e.key === 'r' || e.key === 'R') onRefresh && onRefresh();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onRefresh]);
   const unread=tab==='messages' ? 0 : messages.filter(m=>m.unread && !readIds[m.id]).length;
   const initial=(username||'J').slice(0,1).toUpperCase();
 
@@ -2303,7 +2324,7 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarBroken={onAvatarBroken} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
-      <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread} onMessagesHold={markAllRead}/>
+      <TabBar tab={tab} setTab={setTab} dark={dark} msgBadge={unread} holds={{messages:markAllRead, home:onRefresh}}/>
       {showSubmit&&<SubmitReportModal dark={dark} skn={skn} pinSet={pinSet} onPinSaved={()=>setPinSet(true)} onClose={()=>setShowSubmit(false)}/>}
       {showPwdResubmit&&<PwdResubmitModal dark={dark} pwdDeniedDate={pwdDeniedDate} onClose={()=>setShowPwdResubmit(false)} onResubmitted={onPwdResubmitted}/>}
       {showPinSheet&&<PinSheet dark={dark} onClose={()=>setShowPinSheet(false)} onSaved={()=>{setPinSet(true);setShowPinSheet(false);}}/>}

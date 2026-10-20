@@ -53,3 +53,4 @@ macos/TalliWidgets-Info.plist
 .vercel/
 .DS_Store
 !web/avatars/*.png
+launch/banner/

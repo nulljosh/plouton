@@ -143,7 +143,9 @@ const MON = {JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,
 
 // Known BC pay dates — fallback when scraper returns a stale past date
 const PAY_SCHEDULE = {
-  2026:{0:21,1:25,2:25,3:23,4:27,5:25,6:23,7:26,8:24,9:28,10:25,11:16}
+  // month index (0 = Jan) to day, copied from src/pay-dates.js; tools/test-pay-schedule-sync.js fails if they drift
+  2026:{0:21,1:25,2:25,3:22,4:27,5:24,6:29,7:26,8:23,9:21,10:18,11:16},
+  2027:{0:20,1:24,2:24,3:21,4:19,5:23,6:21,7:25,8:22,9:20,10:24,11:22}
 };
 function nextScheduledPayDate(from) {
   const now = new Date(); now.setHours(0,0,0,0);
@@ -2383,7 +2385,10 @@ function App() {
       const dm = raw.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
       const _now = new Date(); _now.setHours(0,0,0,0);
       let payDate;
-      if (dm) {
+      const nd = json.uiConfig?.nextDate && /^(\d{4})-(\d{2})-(\d{2})$/.exec(json.uiConfig.nextDate);
+      if (nd) {
+        payDate = new Date(+nd[1], +nd[2] - 1, +nd[3]);
+      } else if (dm) {
         let d = new Date(+dm[1], MON[dm[2]], +dm[3]);
         if (d < _now) d = nextScheduledPayDate(d);
         payDate = d;

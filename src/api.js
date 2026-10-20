@@ -1306,6 +1306,8 @@ app.get('/api/latest', requireAuth, async (req, res) => {
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const earningsProfile = await loadUserBlob(userId, 'earnings-profile', null).catch(() => null);
     const uiConfig = {
+      // the official cheque issue date (src/pay-dates.js), so the dashboard never guesses
+      nextDate: nextPaymentDate(new Date()),
       pwdApproved: pwdProfile.status === 'approved' || PWD_APPROVED,
       pwdMedicalDone: pwdProfile.status === 'medical_done' || pwdProfile.status === 'approved' || PWD_MEDICAL_DONE,
       pwdStatus: PWD_RESUBMITTED ? 'resubmitted' : PWD_DENIED ? 'denied' : pwdProfile.status,

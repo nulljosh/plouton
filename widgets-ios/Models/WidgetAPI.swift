@@ -49,9 +49,10 @@ struct WidgetAPI {
     // MARK: - Next Payment Date
 
     static func nextPaymentDate() -> (formatted: String, daysUntil: Int) {
-        let payDates2026: [Int: Int] = [
-            0: 21, 1: 25, 2: 25, 3: 23, 4: 27, 5: 24,
-            6: 23, 7: 26, 8: 24, 9: 28, 10: 25, 11: 16
+        // month index (0 = Jan) to day, from src/pay-dates.js; tools/test-pay-schedule-sync.js fails if they drift
+        let payDatesByYear: [Int: [Int: Int]] = [
+            2026: [0: 21, 1: 25, 2: 25, 3: 22, 4: 27, 5: 24, 6: 29, 7: 26, 8: 23, 9: 21, 10: 18, 11: 16],
+            2027: [0: 20, 1: 24, 2: 24, 3: 21, 4: 19, 5: 23, 6: 21, 7: 25, 8: 22, 9: 20, 10: 24, 11: 22]
         ]
 
         let now = Date()
@@ -62,14 +63,15 @@ struct WidgetAPI {
         var targetMonth = month
         var targetYear = cal.component(.year, from: now)
 
-        if let thisDay = payDates2026[month], day <= thisDay {
+        if let thisDay = payDatesByYear[targetYear]?[month], day <= thisDay {
             targetMonth = month
         } else {
             targetMonth = (month + 1) % 12
             if targetMonth == 0 { targetYear += 1 }
         }
 
-        let targetDay = payDates2026[targetMonth] ?? 25
+        // no published date yet: show nothing rather than guess a benefits payment date
+        guard let targetDay = payDatesByYear[targetYear]?[targetMonth] else { return ("--", 0) }
         var components = DateComponents()
         components.year = targetYear
         components.month = targetMonth + 1

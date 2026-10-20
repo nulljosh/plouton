@@ -501,14 +501,6 @@ const PROGRAMS = [
     link: 'https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4065/medical-expenses.html',
   },
   {
-    id: 'climate', group: 'money', name: 'BC Climate Action Tax Credit', auto: true,
-    when: { taxes: ['yes'] },
-    yearly: null, value: 'Up to $504 a year, paid with your GST credit',
-    why: 'Low income BC residents get it with the GST/HST credit. It is $126 more for each child.',
-    how: ['Nothing to apply for. Keep filing your taxes. Your amount shows in CRA My Account.'],
-    link: 'https://www2.gov.bc.ca/gov/content/taxes/income-taxes/personal/credits/climate-action',
-  },
-  {
     id: 'taxfree', group: 'savings', name: 'No GST or PST on assistive devices',
     when: {}, disabled: true,
     yearly: null, value: 'Wheelchairs, glasses, hearing aids and more',

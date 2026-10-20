@@ -12,6 +12,8 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 - Landing page in the Hermes style (thin caps, grainy blue bands, public domain halftone art, engraved glyph footer). Brand kit at /brand. The tally icon was redone in Icon Composer and centred, and the iOS app target uses Talli.icon.
 - Versions: iOS 4.0.0 is Waiting for Review. Mac 4.0.0 (build 202610201044) is uploaded and attached but not submitted: Apple's five open review submissions limit is full until the iOS review clears. Four empty iOS drafts hold slots, and Apple refuses to cancel or delete them (CLI guard, PATCH canceled says not cancellable, DELETE not allowed), so waiting is the only route.
 - QA 2026-10-20: npm test passes. The live API on talli.jaybulb.com returns 200 with a session and 401 without on every path the iOS app calls. Landing, privacy, manifest, robots and sitemap are 200.
+- Docs pass 2026-10-20: ARCHITECTURE no longer claims Supabase or Upstash (neither is live), WHITEPAPER is v4.0 with the blue Liquid Glass look and an honest analytics line, README badge says 4.0.0. Mac submit retried at the afternoon tick, still capped.
+- For Joshua: `src/session-store.js` and `tools/test-session-store.js` are dead (nothing imports them, `@upstash/redis` is not installed); the loop was not allowed to delete them, so say the word or `git rm` them. The privacy page says no analytics trackers, but the site runs cookieless Cloudflare Web Analytics; decide whether to add a line saying so.
 - Open in roadmap.md: verify the contribution figures against the real account; confirm the store build on the phone; flip the GitHub release when Apple approves the Mac build.
 
 ## Next, in order

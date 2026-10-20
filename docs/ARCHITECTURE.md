@@ -1,6 +1,6 @@
 # Architecture
 
-Talli helps people in BC track and manage their disability benefits. It pulls a user's data from the government's BC Self-Serve portal, explains which benefits they qualify for, and lets them file their monthly income report right from the app instead of the portal. It has a web dashboard, native iOS and macOS apps, a watchOS companion, and an early Android version. A Cloudflare Workers backend does the actual portal scraping, and all versions of the app stay in sync through shared API endpoints backed by Cloudflare's key-value store and Supabase.
+Talli helps people in BC track and manage their disability benefits. It pulls a user's data from the government's BC Self-Serve portal, explains which benefits they qualify for, and lets them file their monthly income report right from the app instead of the portal. It has a web dashboard, native iOS and macOS apps, a watchOS companion, and an early Android version. A Cloudflare Workers backend does the actual portal scraping, and all versions of the app stay in sync through shared API endpoints backed by Cloudflare's key-value store.
 
 ## How it runs
 
@@ -48,12 +48,12 @@ Core business logic: scraper, auth, session management, program schemas, data pa
 
 | File | What it owns |
 |---|---|
-| `src/api.js` | Express app (2000+ lines). Routes all /api/* endpoints (login, check, latest, submit-report, paid-status, messages, etc.). Manages sessions (express-session + Upstash Redis), auth, CSRF. Loads program schemas, binds to Cloudflare KV. Serves static assets via `run_worker_first`. |
+| `src/api.js` | Express app (2700+ lines). Routes all /api/* endpoints (login, check, latest, submit-report, paid-status, messages, etc.). Manages sessions (express-session, cookie only, no external store), auth, CSRF. Loads program schemas, binds to Cloudflare KV. Serves static assets via `run_worker_first`. |
 | `src/http-scraper.js` | HTTP scraper for BC Self-Serve portal. Logs in with credentials (BCeID relay chain), scrapes /Auth/Dashboard, /Auth/MonthlyReports, /Auth/Messages. Handles retries, timeouts, error states. Returns structured portal data (payment amount, next date, benefits, messages, report filing status). |
 | `src/parse-messages.js` | Message extraction from scraped HTML. Handles portal's quirky text-node-only markup. Deduplicates, parses dates, counts. Returns message array [{ text, date }]. |
 | `src/programs/` | Program-specific logic: PWD (Persons with Disabilities), RDSP (Registered Disability Savings Plan), CDB (Canada Disability Benefit). Each has profile endpoints (data structure), eligibility rules, status derivation. Generated routes via `registerProfileRoutes()`. |
 | `src/scraper.js` | Session manager, login orchestration, cache layer. Checks if scrape is already in-flight, returns existing promise (locks prevent duplicate concurrent scrapes). |
-| `src/session-store.js` | Session storage abstraction. Upstash Redis wrapper for express-session (TTL-backed, serializable). Fallback in-memory store for local dev. |
+| `src/session-store.js` | Unused. An old Upstash Redis store for express-session from the Vercel days; nothing imports it and `@upstash/redis` is not a dependency. Slated for deletion. |
 | `src/pay-dates.js` | Hardcoded BC payment schedule (Wednesday cheque issue dates) and derived payday calculation. nextPaymentDate() looks up schedule. |
 | `src/school-grades.js` | Loads cached school grades from disk (for future feature). |
 | `src/_blob.js` | KV storage abstraction. Wraps Cloudflare Workers KV. Stores dashboard cache, report-status, paid-months, avatar, messages. |
@@ -67,7 +67,7 @@ Core business logic: scraper, auth, session management, program schemas, data pa
 | File | What it owns |
 |---|---|
 | `ios/TallyApp.swift` | Main app entry. Instantiates AppState, wraps in environment, sets theme preference. |
-| `ios/ContentView.swift` | Root UI shell (559 lines). AuthenticatedTabShell vs LoginScreen. Tab switching, splash screen, offline/stale banners. TabView with Dashboard, Settings, Reports. |
+| `ios/ContentView.swift` | Root UI shell. AuthenticatedTabShell vs LoginScreen. Splash screen, offline/stale banners. TabView with Home, Status and Messages, each tab owning its NavigationStack. Settings is a sheet from the avatar. |
 
 ### State & API
 
@@ -150,12 +150,12 @@ Minimal UI: three glances (payment, benefits, messages). Read-only companion to 
 
 ## Tools & Scripts
 
-Test suite covering scraper, parsing, date logic, session store, payment dates, message parsing, read-messages, paid-status, program schemas, i18n, auth, Stripe webhooks, WebMCP. Tools include:
+Test suite covering scraper, parsing, date logic, payment dates, message parsing, read-messages, paid-status, program schemas, i18n, auth, Stripe webhooks, WebMCP. Tools include:
 
 | File | What it owns |
 |---|---|
 | `tools/test.js` | Main test runner. Checks scraper sections, portal data freshness, parsing correctness. |
-| `tools/test-*.js` | Individual test files: http-scraper (portal parse), messages (extraction), pay-dates (schedule verification), program-schema (routes), paid-status (monthly paid months format), session-store (Redis), i18n (string validity), stripe-webhook (Stripe event handling), webmcp (tool registration), response-split (Content-Length bug), school-grades (file loading), scrape-lock (concurrency guard), read-messages (read-state persistence). |
+| `tools/test-*.js` | Individual test files: http-scraper (portal parse), messages (extraction), pay-dates (schedule verification), program-schema (routes), paid-status (monthly paid months format), pay-schedule-sync (every cheque table matches gov.bc.ca), i18n (string validity), stripe-webhook (Stripe event handling), webmcp (tool registration), response-split (Content-Length bug), school-grades (file loading), scrape-lock (concurrency guard), read-messages (read-state persistence). |
 | `tools/native-decode-check/` | Swift cross-check: both native clients shipped shape-mismatch bugs (Workers truncated by 1 byte, macOS had wrong field names). This standalone check decodes the payload natively to catch future drift. |
 | `tools/school/fill_pdf.py` | Biology 12 fill-in-the-blank PDF filler. Finds blanks, matches them to answer key using Claude. |
 | `tools/dtc_apply.py` | T2201/DTC application helper (file -> CSV). |

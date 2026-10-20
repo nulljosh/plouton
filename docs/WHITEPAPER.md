@@ -1,6 +1,6 @@
 # Talli Technical Whitepaper
 
-**v3.6** | October 2026
+**v4.0** | October 2026
 
 When does the money come, and how much?
 
@@ -9,8 +9,8 @@ not the people waiting on the payment. Talli answers it directly for people
 on BC disability assistance. It reads BC Self-Serve, tracks income and
 payment dates, follows PWD and DTC applications, and shows government
 messages. Everything the Ministry makes you dig for, in one glance. Live at
-[talli.jaybulb.com](https://talli.jaybulb.com), with an iOS companion
-app and a watchOS complication.
+[talli.jaybulb.com](https://talli.jaybulb.com), with native iPhone, Mac
+and Watch apps.
 
 ## Core Mechanic: The Scraper
 
@@ -63,21 +63,22 @@ On top of the scrape:
 | Platform | Status |
 |---|---|
 | Web (PWA) | Live |
-| iOS | 3.6 Live |
-| macOS | 3.6 Live |
+| iOS | 3.6 live, 4.0 in review |
+| macOS | 3.6 live, 4.0 waiting to submit |
 | watchOS | Bundled complication |
 
-The iOS app matches the web visual language (parchment palette, orange accent,
-pixel-art avatar generated with Core Graphics), because a payment tracker
-should feel calm rather than urgent, and ships via
-`asc workflow run ship-ios`.
+The native apps share the web's look: Talli blue (#5B9BD5), Liquid Glass on
+iOS 26 and up, and a Home screen that is one number, one line and one action,
+because a payment tracker should feel calm rather than urgent. They ship via
+`asc workflow run ship-ios` and `ship-mac`.
 
 ## Security
 
 - Scraper credentials encrypted per session; nothing written to disk in clear,
   since a compromised device shouldn't also hand over a BCeID login.
 - SIN masked in all UI surfaces.
-- No ads, no analytics, no third-party trackers, the only external calls are
-  to BC Self-Serve itself, because the people using this app are already
+- No ads and no trackers. The only data calls are to BC Self-Serve itself.
+  The web pages count visits with Cloudflare Web Analytics, which sets no
+  cookies and keeps no profile, because the people using this app are already
   dealing with the Ministry watching their finances; Talli doesn't add
   another party to that list.

@@ -2,7 +2,7 @@
 
 # Talli
 
-![version](https://img.shields.io/badge/version-v3.6.2-blue)
+![version](https://img.shields.io/badge/version-v4.0.0-blue)
 ![license](https://img.shields.io/badge/license-MIT-green) [![GitHub](https://img.shields.io/badge/GitHub-nulljosh%2Ftalli-black?logo=github)](https://github.com/nulljosh/talli)
 
 Live at [talli.jaybulb.com](https://talli.jaybulb.com) · [App Store](https://apps.apple.com/app/talli/id6782366555)

@@ -442,12 +442,12 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: IS_PRODUCTION, // HTTPS-only on Vercel, HTTP OK on localhost
+    secure: IS_PRODUCTION, // HTTPS-only on Workers, HTTP OK on localhost
     httpOnly: true,
     sameSite: 'strict',
     maxAge: DEFAULT_SESSION_MAX_AGE_MS
   }
-  // No store needed - defaults to MemoryStore locally, cookies on Vercel serverless
+  // No store: MemoryStore per process locally and per isolate on Workers
 }));
 
 // THE LOGIN LOOP: express-session "splits the response" whenever Content-Length

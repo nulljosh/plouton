@@ -16,7 +16,7 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 1. Place the search video on iOS 4.0.1 and submit it.
 2. When Mac is approved, flip the GitHub 4.0.0 release to Latest (#62).
 3. 5.0: open data on iPhone and Mac, zh and pa strings (reviewed, not machine), real-device pass.
-4. Mac snapshot mode shows "Signed in as Unknown"; give it a demo name before the next desktop shots.
+4. Retake the Mac Settings shot (snapshot mode now signs in as your.username) and add it as the fourth desktop shot.
 
 ## For Joshua
 

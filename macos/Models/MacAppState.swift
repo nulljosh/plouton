@@ -94,6 +94,7 @@ final class MacAppState {
     init() {
         if (ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] != nil) {
             isAuthenticated = true
+            username = "your.username"
             // Dates relative to today, so store shots never show a past payday
             // or a stale-sync banner. Same as the iOS mock.
             let day: (Int) -> String = { offset in

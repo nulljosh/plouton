@@ -69,6 +69,7 @@ private struct LoginScreen: View {
     @Environment(AppState.self) private var appState
     @State private var username = ""
     @State private var password = ""
+    @State private var showFederal = false
 
     var body: some View {
         VStack(spacing: 20) {
@@ -128,11 +129,23 @@ private struct LoginScreen: View {
                     .multilineTextAlignment(.center)
             }
 
+            Button("Federal benefits, no account needed") { showFederal = true }
+                .font(.footnote)
+                .tint(Color.talliBlue)
+
             Spacer()
         }
         .padding(24)
         .background(Color(.systemBackground).ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showFederal) {
+            NavigationStack {
+                ScrollView { BenefitFinderView { try await APIClient.shared.federalFinder(answers: $0) }.padding(20) }
+                    .navigationTitle("Federal benefits")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar { Button("Done") { showFederal = false } }
+            }
+        }
     }
 }
 

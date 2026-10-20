@@ -10,7 +10,8 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Joshua's call: delete the dead `src/session-store.js` and `tools/test-session-store.js` (nothing imports them).
 
 ## 5.0 Every platform, every tool
-- [ ] Web-only tools on iPhone and Mac: federal-only mode, open data, benefit finder, job calculator.
+- [x] Benefit finder, job calculator and federal-only mode (sign-in screen, no account) on iPhone and Mac.
+- [ ] Open data on iPhone and Mac.
 - [ ] fr, zh and pa strings complete in the String Catalog, checked by a test.
 - [ ] Watch shows the next amount and date with no phone nearby. Built: it calls `/api/summary` with its own token and caches the last result; needs the real-device check below.
 - [x] Widgets read the shared pay table, tested against `src/pay-dates.js` (`tools/test-pay-schedule-sync.js`).

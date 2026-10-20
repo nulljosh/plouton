@@ -181,6 +181,14 @@ final class APIClient: @unchecked Sendable {
         return try await send(path: "api/benefit-finder", responseType: BenefitFinder.self)
     }
 
+    /// Federal-only finder (src/programs/finder.js, scope federal): public, for people without a BC account; nothing is saved.
+    func federalFinder(answers: [String: [String]]?) async throws -> BenefitFinder {
+        if let answers {
+            return try await send(path: "api/federal-finder", method: "POST", body: BenefitFinderRequest(answers: answers), responseType: BenefitFinder.self)
+        }
+        return try await send(path: "api/federal-finder", responseType: BenefitFinder.self)
+    }
+
     /// Raw requests for the document vault: ciphertext in and out, so no JSON decoding.
     var vault: VaultAPI {
         VaultAPI { path, method, body, contentType in

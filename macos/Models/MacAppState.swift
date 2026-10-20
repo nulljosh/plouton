@@ -99,7 +99,7 @@ final class MacAppState {
                 return d.formatted(Date.ISO8601FormatStyle(timeZone: .current).year().month().day())
             }
             dashboard = MacDashboardData(
-                paymentAmount: "$1,080.00",
+                paymentAmount: "$1,750.00",
                 nextPaymentDate: day(18),
                 statusMessages: [
                     .init(text: "Your monthly report has been received.", timestamp: day(-1)),

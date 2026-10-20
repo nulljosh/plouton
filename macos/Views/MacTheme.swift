@@ -1,35 +1,25 @@
 import SwiftUI
 
-// BC Government Blue Palette
+// One accent, the same Talli blue the web uses (#5B9BD5). bcLight is kept as a name only.
 extension Color {
-    /// #003366 in light mode, brightened for legibility against dark backgrounds in dark mode
-    static let bcPrimary = Color(NSColor(name: nil, dynamicProvider: { appearance in
-        appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            ? NSColor(red: 92/255, green: 170/255, blue: 235/255, alpha: 1)
-            : NSColor(red: 0/255, green: 51/255, blue: 102/255, alpha: 1)
-    }))
-    /// #1A5276 - BC Gov medium blue
-    static let bcMedium = Color(red: 26/255, green: 82/255, blue: 118/255)
-    /// #38B0DE - BC Gov light accent blue
-    static let bcLight = Color(red: 56/255, green: 176/255, blue: 222/255)
+    static let bcPrimary = Color(red: 91/255, green: 155/255, blue: 213/255)
+    static let bcLight = bcPrimary
 }
 
 // MARK: - Shared Card Modifiers
 
 private let macCardShape = RoundedRectangle(cornerRadius: 20, style: .continuous)
 
+// Glass card: one radius (20), padding on the 4 point scale, a hairline edge, no drop shadow.
 struct MacGlassCard: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
+    var padding: CGFloat = 16
 
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(20)
-            .background(
-                macCardShape
-                    .fill(colorScheme == .dark ? .regularMaterial : .ultraThinMaterial)
-                    .shadow(color: .black.opacity(colorScheme == .dark ? 0.25 : 0.06), radius: 10, y: 3)
-            )
+            .padding(padding)
+            .background(macCardShape.fill(colorScheme == .dark ? .regularMaterial : .ultraThinMaterial))
             .overlay(
                 macCardShape.strokeBorder(
                     Color.primary.opacity(colorScheme == .dark ? 0.12 : 0.05),
@@ -40,5 +30,5 @@ struct MacGlassCard: ViewModifier {
 }
 
 extension View {
-    func macGlassCard() -> some View { modifier(MacGlassCard()) }
+    func macGlassCard(padding: CGFloat = 16) -> some View { modifier(MacGlassCard(padding: padding)) }
 }

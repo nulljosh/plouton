@@ -3,8 +3,8 @@
 Talli is free and stays free. The job is accuracy: what lands, when, and what you are allowed to earn. History lives in git. Store state comes from `asc versions list --app 6782366555`, never from this file.
 
 ## Now (4.0.x)
-- [ ] iOS 4.0.1: build 202610201345 uploaded. Attach, new iPhone screenshots, animated header, URLs, submit.
-- [ ] Mac 4.0.0: rebuild from main (Settings tab), attach, four-tab desktop shots, submit.
+- [ ] iOS 4.0.1: build 202610201345 attached, iPhone screenshots and header video on. Search results video processing, then submit.
+- [x] Mac 4.0.0: build 202610201455 from main, desktop shots, submitted 2026-10-20.
 - [ ] Flip the GitHub 4.0.0 release to Latest once Mac is approved (#62).
 - [ ] Verify the account contribution figures against the real account (#57, Joshua's login).
 - [ ] Joshua's call: delete the dead `src/session-store.js` and `tools/test-session-store.js` (nothing imports them).

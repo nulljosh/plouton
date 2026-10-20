@@ -15,7 +15,7 @@ app and a watchOS complication.
 ## Core Mechanic: The Scraper
 
 BC Self-Serve has no public API, so reading it at all means acting like a
-browser. Talli's core is a Puppeteer scraper (`src/scraper.js`) that logs in
+browser. Talli's core is an HTTP scraper (`src/http-scraper.js`) that logs in
 with the user's BCeID, navigates the portal, and extracts payments, messages,
 account info, and application status into structured JSON. Credentials are
 session-encrypted and never stored in plaintext, because a scraper that holds

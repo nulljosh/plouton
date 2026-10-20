@@ -49,10 +49,10 @@ Core business logic: scraper, auth, session management, program schemas, data pa
 | File | What it owns |
 |---|---|
 | `src/api.js` | Express app (2000+ lines). Routes all /api/* endpoints (login, check, latest, submit-report, paid-status, messages, etc.). Manages sessions (express-session + Upstash Redis), auth, CSRF. Loads program schemas, binds to Cloudflare KV. Serves static assets via `run_worker_first`. |
-| `src/http-scraper.js` | Puppeteer scraper for BC Self-Serve portal. Logs in with credentials (BCeID relay chain), scrapes /Auth/Dashboard, /Auth/MonthlyReports, /Auth/Messages. Handles retries, timeouts, error states. Returns structured portal data (payment amount, next date, benefits, messages, report filing status). |
+| `src/http-scraper.js` | HTTP scraper for BC Self-Serve portal. Logs in with credentials (BCeID relay chain), scrapes /Auth/Dashboard, /Auth/MonthlyReports, /Auth/Messages. Handles retries, timeouts, error states. Returns structured portal data (payment amount, next date, benefits, messages, report filing status). |
 | `src/parse-messages.js` | Message extraction from scraped HTML. Handles portal's quirky text-node-only markup. Deduplicates, parses dates, counts. Returns message array [{ text, date }]. |
 | `src/programs/` | Program-specific logic: PWD (Persons with Disabilities), RDSP (Registered Disability Savings Plan), CDB (Canada Disability Benefit). Each has profile endpoints (data structure), eligibility rules, status derivation. Generated routes via `registerProfileRoutes()`. |
-| `src/scraper.js` | Puppeteer session manager, login orchestration, cache layer. Checks if scrape is already in-flight, returns existing promise (locks prevent duplicate concurrent scrapes). |
+| `src/scraper.js` | Session manager, login orchestration, cache layer. Checks if scrape is already in-flight, returns existing promise (locks prevent duplicate concurrent scrapes). |
 | `src/session-store.js` | Session storage abstraction. Upstash Redis wrapper for express-session (TTL-backed, serializable). Fallback in-memory store for local dev. |
 | `src/pay-dates.js` | Hardcoded BC payment schedule (Wednesday cheque issue dates) and derived payday calculation. nextPaymentDate() looks up schedule. |
 | `src/school-grades.js` | Loads cached school grades from disk (for future feature). |
@@ -179,7 +179,7 @@ Test suite covering scraper, parsing, date logic, session store, payment dates, 
 ## Key Gotchas & Design Decisions
 
 - **No authentication token in code**: Sessions are server-side and cookie-based. Portal credentials never leave the server (stored encrypted in KV). Clients hold only session cookies via URLSession.
-- **Portal scraper**: Puppeteer-based on BC Self-Serve HTML. Inherently fragile to UI changes. Test suite (`tools/test.js`) validates freshness weekly.
+- **Portal scraper**: HTTP-based on BC Self-Serve HTML. Inherently fragile to UI changes. Test suite (`tools/test.js`) validates freshness weekly.
 - **Stale-while-revalidate**: API serves cached data immediately, refreshes in background. Prevents UI hang on slow portal scrapes (~30s).
 - **App Group sharing**: iOS app + widgets share data via UserDefaults(suiteName: "group.com.heyitsmejosh.talli"). macOS uses the same pattern. watchOS reads from API only (no local sync).
 - **Date parsing**: Portal returns inconsistent date formats. DateParsing.swift/MacDateParsing.swift handle multiple patterns with fallbacks.

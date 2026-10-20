@@ -1,4 +1,4 @@
-# Talli loop handoff (2026-10-16, 15:40, STOPPED at goal)
+# Talli loop handoff (2026-10-20, running to 4.0.0)
 
 ## What the loop is
 
@@ -12,25 +12,19 @@ Since then: the landing, login, lawyers and privacy pages use plain white and of
 
 ## Next steps
 
-1. Real-account test: Joshua runs a one-line login (saves cookie jar to scratchpad), read-only checks on real data (household vs cheque, missed-payment alert, budget, finder prefill, helper view). Claude never types BCeID password.
-2. Fresh native build to App Store review: asc workflow, update review notes with exact steps to reach new tools. First native release since 3.6.0.
-3. Real-device checks: reminders firing, Watch token handoff, vault encryption on real phone.
-4. Note: federal-only mode and open data API are web only.
-5. Flip GitHub release v3.6.2 from pre-release to Latest once Apple approves. Verify the contribution figures against the real account.
+1. Confirm on the phone that the updated store build loads Home and opens Settings. The earlier blank-home report was the old 3.6.0 build calling the lapsed host.
+2. Real-account test: Joshua logs in from .env once, read-only checks on real data (household vs cheque, missed-payment alert, budget, finder prefill, helper view, contribution figures).
+3. Cut native 4.0.0, the first store release with everything since 3.6.2: ship-ios, ship-mac, review notes with exact steps to reach the new tools, App Privacy for the vault, submit both.
+4. Real-device checks: reminders firing, Watch token handoff, vault encryption.
+5. When Apple approves, flip the GitHub release to Latest.
+6. Federal-only mode and the open data API are web only.
 
-Payday push dropped.
+## QA 2026-10-20
 
-## Restart prompt (when resuming from STOPPED)
+npm test passes. Live API on talli.jaybulb.com: every path the iOS app calls returns 200 with a session and 401 without. Landing, privacy, manifest, robots and sitemap are 200. No bugs found; /terms, /support and /favicon.ico 404 but nothing links to them (the icons come from link tags).
 
-When 3.6.0 clears App Store review:
+## Restart prompt
 
 ```
-/loop Talli: real-account test with cookie jar (Joshua logs in from .env, reads real cheque, checks household/alert/budget/finder/helper/RDSP/supplements), create the next App Store version (iOS 3.6.2 and Mac 3.6.1 are already in review), attach TestFlight build, write review notes (steps: open app, tap Money tools, tap What If), write App Privacy for vault, submit iPhone and Mac, run read-only checks from asc web UI, real-device checks (reminders, Watch, vault). Payday push dropped. Keep UI super simple.
+/loop Talli: read ~/.claude/loops/talli.md and docs/LOOP-HANDOFF.md, run the next iteration toward native 4.0.0 (real versions from `asc versions list`), then re-arm.
 ```
-
-## Release cadence
-
-Latest: 3.21.0 shipped 2026-10-02. Next: fresh native build to App Store (all features since 3.7.0 included).
-
-## Update 2026-10-17
-Phone report (blank home, no settings) is the old store build calling the lapsed heyitsmejosh.com host. Source is fine. Confirm on iOS 3.6.2 once approved. Open: favicon refresh.

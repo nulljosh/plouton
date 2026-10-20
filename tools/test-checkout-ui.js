@@ -15,6 +15,7 @@ function harness(fetch, returning = false) {
     fetch, URL, URLSearchParams, tk: () => ({}),
     useState(initial) { const i = state.length; state.push(typeof initial === 'function' ? initial() : initial); return [state[i], value => { state[i] = value; }]; },
     useEffect(fn) { effects.push(fn); },
+    useRef(value) { return { current: value }; },
     setTimeout(fn) { timers.push(fn); return timers.length; }, clearTimeout() {},
     window: { location, history: { state: null, replaceState(_s, _title, url) { location.href = String(url); } } },
   };

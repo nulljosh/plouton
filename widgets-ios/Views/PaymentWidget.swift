@@ -11,7 +11,7 @@ struct PaymentWidget: Widget {
         }
         .configurationDisplayName("Next Payment")
         .description("Countdown to your next payment.")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }
 
@@ -23,6 +23,8 @@ struct PaymentWidgetView: View {
         switch family {
         case .accessoryCircular:
             accessoryCircularView
+        case .accessoryRectangular:
+            accessoryRectangularView
         case .accessoryInline:
             accessoryInlineView
         case .systemSmall:
@@ -46,6 +48,14 @@ struct PaymentWidgetView: View {
                 .font(.title2.bold().monospacedDigit())
             Text("days")
                 .font(.system(size: 8))
+        }
+    }
+
+    private var accessoryRectangularView: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Next payment").font(.caption2).foregroundStyle(.secondary)
+            Text(entry.amount).font(.title3.weight(.semibold).monospacedDigit())
+            Text("\(entry.nextDate) -- \(entry.daysUntil)d").font(.caption2)
         }
     }
 

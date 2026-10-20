@@ -509,7 +509,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         </div>
 
         <div style={{fontSize:`min(calc((100vw - 40px) / ${(digits.length*0.46+0.6).toFixed(2)}), 32vh)`,whiteSpace:'nowrap',fontWeight:200,fontVariantNumeric:'tabular-nums',letterSpacing:'-0.045em',lineHeight:1,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease, filter 0.25s ease',filter:hidden?'blur(22px)':'none',userSelect:'none',WebkitUserSelect:'none',WebkitTouchCallout:'none',textDecorationLine:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}} onPointerDown={()=>{holdAmount.current=setTimeout(toggleHidden,HOLD_MS);}} onPointerUp={()=>clearTimeout(holdAmount.current)} onPointerLeave={()=>clearTimeout(holdAmount.current)} onPointerCancel={()=>clearTimeout(holdAmount.current)} onContextMenu={e=>e.preventDefault()}>
-          <span style={{position:'relative',display:'inline-block'}}><span style={{position:'absolute',right:'100%',top:'0.2em',marginRight:'0.04em',fontSize:'0.36em',fontWeight:300,color:t.accent,letterSpacing:0,lineHeight:1}}>$</span>{digits}</span>
+          <span style={{position:'relative',display:'inline-block'}}><span style={{position:'absolute',right:'100%',top:'0.2em',marginRight:'0.04em',fontSize:'0.36em',fontWeight:300,color:t.success,letterSpacing:0,lineHeight:1}}>$</span>{digits}</span>
         </div>
 
         <div style={{marginTop:24,fontSize:28,fontWeight:600,letterSpacing:'-0.02em',lineHeight:1,color:isToday?t.success:t.accent,transition:'color 0.3s',animation:'fadeUp 0.45s 0.1s ease both'}}>

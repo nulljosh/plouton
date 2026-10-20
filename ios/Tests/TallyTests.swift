@@ -81,6 +81,16 @@ final class DashboardDataDecodingTests: XCTestCase {
         XCTAssertEqual(data.statusMessages[0].timestamp, "2026-05-01")
     }
 
+    func testMalformedBlockKeepsAmountAndDate() throws {
+        // 4.0 regression: earnings.over came as a Bool and the whole dashboard decoded to "--"
+        let data = try decode("""
+        {"payment_amount":"$1,260","next_date":"2026-10-21","messages":[],
+         "earnings":{"year":2026,"earned":0,"exemption":16200,"left":16200,"over":false}}
+        """)
+        XCTAssertEqual(data.paymentAmount, "$1,260")
+        XCTAssertEqual(data.nextPaymentDate, "2026-10-21")
+    }
+
     func testServerShapeMessages() throws {
         // /api/mobile sends {id, text, timestamp} — regression: these decoded to empty text and were filtered out
         let data = try decode("""

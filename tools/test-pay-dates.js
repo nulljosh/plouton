@@ -77,8 +77,8 @@ t('portal amount beats the default rate, not a recorded one', () => {
 t('earnings exemption: this year only, flags going over', () => {
   const { deriveEarnings } = require('../src/programs/profiles');
   const e = deriveEarnings({ entries: [{ date: '2026-03-01', amount: 1000 }, { date: '2025-12-30', amount: 9999 }] }, new Date(2026, 9, 2));
-  assert.deepStrictEqual(e, { year: 2026, earned: 1000, exemption: 16200, left: 15200, over: false });
-  assert.strictEqual(deriveEarnings({ entries: [{ date: '2026-05-01', amount: 17000 }] }, new Date(2026, 9, 2)).over, true);
+  assert.deepStrictEqual(e, { year: 2026, earned: 1000, exemption: 16200, left: 15200, over: 0 });
+  assert.strictEqual(deriveEarnings({ entries: [{ date: '2026-05-01', amount: 17000 }] }, new Date(2026, 9, 2)).over, 800);
   assert.strictEqual(deriveEarnings(null, new Date(2031, 0, 1)).exemption, null);
 });
 

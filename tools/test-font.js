@@ -16,6 +16,7 @@ for (const f of ['web/fonts/OFL.txt', 'fonts/OFL.txt']) assert(/Open Font Licens
 const html = read('web/unified.html').toString();
 assert(html.includes("src:url('/fonts/TalliDisplay-Semibold.woff2')"), 'unified.html has no @font-face for Talli Display');
 assert(html.includes('rel="preload" href="/fonts/TalliDisplay-Semibold.woff2"'), 'unified.html does not preload the font');
+assert(read('web/landing.css').toString().includes('url(/fonts/TalliDisplay-Semibold.woff2)'), 'landing.css has no @font-face for Talli Display');
 for (const f of ['ios/project.yml', 'macos/project.yml'])
   assert(read(f).toString().includes('../fonts/TalliDisplay-Semibold.ttf'), `${f} does not bundle the font`);
 

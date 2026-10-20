@@ -2,6 +2,7 @@
    frame down the window, and full-bleed grainy blue bands where the glyphs sit in scanlines like an engraving.
    Colours come from tokens.css (canonical plus Talli's blue). Only the band colours below are landing-only. System font. */
 :root {
+  --money: #2d9e5f;                      /* the $ on the amount, as in the app */
   --band: #2F6FB0;                       /* full-bleed sections, white text on it is 5.2:1 */
   --band-sub: #dbe8f6;
   --band-art: #a9cdef;
@@ -27,7 +28,7 @@
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .28 0 0 0 -.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 @media (prefers-color-scheme: dark) {
-  :root { --band: #1f5390; --band-art: #7fb0e3; --frame: #2F6FB0; --btn: #2F6FB0; }
+  :root { --money: #4ade80; --band: #1f5390; --band-art: #7fb0e3; --frame: #2F6FB0; --btn: #2F6FB0; }
 }
 
 /* Glyph art: each glyph (art/*.svg) is a mask, cut into scanlines and tinted with --band-art */
@@ -89,7 +90,10 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .app-pane { padding: var(--sp-2) var(--sp-5) var(--sp-5); min-height: 300px; display: grid; gap: var(--sp-3); align-content: start; }
 .app-pane[hidden] { display: none; }
 .app small { display: block; font-size: 13px; line-height: 16px; color: var(--l-sub); text-transform: uppercase; letter-spacing: .06em; }
-.big { font-size: 56px; line-height: 64px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+/* the amount in Talli Display, set like the app: a half-size green $ raised to the top of the figures */
+@font-face { font-family: 'Talli Display'; src: url(/fonts/TalliDisplay-Semibold.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+.big { display: flex; align-items: flex-start; gap: var(--sp-1); font: 600 88px/72px 'Talli Display', var(--font); }
+.cur { font-size: .5em; line-height: 1; color: var(--money); }
 .one { color: var(--l-sub); }
 .act { height: 48px; border: 0; border-radius: 999px; background: var(--btn); color: #fff; font: 600 17px var(--font); cursor: pointer; margin-top: var(--sp-2); }
 .act[aria-pressed="true"] { background: var(--l-surface); color: var(--l-text); }

@@ -59,6 +59,7 @@ function listProvinces(today = new Date()) {
   return Object.values(PROVINCES).map((p) => ({
     code: p.code, name: p.name, program: p.program, asOf: p.asOf, monthlySingle: p.monthlySingle,
     monthlyNote: p.monthlyNote, children: p.children || null, extra: p.extra || null, paid: p.paid,
+    earningsNote: p.earningsNote || null, report: p.report || null,
     rule: describeRule(p), familyRule: p.earnings.familyTiers ? describeRule(p, true) : null,
     apply: p.apply, payments: p.payments || null, confidence: p.confidence,
     payDates: payDatesFor(p), nextPayDate: nextPayDate(p.code, today),

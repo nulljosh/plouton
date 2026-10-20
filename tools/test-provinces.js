@@ -53,28 +53,29 @@ test('getProvince is forgiving about case and strict about unknowns', () => {
   assert.strictEqual(getProvince(undefined), null);
 });
 
-test('monthly deductions: Alberta tiers and Ontario 25 cents', () => {
+test('monthly deductions: Alberta $350 then dollar for dollar, Ontario 25 cents', () => {
   const ab = PROVINCES.ab.earnings.tiers, on = PROVINCES.on.earnings.tiers;
-  assert.strictEqual(monthlyDeduction(ab, 1000), 0);
-  assert.strictEqual(monthlyDeduction(ab, 2009), 468.5);          // half of the 937 above 1,072
-  assert.strictEqual(monthlyDeduction(ab, 2500), 959.5);          // plus a dollar for each of the last 491
+  assert.strictEqual(monthlyDeduction(ab, 350), 0);
+  assert.strictEqual(monthlyDeduction(ab, 1000), 650);             // AISH since July 2, 2026: every dollar over 350
+  assert.strictEqual(monthlyDeduction(ab, 2500), 2150);
   assert.strictEqual(monthlyDeduction(on, 1000), 0);
   assert.strictEqual(monthlyDeduction(on, 1500), 375);            // 75 cents of each dollar over 1,000
   assert.strictEqual(monthlyDeduction(on, 0), 0);
 });
 
-test('Alberta families get the bigger monthly allowance', () => {
-  const single = deriveWhatIf({ wage: 25, hours: 30, start: '2026-11', province: 'ab' }, opts);
-  const family = deriveWhatIf({ wage: 25, hours: 30, start: '2026-11', province: 'ab' }, { ...opts, household: 'couple_one' });
-  assert.ok(family.rows[0].reduction < single.rows[0].reduction);
+test('AISH has one $350 rule for singles and families since July 2026', () => {
+  const single = deriveWhatIf({ wage: 15, hours: 10, start: '2026-11', province: 'ab' }, opts);
+  const family = deriveWhatIf({ wage: 15, hours: 10, start: '2026-11', province: 'ab' }, { ...opts, household: 'couple_one' });
+  assert.strictEqual(family.rows[0].reduction, single.rows[0].reduction);
+  assert.strictEqual(single.rows[0].reduction, 300);                // $650 a month, $300 over the $350
 });
 
-test('what-if in Alberta: $25 at 30 hours loses $1,709.50 a month and keeps 47%', () => {
+test('what-if in Alberta: $25 at 30 hours earns past the whole cheque', () => {
   const d = deriveWhatIf({ wage: 25, hours: 30, start: '2026-11', province: 'ab' }, opts);
   assert.strictEqual(d.base, 1940);
-  assert.deepStrictEqual([d.rows[0].reduction, d.rows[0].assistance, d.keepPct], [1709.5, 230.5, 47]);
+  assert.deepStrictEqual([d.rows[0].reduction, d.rows[0].assistance], [1940, 0]);
   assert.strictEqual(d.province.code, 'ab');
-  assert.ok(d.rule.includes('$1,072') && d.rule.includes('$2,009'));
+  assert.ok(d.rule.includes('$350'));
 });
 
 test('what-if in Ontario: $20 at 20 hours loses $550 a month; room is the first $1,000', () => {
@@ -85,8 +86,8 @@ test('what-if in Ontario: $20 at 20 hours loses $550 a month; room is the first 
 });
 
 test('a small job under the first tier costs nothing in either province', () => {
-  for (const province of ['ab', 'on']) {
-    const d = deriveWhatIf({ wage: 15, hours: 10, start: '2026-11', province }, opts);   // about $650 a month
+  for (const [province, hours] of [['ab', 5], ['on', 10]]) {
+    const d = deriveWhatIf({ wage: 15, hours, start: '2026-11', province }, opts);   // about $325 and $650 a month
     assert.strictEqual(d.totalReduction, 0, province);
     assert.strictEqual(d.firstClawback, null);
   }
@@ -102,6 +103,17 @@ test('listProvinces gives the screen everything it needs, in plain words', () =>
   assert.deepStrictEqual(list.map((p) => p.code), ['bc', 'ab', 'on']);
   assert.ok(list.find((p) => p.code === 'on').rule.includes('25 cents'));
   assert.ok(describeRule(PROVINCES.bc).includes('yearly limit'));
+});
+
+test('report windows come from the official pages: Ontario by the 7th, Alberta as it happens', () => {
+  const list = listProvinces(now);
+  const on = list.find((p) => p.code === 'on').report, ab = list.find((p) => p.code === 'ab').report;
+  assert.strictEqual(on.dueDay, 7);
+  assert.ok(on.text.includes('$0') && on.source.startsWith('https://www.ontario.ca/'));
+  assert.strictEqual(ab.dueDay, null);
+  assert.ok(ab.source.startsWith('https://manuals.alberta.ca/'));
+  assert.ok(list.find((p) => p.code === 'ab').earningsNote.includes('$700'));
+  assert.strictEqual(list.find((p) => p.code === 'bc').report, null);
 });
 
 console.log(`\nResults: ${passed} passed, ${failed} failed`);

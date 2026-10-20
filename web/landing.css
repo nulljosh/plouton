@@ -107,6 +107,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .band .label { color: var(--band-sub); }
 .band-head { text-align: center; }
 .band-art { aspect-ratio: 19 / 10; max-height: 86vh; width: 100%; background: none; }
+/* fade the art into the band so the heading over its foot stays readable */
+.band-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--band) 88%); }
 .band-copy { position: relative; margin-top: -8vw; padding: 0 var(--sp-5) var(--sp-9); }
 .band-copy h2 { font-size: clamp(56px, 10vw, 160px); line-height: .9; }
 .band-copy p:last-child { margin: var(--sp-6) auto 0; max-width: 480px; color: var(--band-sub); }
@@ -128,8 +130,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .body { text-wrap: pretty; color: var(--l-sub); margin-top: var(--sp-5); max-width: 560px; }
 .center .body { margin-left: auto; margin-right: auto; }
 .term-stage { margin-top: var(--sp-7); }
-.term-stage .stage-art { --fit: 100%; }
-.term-stage .stage-art::before { -webkit-mask-position: center bottom, 0 0; mask-position: center bottom, 0 0; }
+.term-stage .stage-art { --fit: 58%; }
 .term { position: relative; max-width: 680px; margin: 0 auto; text-align: left; border-radius: 4px; background: var(--l-bg); border: 1px solid var(--l-line); padding: var(--sp-5); }
 .term pre { font: 13px/20px ui-monospace, SFMono-Regular, Menlo, monospace; overflow-x: auto; }
 .term .dim { color: var(--l-sub); }

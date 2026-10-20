@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Talli brand kit</title>
+<meta name="description" content="Talli's mark, colour, type, space and shape. Every value is read live from the tokens the app and site use.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/landing.css">
+<style>
+  main { max-width: var(--wrap); margin: 0 auto; padding: var(--sp-8) var(--sp-5) var(--sp-9); display: grid; gap: var(--sp-8); }
+  .head { display: flex; align-items: center; gap: var(--sp-5); flex-wrap: wrap; }
+  .head img { border-radius: var(--r-icon); }
+  .head h1 { font-size: clamp(72px, 12vw, 160px); }
+  .sub { color: var(--l-sub); margin-top: var(--sp-2); max-width: 560px; }
+  section > h2 { font-size: clamp(40px, 5vw, 64px); margin-bottom: var(--sp-5); }
+  .card { background: var(--l-surface); border-radius: 28px; padding: var(--sp-6); }
+  .row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--sp-6); }
+  .row figure { display: grid; justify-items: center; gap: var(--sp-2); }
+  .row img { border-radius: 22.5%; }
+  .foot2 { font-size: 13px; line-height: 16px; color: var(--l-sub); }
+  .marks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-top: var(--sp-4); }
+  .marks div { border-radius: 20px; padding: var(--sp-6); display: grid; place-items: center; }
+  .mark { display: block; width: 160px; height: 160px; -webkit-mask: url(mark.svg) center / contain no-repeat; mask: url(mark.svg) center / contain no-repeat; }
+  .art-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+  .art-row .art { aspect-ratio: 3 / 2; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--sp-4); }
+  .sw { border-radius: 20px; overflow: hidden; border: 1px solid var(--l-line); background: var(--l-bg); }
+  .sw i { display: block; height: 72px; }
+  .sw p { padding: var(--sp-3) var(--sp-4); font-size: 13px; line-height: 16px; }
+  .sw p span { display: block; color: var(--l-sub); }
+  .scale { display: grid; gap: var(--sp-4); }
+  .scale div { display: grid; grid-template-columns: 160px 1fr; align-items: baseline; gap: var(--sp-4); }
+  .space { display: grid; gap: var(--sp-2); }
+  .space div { display: flex; align-items: center; gap: var(--sp-4); font-size: 13px; }
+  .space b { display: block; height: 16px; background: var(--frame); border-radius: 4px; }
+  .radii { display: flex; flex-wrap: wrap; gap: var(--sp-5); }
+  .radii div { width: 120px; height: 96px; background: var(--l-bg); border: 1px solid var(--l-line); display: grid; place-items: end start; padding: var(--sp-3); font-size: 13px; }
+  .cap { height: 48px; padding: 0 var(--sp-5); border: 0; border-radius: 999px; background: var(--btn); color: #fff; font: 600 17px var(--font); }
+  @media (max-width: 600px) { .marks, .art-row { grid-template-columns: 1fr; } .scale div { grid-template-columns: 1fr; gap: 0; } }
+</style>
+</head>
+<body>
+<header class="nav" aria-label="Site">
+  <nav class="nav-links" aria-label="Main"><a href="/">Home</a></nav>
+  <a class="nav-brand" href="/" aria-label="Talli home"><img src="/icon.svg" alt="" width="28" height="28"><span>Talli</span></a>
+  <div class="nav-end"><a class="btn btn-solid" href="/login">Sign in</a></div>
+</header>
+<main>
+  <section class="head">
+    <img src="/icon.svg" width="96" height="96" alt="">
+    <div><p class="label">Brand kit and design system</p><h1>Talli</h1><p class="sub">Talli keeps a tally of your benefits: what lands, when, and what you can still earn. Every colour on this page is read live from the tokens the site uses.</p></div>
+  </section>
+
+  <section>
+    <h2>The mark</h2>
+    <div class="card">
+      <div class="row">
+        <figure><img src="/icon.svg" width="256" height="256" alt=""><figcaption class="foot2">256</figcaption></figure>
+        <figure><img src="/icon.svg" width="128" height="128" alt=""><figcaption class="foot2">128</figcaption></figure>
+        <figure><img src="/icon.svg" width="64" height="64" alt=""><figcaption class="foot2">64</figcaption></figure>
+        <figure><img src="/favicon.svg" width="32" height="32" alt=""><figcaption class="foot2">32</figcaption></figure>
+        <figure><img src="/favicon.svg" width="16" height="16" alt=""><figcaption class="foot2">16</figcaption></figure>
+      </div>
+    </div>
+    <div class="marks">
+      <div style="background:#fff"><b class="mark" style="background:#2F6FB0"></b></div>
+      <div style="background:#0d0c0b"><b class="mark" style="background:#f5f5f7"></b></div>
+    </div>
+    <p class="foot2" style="margin-top:var(--sp-3)">Four strokes and a slash: a tally. One bold white glyph on a blue gradient, made in Icon Composer (Talli.icon). No text, no outline. Clear space equals one stroke. Smallest size 16 px.</p>
+  </section>
+
+  <section>
+    <h2>Art</h2>
+    <div class="art-row">
+      <div class="art pic" style="--img: url(art/niche.png)"></div>
+      <div class="art pic" style="--img: url(art/chariot.png)"></div>
+      <div class="art" style="--img: url(art/calendar.svg)"></div>
+    </div>
+    <p class="foot2" style="margin-top:var(--sp-3)">Public domain and CC0 engravings and sculpture, dithered to halftone dots and tinted on the blue band. Glyphs sit in scanlines. Every image is used once on the site.</p>
+  </section>
+
+  <section>
+    <h2>Colour</h2>
+    <div class="swatches" id="swatches"></div>
+    <p class="foot2" style="margin-top:var(--sp-3)">Shown for your current light or dark mode. Blue is the only colour Talli owns. #5B9BD5 is the brand blue; #2F6FB0 is the same blue deep enough for text and white-label fills on light (5.2:1).</p>
+  </section>
+
+  <section>
+    <h2>Type</h2>
+    <div class="card scale">
+      <div><span class="foot2">Display, thin caps</span><span style="font-family:var(--display);font-weight:100;font-size:64px;line-height:64px;text-transform:uppercase">Every cheque</span></div>
+      <div><span class="foot2">Title 34/41 bold</span><span style="font-size:34px;line-height:41px;font-weight:700">$1,735.50</span></div>
+      <div><span class="foot2">Headline 22/28</span><span style="font-size:22px;line-height:28px;font-weight:600">Next payment</span></div>
+      <div><span class="foot2">Body 17/24</span><span>Wednesday, in 2 days.</span></div>
+      <div><span class="foot2">Footnote 13/18</span><span class="foot2">Ministry &middot; Oct 6</span></div>
+      <p class="foot2">The system font only: SF Pro, then Lato, then Helvetica. No webfonts.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Space and shape</h2>
+    <div class="card" style="display:grid;gap:var(--sp-6)">
+      <div class="space" id="space"></div>
+      <div class="radii">
+        <div style="border-radius:20px">group 20</div>
+        <div style="border-radius:28px">card 28</div>
+        <div style="border-radius:22.5%">icon 22.5%</div>
+        <div style="border-radius:2px">web 2</div>
+      </div>
+      <div class="row" style="align-items:center">
+        <button class="cap" type="button">It landed</button>
+        <a class="btn btn-solid" href="#">Sign in</a>
+        <a class="btn btn-ghost" href="#">App Store</a>
+        <span class="foot2">In the app, controls are 48 point capsules. On the site, buttons are 40 point squares in caps.</span>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+// Swatches read the live computed tokens, so this page cannot drift from them.
+(function () {
+  var cs = getComputedStyle(document.documentElement);
+  var roles = [['--accent', 'Brand blue'], ['--btn', 'Buttons and band'], ['--frame', 'Frame'], ['--band-sub', 'Band text'], ['--band-art', 'Band art'],
+               ['--l-bg', 'Background'], ['--l-surface', 'Surface'], ['--l-line', 'Line'], ['--l-text', 'Text'], ['--l-sub', 'Secondary'], ['--error', 'Error']];
+  document.getElementById('swatches').innerHTML = roles.map(function (r) {
+    var v = cs.getPropertyValue(r[0]).trim();
+    return '<div class="sw"><i style="background:' + v + '"></i><p>' + r[1] + '<span>' + v + '</span></p></div>';
+  }).join('');
+  document.getElementById('space').innerHTML = [4, 8, 12, 16, 24, 32, 48].map(function (n) { return '<div><b style="width:' + n * 3 + 'px"></b>' + n + '</div>'; }).join('');
+})();
+</script>
+</body>
+</html>

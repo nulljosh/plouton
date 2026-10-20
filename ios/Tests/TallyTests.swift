@@ -412,3 +412,13 @@ final class ReportSubmissionResponseTests: XCTestCase {
         XCTAssertNil(r.error)
     }
 }
+
+final class SupplementRowsTests: XCTestCase {
+    func testOneRowPerSupplement() {
+        let e = { (id: String, date: String) in
+            Supplements.Event(id: id, name: id, date: date, amount: 52, kind: "cheque", remindOn: date, remind: true)
+        }
+        let rows = SupplementsView.nextOfEach([e("transport", "2026-10-21"), e("transport", "2026-11-25"), e("diet", "2026-11-25"), e("transport", "2026-12-16")])
+        XCTAssertEqual(rows.map(\.key), ["transport2026-10-21", "diet2026-11-25"])
+    }
+}

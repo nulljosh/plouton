@@ -346,7 +346,8 @@ final class AppState {
     }
 
     func bootstrap() async {
-        if Self.isSnapshot { return }
+        // Store shots show a real portrait, fetched the same way a signed-in user's is.
+        if Self.isSnapshot { await loadAvatar(from: "/avatars/07-zeus-bearded.png"); return }
         // Optimistic: show cached dashboard immediately while session check runs
         if storedCredentials != nil, dashboard != nil {
             isAuthenticated = true
@@ -445,7 +446,9 @@ final class AppState {
 
             async let paidTask: Void = loadPaidStatus()
             async let readTask: Void = loadReadMessages()
-            _ = await (paidTask, readTask)
+            // a fresh sign-in also picks up the server's portrait; before, only a resumed session did
+            async let avatarTask: Void = syncAvatar()
+            _ = await (paidTask, readTask, avatarTask)
 
             do {
                 try await loadLatestData()

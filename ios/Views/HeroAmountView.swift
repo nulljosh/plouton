@@ -9,8 +9,8 @@ private typealias PlatformFont = NSFont
 #endif
 
 /// The Home amount in Talli Display (fonts/TalliDisplay-Semibold.ttf, made by scripts/gen_font.py), shared by
-/// iPhone and Mac. Same rule as the web hero: the figures are up to `maxHeight` tall at their own proportions; when
-/// `width` is too narrow for that they stretch taller, never more than 1.5x. The $ is half size, green, raised to
+/// iPhone and Mac. Same rule as the web hero: the figures keep the font's own proportions, as tall as `maxHeight` or
+/// as wide as `width` allows, never stretched (big-number heroes are set this way). The $ is half size, green, raised to
 /// the top of the figures, the way prices are set. It breathes slowly unless Reduce Motion is on.
 struct HeroAmountView: View {
     let digits: String
@@ -21,7 +21,7 @@ struct HeroAmountView: View {
     static let fontName = "TalliDisplay-Semibold"
     // Font units per 1000: top of the figures, foot of the comma, the $ top, cap stretch limit, gap after the $.
     private static let top: CGFloat = 712, box: CGFloat = 805, dollarTop: CGFloat = 788
-    private static let maxStretch: CGFloat = 1.5, dollarScale: CGFloat = 0.5, gap: CGFloat = 36
+    private static let maxStretch: CGFloat = 1, dollarScale: CGFloat = 0.5, gap: CGFloat = 36
     /// Room on each side so the figures never run to the screen edge (points, same 24 as the web).
     static let inset: CGFloat = 24
 

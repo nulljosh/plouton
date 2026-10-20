@@ -168,7 +168,7 @@ Test suite covering scraper, parsing, date logic, payment dates, message parsing
 | `scripts/gen_font.py` | Builds Talli Display: Barlow Condensed SemiBold (OFL) renamed, figures respaced to be proportional. `--check` also proves the web advance table matches the font. Run with `uv run --with fonttools --with brotli`. |
 | `web/fonts/TalliDisplay-Semibold.woff2` | The web copy, loaded by `@font-face` and preloaded in `web/unified.html`. |
 | `fonts/TalliDisplay-Semibold.ttf` | The Apple copy, bundled by `ios/project.yml` and `macos/project.yml` and registered at runtime. |
-| `ios/Views/HeroAmountView.swift` | The Home amount on iPhone and Mac: figures up to half the screen tall, stretched at most 1.5x on narrow screens, a small raised green $, a slow breath (off with Reduce Motion). The web `HeroAmount` draws the same thing as SVG. |
+| `ios/Views/HeroAmountView.swift` | The Home amount on iPhone and Mac: figures up to half the screen tall at their own proportions (never stretched), 24 points of room each side, a small raised green $, a slow breath (off with Reduce Motion). The web `HeroAmount` draws the same thing as SVG. |
 | `tools/test-font.js` | Both font files exist, are named Talli Display, ship with the OFL, and are wired into the page and both Xcode projects. |
 
 ## Terminal

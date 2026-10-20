@@ -136,16 +136,16 @@ function nextScheduledPayDate(from) {
 }
 
 // The Home amount in Talli Display (scripts/gen_font.py), drawn as SVG so it fills a box exactly. The figures are up
-// to half the screen tall at the font's own proportions; when the column is too narrow for that they stretch taller,
-// never more than 1.5x, so a phone reads like a tall sign, not a squashed photo. The $ is half size and raised to
+// to half the screen tall at the font's own proportions, never stretched: on a phone the width sets the size, with
+// 24px of room each side. The $ is half size and raised to
 // the top of the figures, the way prices are set. Advances are the font's, per 1000 units; the box runs from the
 // top of the figures (-712) to the foot of the comma (+93).
 const TD_ADVANCE = {'0':450,'1':296,'2':451,'3':435,'4':502,'5':437,'6':438,'7':440,'8':434,'9':438,',':199,'.':211};
-const TD_TOP = 712, TD_BOX = 805, TD_STRETCH = 1.5, TD_DOLLAR = 0.5, TD_GAP = 36;
+const TD_TOP = 712, TD_BOX = 805, TD_STRETCH = 1, TD_DOLLAR = 0.5, TD_GAP = 36;
 function HeroAmount({digits, t, paid}) {
   const figures = [...digits].reduce((w, c) => w + (TD_ADVANCE[c] || 450), 0);
   const lead = Math.round(434 * TD_DOLLAR) + TD_GAP, natural = lead + figures;
-  const h = `min(50vh, calc((100vw - 40px) * ${(TD_BOX * TD_STRETCH / natural).toFixed(4)}))`;
+  const h = `min(50vh, calc((100vw - 88px) * ${(TD_BOX * TD_STRETCH / natural).toFixed(4)}))`;
   const face = {fontFamily:"'Talli Display', -apple-system, BlinkMacSystemFont, sans-serif",fontWeight:600};
   return (
     <svg viewBox={`0 -${TD_TOP} ${natural} ${TD_BOX}`} preserveAspectRatio="none" aria-hidden="true"

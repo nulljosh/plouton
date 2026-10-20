@@ -24,12 +24,9 @@ struct MacDashboardView: View {
                     arrived: { try? await MacAPIClient.shared.markPaid(month: $0) }
                 )
 
-                VStack(spacing: 32) {
-                    paymentCard
-                    progressBar
-                }
-                .frame(maxHeight: .infinity, alignment: .center)
-                .containerRelativeFrame(.vertical) { length, _ in length * 0.78 }
+                // the whole first screen is the number; Details sits below the fold
+                paymentCard
+                    .containerRelativeFrame(.vertical) { length, _ in length - 48 }
 
                 DisclosureGroup("Details") {
                     VStack(spacing: 20) {
@@ -51,47 +48,32 @@ struct MacDashboardView: View {
 
     // MARK: - Payment Card
 
+    // Same hero as the web dashboard: thin tabular digits, a green dollar sign. The amount is set
+    // huge and scales down to whatever the window gives it, so it always fills the width.
     private var paymentCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(spacing: 8) {
             Text("NEXT PAYMENT")
                 .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
                 .ltrTracking(0.5)
 
-            Text(appState.paymentAmountText.replacingOccurrences(of: ".00", with: ""))
-                .font(.system(size: 112, weight: .bold))
-                .tracking(-5)
-                .minimumScaleFactor(0.3)
+            (Text("$").foregroundStyle(Color.green)
+             + Text(appState.paymentAmountText.replacingOccurrences(of: ".00", with: "").replacingOccurrences(of: "$", with: "")))
+                .font(.system(size: 600, weight: .thin).monospacedDigit())
+                .minimumScaleFactor(0.05)
                 .lineLimit(1)
-                .foregroundStyle(Color.bcPrimary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .contentTransition(.numericText())
 
             Text(appState.countdownText)
-                .font(.system(size: 34, weight: .semibold))
+                .font(.title.weight(.light))
                 .foregroundStyle(Color.bcLight)
 
             Text(appState.nextPaymentDateText)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private var progressBar: some View {
-        let total = 30.0
-        let elapsed = max(0, total - Double(appState.daysUntilPayment))
-        let progress = min(1.0, elapsed / total)
-
-        return GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.secondary.opacity(0.15))
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.bcPrimary)
-                    .frame(width: geo.size.width * progress)
-            }
-        }
-        .frame(height: 6)
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Calendar

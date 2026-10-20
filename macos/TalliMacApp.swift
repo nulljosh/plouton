@@ -4,12 +4,14 @@ import SwiftUI
 struct TalliMacApp: App {
     @State private var appState = MacAppState()
     @AppStorage("app_theme") private var rawTheme = "system"
+    /// UI tests pick light or dark through the environment; AppleInterfaceStyle does not reach SwiftUI.
+    private var theme: String { ProcessInfo.processInfo.environment["UITEST_APPEARANCE"] ?? rawTheme }
 
     var body: some Scene {
         WindowGroup {
             MacContentView()
                 .environment(appState)
-                .preferredColorScheme(rawTheme == "dark" ? .dark : rawTheme == "light" ? .light : nil)
+                .preferredColorScheme(theme == "dark" ? .dark : theme == "light" ? .light : nil)
                 .task {
                     guard !(ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] != nil) else { return }
                     await appState.bootstrap()

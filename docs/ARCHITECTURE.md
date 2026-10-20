@@ -142,7 +142,7 @@ Minimal UI: three glances (payment, benefits, messages). Read-only companion to 
 
 | File | What it owns |
 |---|---|
-| `kmp/shared/src/commonMain/kotlin/com/nulljosh/talli/` | Shared code: Models.kt (data shapes), TalliApi.kt (HTTP client via Ktor, mirrors backend shapes). |
+| `kmp/shared/src/commonMain/kotlin/com/nulljosh/plouton/` | Shared code: Models.kt (data shapes), TalliApi.kt (HTTP client via Ktor, mirrors backend shapes). |
 | `kmp/shared/src/commonTest/kotlin/` | DashboardParserTest. Tests shared model decoding. |
 | `kmp/composeApp/src/androidMain/kotlin/` | MainActivity. Android entry, sets content. |
 | `kmp/composeApp/src/commonMain/kotlin/` | App.kt (307 lines). Shared UI in Compose. Not yet fully featured (stub). |

@@ -26,5 +26,5 @@ npm test passes. Live API on plouton.jaybulb.com: every path the iOS app calls r
 ## Restart prompt
 
 ```
-/loop Plouton: read ~/.claude/loops/talli.md and docs/LOOP-HANDOFF.md, run the next iteration toward native 4.0.0 (real versions from `asc versions list`), then re-arm.
+/loop Plouton: read ~/.claude/loops/plouton.md and docs/LOOP-HANDOFF.md, run the next iteration toward native 4.0.0 (real versions from `asc versions list`), then re-arm.
 ```

@@ -60,6 +60,8 @@
   band.classList.add('live');
   draw();
   imgs.forEach(function (i) { i.addEventListener('load', draw); });
+  // the band colour comes from landing.css, which can apply after this runs (tokens.css @imports a remote file)
+  window.addEventListener('load', draw);
   // iOS fires resize as the toolbar slides; only a width change needs a redraw
   window.addEventListener('resize', function () { if (Math.round(canvas.clientWidth * Math.min(window.devicePixelRatio || 1, 2)) !== drawnW) draw(); });
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);

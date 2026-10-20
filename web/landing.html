@@ -21,6 +21,7 @@
 <meta property="og:image" content="https://talli.jaybulb.com/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://talli.jaybulb.com/og.png">
+<link rel="preload" href="/fonts/TalliDisplay-Semibold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/tokens.css">
 <link rel="stylesheet" href="/landing.css">
 <script src="/landing.js" defer></script>
@@ -66,7 +67,7 @@
         </div>
         <div class="app-pane" role="tabpanel" id="p-home" aria-labelledby="t-home">
           <small>Next payment</small>
-          <p class="big">$1,735.50</p>
+          <p class="big"><span class="cur">$</span>1,735.50</p>
           <p class="one" id="d-when">Wednesday, in 2 days</p>
           <button class="act" id="d-paid" aria-pressed="false">It landed</button>
           <div class="fold"><span>Disability assistance</span><span>$1,535.50</span></div>
@@ -74,7 +75,7 @@
         </div>
         <div class="app-pane" role="tabpanel" id="p-status" aria-labelledby="t-status" hidden>
           <small>Earnings this year</small>
-          <p class="big">$16,200</p>
+          <p class="big"><span class="cur">$</span>16,200</p>
           <p class="one">left before it touches your cheque</p>
           <div class="meter" aria-hidden="true"><b style="--w: 18%"></b></div>
           <div class="fold"><span>Earned so far</span><span>$2,900</span></div>
@@ -180,7 +181,7 @@
     </nav>
   </div>
   <div class="word-band" aria-hidden="true"><canvas class="word-canvas"></canvas></div>
-  <p class="legal">&copy; 2026 Joshua Trommel &middot; <a href="https://github.com/nulljosh/talli/blob/main/LICENSE">MIT License</a> &middot; Not affiliated with the Government of British Columbia</p>
+  <p class="legal">&copy; 2026 Joshua Trommel &middot; <a href="https://github.com/nulljosh/talli/blob/main/LICENSE">Apache License 2.0</a> &middot; Not affiliated with the Government of British Columbia</p>
 </footer>
 
 <script src="/footer-band.js" defer></script>

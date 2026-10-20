@@ -202,7 +202,8 @@ final class AppState {
         let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
         if days < 0 { return "Payment date passed" }
         if days == 0 { return "Today" }
-        return "\(days) day\(days == 1 ? "" : "s")"
+        if days == 1 { return "Tomorrow" }
+        return "\(days) days"
     }
 
     var parsedNextPaymentDate: Date? {

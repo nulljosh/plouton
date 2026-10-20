@@ -25,4 +25,19 @@ for (const f of ['widgets-ios/Models/WidgetAPI.swift', 'widgets-macos/Models/Mac
     got[y] = Object.fromEntries(body.split(',').map((p) => p.split(':').map((x) => Number(x.trim()))));
   assert.deepStrictEqual(got, want, f);
 }
+// web: the Home payday list reads the same schedule
+{
+  const html = read('web/unified.html');
+  const grab = (from, to) => html.slice(html.indexOf(from), html.indexOf(to, html.indexOf(from)));
+  const src = grab('const PAY_SCHEDULE', 'function nextScheduledPayDate') + grab('function upcomingPaydays', '// Paydays on Home');
+  const { upcomingPaydays, whenText } = new Function(src + 'return { upcomingPaydays, whenText };')();
+  const oct20 = new Date(2026, 9, 20);
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  assert.deepStrictEqual(upcomingPaydays(3, oct20).map(iso), ['2026-10-21', '2026-11-18', '2026-12-16']);
+  assert.strictEqual(iso(upcomingPaydays(1, new Date(2026, 9, 21))[0]), '2026-10-21', 'payday itself still counts until it passes');
+  assert.deepStrictEqual(upcomingPaydays(6, oct20).map(iso), CHEQUE_ISSUE_DATES.filter((d) => d >= '2026-10-20').slice(0, 6));
+  assert.strictEqual(whenText(new Date(2026, 9, 21), oct20), 'tomorrow');
+  assert.strictEqual(whenText(oct20, oct20), 'today');
+  assert.strictEqual(whenText(new Date(2026, 10, 18), oct20), 'in 29 days');
+}
 console.log('test-pay-schedule-sync: ok');

@@ -100,7 +100,7 @@ final class MacAppState {
             }
             dashboard = MacDashboardData(
                 paymentAmount: "$1,750.00",
-                nextPaymentDate: day(18),
+                nextPaymentDate: day(1),
                 statusMessages: [
                     .init(text: "Your monthly report has been received.", timestamp: day(-1)),
                     .init(text: "PWD application resubmitted.", timestamp: day(-12))
@@ -141,7 +141,8 @@ final class MacAppState {
         let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
         if days < 0 { return "Payment date passed" }
         if days == 0 { return "Today" }
-        return "in \(days) day\(days == 1 ? "" : "s")"
+        if days == 1 { return "Tomorrow" }
+        return "in \(days) days"
     }
 
     var daysUntilPayment: Int {

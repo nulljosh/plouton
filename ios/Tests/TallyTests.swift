@@ -236,7 +236,7 @@ final class AppStateComputedTests: XCTestCase {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         state.dashboard = DashboardData(paymentAmount: nil, nextPaymentDate: formatter.string(from: tomorrow), statusMessages: [])
-        XCTAssertEqual(state.countdownText, "1 day")
+        XCTAssertEqual(state.countdownText, "Tomorrow")
     }
 
     // daysUntilPayment

@@ -3,8 +3,9 @@
 # Talli's six glyphs (web/art/*.svg) engraved in scanlines on the grainy landing blue, drifting left
 # one full row per loop so the end meets the start. Same look as the landing footer band.
 # Run from the repo root: sh launch/make_banner.sh  ->  launch/banner/talli-header.mp4
+# Search results video (3:2): W=2880 H=1920 CELL=1440 G=960 NAME=talli-search sh launch/make_banner.sh
 set -e
-W=3840 H=1646 CELL=1280 G=820 PITCH=14 LINE=6 SECS=30
+W=${W:-3840} H=${H:-1646} CELL=${CELL:-1280} G=${G:-820} NAME=${NAME:-talli-header} PITCH=14 LINE=6 SECS=30
 OUT=launch/banner TMP=$(mktemp -d)
 mkdir -p $OUT
 BAND='#2F6FB0' INK='#a9cdef'
@@ -29,5 +30,5 @@ magick -size ${SW}x$H xc:"$BAND" $TMP/faint.png -composite $TMP/glyphs.png -comp
 
 ffmpeg -y -loglevel error -loop 1 -framerate 30 -i $TMP/strip.png -t $SECS \
   -vf "crop=$W:$H:'mod(t*$((CELL * 6))/$SECS,$((CELL * 6)))':0,noise=alls=10:allf=t,format=yuv420p" \
-  -c:v libx264 -preset slow -crf 20 -maxrate 40M -bufsize 80M -profile:v high -movflags +faststart -an $OUT/talli-header.mp4
+  -c:v libx264 -preset slow -crf 20 -maxrate 40M -bufsize 80M -profile:v high -movflags +faststart -an $OUT/$NAME.mp4
 rm -rf $TMP

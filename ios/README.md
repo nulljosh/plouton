@@ -81,7 +81,7 @@ To regenerate App Store screenshots (runs `UITests/PreviewScreenshot.swift` agai
 - Concurrent async loads on login
 
 ### v2.1.0 (2026-03-24)
-- General benefits guide (grocery rebate, GST/HST, climate credit, CWB, CCB, SAFER, PharmaCare, BC Bus Pass)
+- General benefits guide (GST/HST, CWB, CCB, SAFER, PharmaCare, BC Bus Pass)
 - Native SwiftUI cards
 - Default tab on Benefits
 

@@ -159,6 +159,29 @@ Test suite covering scraper, parsing, date logic, payment dates, message parsing
 | `tools/native-decode-check/` | Swift cross-check: both native clients shipped shape-mismatch bugs (Workers truncated by 1 byte, macOS had wrong field names). This standalone check decodes the payload natively to catch future drift. |
 | `tools/school/fill_pdf.py` | Biology 12 fill-in-the-blank PDF filler. Finds blanks, matches them to answer key using Claude. |
 | `tools/dtc_apply.py` | T2201/DTC application helper (file -> CSV). |
+| `tools/test-avatar.js` | Every avatar file exists, the same user always gets the same face, regenerate always changes it, users spread over the set. |
+| `tools/test-cli.js` | bin/talli.js views from good, partial, missing and garbage summaries, and the TUI frame at two terminal sizes. |
+
+## Terminal
+
+| File | What it owns |
+|---|---|
+| `bin/talli.js` | The `talli` CLI and TUI, no dependencies. `login` signs in once and stores only the read-only widget token (~/.config/talli/token, 0600); `next`, `summary [--json]` and `tui` read `/api/summary`; the next cheque date comes from `src/pay-dates.js`, so it works offline. |
+
+## Avatars
+
+| File | What it owns |
+|---|---|
+| `src/avatar.js` | Picks each user's portrait: 24 public domain Greek sculpture photos plus mirrors, hashed by user, stepped by Refresh. |
+| `web/avatars/` | The 48 portraits, dithered into the landing blues. `CREDITS.md` names every source and license. |
+
+## Commercial
+
+| File | What it owns |
+|---|---|
+| `launch/make_promo.py` | Builds `launch/talli-promo.mp4`: ElevenLabs voice per shot, the app recording, the stage recording, an original music bed ducked under the voice. |
+| `launch/record.mjs` | Headless Chrome screencast recorder: `app` records the dashboard at phone size, `stage` records `stage.html` at 1080p. |
+| `launch/stage.html` | The commercial's picture: landing-style sculpture cards, the app in a phone frame, the end card. |
 
 ## Build & Deploy
 

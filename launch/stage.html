@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Talli commercial stage</title>
+<!-- The commercial's picture, played once by launch/make_promo.py and recorded by launch/record.mjs.
+     Same look as the landing page: grainy Talli-blue bands, public domain sculpture dithered into the
+     band colours, thin system type. window.start(plan) plays it; window.__done turns true at the end. -->
+<style>
+  :root {
+    --band: #2F6FB0; --band-art: #a9cdef; --ink: #fff;
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .28 0 0 0 -.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--band); }
+  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .scene { position: absolute; inset: 0; background: var(--grain), var(--band); opacity: 0; transition: opacity .45s ease; }
+  .scene.on { opacity: 1; }
+  .art { position: absolute; inset: 0; transform: scale(1); transition: transform 7s cubic-bezier(.2,.4,.3,1); }
+  .scene.on .art { transform: scale(1.07); }
+  .art::before { content: ""; position: absolute; inset: 0; background: var(--band-art);
+    -webkit-mask: var(--img) var(--pos, right center) / var(--fit, cover) no-repeat; mask: var(--img) var(--pos, right center) / var(--fit, cover) no-repeat; }
+  .dim .art::before { opacity: .38; }
+  .words { position: absolute; left: 160px; top: 50%; transform: translateY(-50%); width: 760px; }
+  .center .words { left: 0; right: 0; bottom: auto; top: 50%; width: auto; transform: translateY(-50%); text-align: center; }
+  .label { font-size: 22px; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; opacity: .85; margin-bottom: 24px; }
+  /* cards: the art keeps to the right half so the type sits on clean band blue */
+  .card-scene .art { left: 46%; }
+  .big { font-size: 112px; line-height: 1.02; font-weight: 200; letter-spacing: -.02em; }
+  .mid { font-size: 92px; line-height: 1.04; font-weight: 200; letter-spacing: -.015em; }
+  .line { display: block; opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .8s cubic-bezier(.2,.9,.3,1); }
+  .scene.on .line { opacity: 1; transform: none; }
+  .scene.on .line:nth-child(2) { transition-delay: .18s; }
+  .scene.on .line:nth-child(3) { transition-delay: .36s; }
+  .scene.on .line:nth-child(4) { transition-delay: .54s; }
+  .phone { position: absolute; right: 230px; top: 50%; width: 506px; height: 900px; margin-top: -450px; border-radius: 64px; overflow: hidden; background: #fff;
+    box-shadow: 0 0 0 10px rgba(255,255,255,.14), 0 40px 120px rgba(8,30,60,.45); transform: translateY(40px) scale(.96); opacity: 0;
+    transition: transform .9s cubic-bezier(.2,.9,.3,1), opacity .5s ease; }
+  .scene.on .phone { transform: none; opacity: 1; }
+  .phone video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .phone-scene .words { left: 160px; top: 50%; bottom: auto; transform: translateY(-50%); width: 900px; }
+  .end .stack { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+  .end img { width: 168px; height: 168px; border-radius: 22%; box-shadow: 0 24px 64px rgba(8,30,60,.4); }
+  .wordmark { font-size: 88px; font-weight: 200; letter-spacing: .24em; margin-left: .24em; }
+  .tag { font-size: 24px; letter-spacing: .2em; text-transform: uppercase; opacity: .85; }
+  .pill { margin-top: 24px; height: 80px; padding: 0 48px; border-radius: 999px; background: #fff; color: var(--band); display: flex; align-items: center; font-size: 34px; font-weight: 600; }
+  .url { font-size: 36px; font-weight: 400; letter-spacing: .02em; }
+  .end .stack > * { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .8s cubic-bezier(.2,.9,.3,1.15); }
+  .end .stack > img { transform: scale(.8); }
+  .end.on .stack > * { opacity: 1; transform: none; }
+  .end.on .stack > :nth-child(2) { transition-delay: .2s; } .end.on .stack > :nth-child(3) { transition-delay: .35s; }
+  .end.on .stack > :nth-child(4) { transition-delay: .55s; } .end.on .stack > :nth-child(5) { transition-delay: .75s; }
+</style>
+</head>
+<body>
+<video id="screen" src="screen.mp4" muted playsinline preload="auto" style="display:none"></video>
+<script>
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const art = (img, pos, dim) => `<div class="art" style="--img:url(art/${img});--pos:${pos || 'right center'}"></div>`;
+
+function scene(s) {
+  const el = document.createElement('div');
+  el.className = 'scene ' + (s.kind === 'phone' ? 'phone-scene dim' : s.kind === 'end' ? 'end dim' : 'card-scene') + (s.center ? ' center' : '');
+  const lines = (s.lines || []).map((l) => `<span class="line">${l}</span>`).join('');
+  if (s.kind === 'card') el.innerHTML = art(s.art, s.pos) + `<div class="words">${s.label ? `<div class="label line">${s.label}</div>` : ''}<div class="${s.size || 'big'}">${lines}</div></div>`;
+  if (s.kind === 'phone') el.innerHTML = art(s.art, s.pos) + `<div class="words"><div class="label line">${s.label || ''}</div><div class="mid">${lines}</div></div><div class="phone"><video muted playsinline preload="auto" src="screen.mp4"></video></div>`;
+  if (s.kind === 'end') el.innerHTML = art(s.art, s.pos) + `<div class="stack"><img src="icon.svg" alt=""><div class="wordmark">TALLI</div><div class="tag">BC disability assistance, counted</div><div class="pill">Free on the App Store</div><div class="url">talli.jaybulb.com</div></div>`;
+  document.body.appendChild(el);
+  return el;
+}
+
+// plan: [{kind, dur, lines, label, art, pos, at}] where `at` is where this scene's slice of screen.mp4 starts
+window.start = async (plan) => {
+  const els = plan.map(scene);
+  // let every phone video buffer and sit on its first frame before the clock starts
+  await Promise.all(els.map((el, i) => {
+    const v = el.querySelector('video'); if (!v) return null;
+    return new Promise((r) => { v.addEventListener('seeked', r, { once: true }); v.addEventListener('loadeddata', () => { v.currentTime = plan[i].at; }, { once: true }); v.load(); });
+  }));
+  await sleep(300);
+  window.__t0 = Date.now() / 1000;
+  for (let i = 0; i < plan.length; i++) {
+    const el = els[i], v = el.querySelector('video');
+    if (v) v.play();
+    el.classList.add('on');
+    if (i > 0) setTimeout(() => els[i - 1].classList.remove('on'), 450);
+    await sleep(plan[i].dur * 1000);
+  }
+  window.__done = true;
+};
+</script>
+</body>
+</html>

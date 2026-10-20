@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
-"""Talli's commercial: launch/talli-promo.mp4 (1080x1920), talli-promo.vtt and talli-promo-poster.jpg.
+"""Talli's commercial: launch/talli-promo.mp4 (1920x1080), talli-promo.vtt and talli-promo-poster.jpg.
 
-Records the real dashboard at phone size against a local demo server, voices each beat with ElevenLabs,
-lays an original music bed under it (ducked under the voice) and ends on a card with the App Store line
-and the site. Same recipe as turing/scripts/make_promo.py.
+The house shape (Bookrank's and Turing's ads): a voice carries it, every cut lands on a sentence, type cards
+hold the few words, the real app plays in a phone frame, and it ends on the mark. The look is the landing
+page's: grainy Talli-blue bands with public domain sculpture dithered into the band colours, thin system type.
+
+1. Voice: one ElevenLabs line per shot (cached by turing/app/voice.py, so a rerun costs nothing).
+2. App: launch/record.mjs records the real dashboard at phone size against a local demo server.
+3. Stage: launch/stage.html plays the cut with that recording inside the phone; record.mjs records it at 1080p.
+4. Mix: the voice on each cut, an original music bed ducked under it, loudness normalised.
 
 Run from the repo root: ~/Documents/Code/turing/.venv/bin/python launch/make_promo.py
-Needs ELEVENLABS_API_KEY (environment or the fish secrets file), ffmpeg, and that venv's playwright + numpy.
-Voice lines are cached by turing/app/voice.py, so a rerun costs nothing."""
-import glob
+Needs ELEVENLABS_API_KEY (environment or the fish secrets file), ffmpeg, node and Google Chrome."""
 import json
 import os
 import shutil
@@ -22,30 +25,27 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.expanduser("~/Documents/Code/turing/app"))
 import voice  # noqa: E402
 
-PORT = 3123
-BASE = f"http://localhost:{PORT}"
-VW, VH = 432, 768          # a phone's CSS width, 9:16
-W, H = 1080, 1920
+APP_PORT, STAGE_PORT = 3123, 3124
 DEMO_PASSWORD = "promo-demo"
+VO_IN = 0.35  # the cut lands, the voice comes in a breath later
 
-# (what is said, what the caption shows, what happens on screen). Spelled "Tally" so the voice says it right.
-SEGMENTS = [
-    ("Payday shouldn't be a guessing game.", "Payday shouldn't be a guessing game.", "home"),
-    ("Tally shows your next cheque, and the day it lands.", "Talli shows your next cheque, and the day it lands.", "hide"),
-    ("Every letter from the ministry, in one clean list.", "Every letter from the ministry, in one clean list.", "messages"),
-    ("Your benefits, all in one place.", "Your benefits, all in one place.", "status"),
-    ("Tally. Free on the App Store. Tally dot jaybulb dot com.", "Talli. Free on the App Store. talli.jaybulb.com", "card"),
+# One shot per sentence. `say` is spoken (spelled "Tally" so it is said right), `lines` are on screen.
+SHOTS = [
+    dict(kind="card", art="niche.png", lines=["Payday."], say="Payday shouldn't be a guessing game.", min=3.0),
+    dict(kind="card", art="chiaroscuro.png", lines=["When does", "it land?", "How much?"], say="When does it land? How much is it?", min=3.0),
+    dict(kind="phone", action="home", art="eirene.png", label="Home", lines=["One number.", "One date."],
+         say="Tally puts it on one screen. The amount, and the day it lands.", min=4.6),
+    dict(kind="phone", action="messages", art="chariot.png", label="Messages", lines=["Every letter.", "One list."],
+         say="Every letter from the ministry, in one clean list.", min=4.2),
+    dict(kind="phone", action="status", art="bronze.png", label="Status", lines=["Every benefit,", "one place."],
+         say="Your assistance, your disability benefit and your tax credit, all in one place.", min=4.8),
+    dict(kind="card", art="eirene.png", lines=["Free.", "Private.", "Yours."], say="Free. Private. Yours.", min=3.0),
+    dict(kind="end", art="niche.png", say="Tally. Free on the App Store, and at tally dot jaybulb dot com.", min=5.6),
 ]
-HOLD = [4.2, 4.6, 4.6, 4.4, 6.0]  # the least each beat stays on screen
-
-END_CARD = """(() => { const d = document.createElement('div');
-  d.style.cssText = 'position:fixed;inset:0;z-index:999;background:#2F6FB0;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-family:-apple-system,BlinkMacSystemFont,Helvetica,sans-serif;text-align:center;opacity:0;transition:opacity .6s ease';
-  d.innerHTML = '<img src="/icon.svg" width="96" height="96" style="border-radius:22%;box-shadow:0 8px 32px rgba(0,0,0,.25)">'
-    + '<div style="font-size:44px;font-weight:200;letter-spacing:.2em;margin-top:8px">TALLI</div>'
-    + '<div style="font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.85">BC disability assistance, counted</div>'
-    + '<div style="margin-top:24px;height:48px;padding:0 24px;border-radius:999px;background:#fff;color:#2F6FB0;display:flex;align-items:center;font-size:17px;font-weight:600">Free on the App Store</div>'
-    + '<div style="font-size:20px;font-weight:500;margin-top:8px">talli.jaybulb.com</div>';
-  document.body.appendChild(d); requestAnimationFrame(() => requestAnimationFrame(() => { d.style.opacity = 1; })); })()"""
+CAPTIONS = ["Payday shouldn't be a guessing game.", "When does it land? How much is it?",
+            "Talli puts it on one screen. The amount, and the day it lands.", "Every letter from the ministry, in one clean list.",
+            "Your assistance, your disability benefit and your tax credit, all in one place.", "Free. Private. Yours.",
+            "Talli. Free on the App Store, and at talli.jaybulb.com"]
 
 
 def clock(t):
@@ -59,82 +59,94 @@ def duration(path):
     return float(out.stdout.strip())
 
 
+def ff(*args):
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *args], check=True)
+
+
 def narrate(key):
-    """One mp3 per beat; exits plainly if ElevenLabs gives nothing back."""
+    """One mp3 per shot; exits plainly if ElevenLabs gives nothing back."""
     clips = []
-    for said, _, _ in SEGMENTS:
-        mp3 = voice.eleven_mp3(said, key)
+    for shot in SHOTS:
+        mp3 = voice.eleven_mp3(shot["say"], key)
         if not mp3:
-            sys.exit("ElevenLabs did not return audio for: " + said)
+            sys.exit("ElevenLabs did not return audio for: " + shot["say"])
         clips.append((mp3, duration(mp3)))
     return clips
 
 
-def button(page, label):
-    """Click the first button whose text starts with label."""
-    page.evaluate("(l) => [...document.querySelectorAll('button')].find(b => b.textContent.trim().startsWith(l)).click()", label)
+def record(args):
+    """Run launch/record.mjs and return its JSON."""
+    subprocess.run(["node", os.path.join(REPO, "launch", "record.mjs"), *args], capture_output=True, text=True, check=True)
+    out_dir = args[3] if args[0] == "app" else args[2]
+    with open(os.path.join(out_dir, "rec.json")) as f:
+        return json.load(f)
 
 
-def record(clips, out_dir):
-    """launch/record.mjs drives Chrome through every beat and saves its screencast frames (1080x1920) with arrival times.
-    Returns (ffmpeg concat list, [beat start seconds from the first beat])."""
-    beats = [{"action": action, "hold": max(seconds + 0.6, HOLD[i]), "card": END_CARD}
-             for i, ((_, seconds), (_, _, action)) in enumerate(zip(clips, SEGMENTS))]
-    out = subprocess.run(["node", os.path.join(REPO, "launch", "record.mjs"), BASE, DEMO_PASSWORD, out_dir, json.dumps(beats)],
-                         capture_output=True, text=True, check=True).stdout
-    rec = json.loads(out.strip().splitlines()[-1])
-    t0, end, frames = rec["starts"][0], rec["end"], rec["frames"]
+def frames_to_video(rec, t0, out_dir, name, size):
+    """Rebuild real time from stamped screencast frames (each holds until the next lands), from t0 to the end."""
+    frames, end = rec["frames"], rec["end"]
     before = [f for f in frames if f[0] < t0]
     keep = ([[t0, before[-1][1]]] if before else []) + [f for f in frames if f[0] >= t0]
-    lst = os.path.join(out_dir, "frames.txt")
-    with open(lst, "w") as fh:  # each frame holds until the next one lands
+    lst = os.path.join(out_dir, name + ".txt")
+    with open(lst, "w") as fh:
         for (ts, path), nxt in zip(keep, keep[1:] + [[end, None]]):
             fh.write(f"file '{path}'\nduration {max(0.001, nxt[0] - ts):.3f}\n")
         fh.write(f"file '{keep[-1][1]}'\n")
-    return lst, [s - t0 for s in rec["starts"]]
+    mp4 = os.path.join(out_dir, name + ".mp4")
+    ff("-f", "concat", "-safe", "0", "-i", lst, "-vf", f"scale={size},tpad=stop_mode=clone:stop_duration=3,fps=30,format=yuv420p",
+       "-c:v", "libx264", "-crf", "18", "-g", "15", "-preset", "medium", "-t", f"{end - t0 + 2:.2f}", mp4)
+    return mp4
 
 
-def music(seconds, path, rate=44100):
-    """An original, sample-free bed: warm plucks over D, A, Bm, G at 112 bpm, a soft kick and hats from bar two,
-    a bell on each bar and a held chord under the end card. Mono wav, mixed under the voice."""
+def music(seconds, end_at, path, rate=44100):
+    """An original, sample-free bed in D at 100 bpm: a soft string pad, warm piano plucks, a felt kick from bar
+    two, a bell each bar, and one held chord under the end card. Mono wav, mixed under the voice."""
     import numpy as np
     n = int(seconds * rate)
     out = np.zeros(n)
-    beat = 60 / 112
-    chords = [(73.42, [293.66, 369.99, 440.0, 587.33]), (55.0, [277.18, 329.63, 440.0, 554.37]),
-              (61.74, [293.66, 369.99, 493.88, 587.33]), (49.0, [293.66, 392.0, 493.88, 587.33])]
-    pattern = [0, 2, 1, 3, 2, 1, 3, 2]
+    beat = 60 / 100
+    hz = lambda m: 440 * 2 ** ((m - 69) / 12)  # noqa: E731
+    prog = [([62, 66, 69, 74], 38), ([61, 64, 69, 73], 33), ([59, 62, 66, 71], 35), ([59, 62, 67, 71], 31)]  # D A Bm G
+    tune = [78, 76, 74, 76, 73, 71, 73, 76]
 
-    def put(start, sig):
+    def put(start, sig, gain=1.0):
         i = int(start * rate)
         if 0 <= i < n:
             m = min(len(sig), n - i)
-            out[i:i + m] += sig[:m]
+            out[i:i + m] += gain * sig[:m]
 
-    def tone(f, dur, decay, harm=(1, 0.45, 0.2)):
-        x = np.arange(int(dur * rate)) / rate
-        return sum(h * np.sin(2 * np.pi * f * (k + 1) * x) for k, h in enumerate(harm)) * np.exp(-x * decay) * np.minimum(1, x / 0.004)
+    def t_(d):
+        return np.arange(int(d * rate)) / rate
 
-    end = max(0, seconds - 6.0)
-    for bar in range(int(seconds / (beat * 4)) + 1):
-        t0 = bar * beat * 4
-        if t0 >= end:
-            break
-        root, notes = chords[bar % 4]
-        for k, i in enumerate(pattern):
-            put(t0 + k * beat / 2, 0.28 * tone(notes[i], 0.55, 8))
-        put(t0, 0.5 * tone(root * 2, beat * 2, 2.2, (1, 0.25)))
-        put(t0 + beat * 2, 0.38 * tone(root * 2, beat * 2, 2.2, (1, 0.25)))
-        put(t0, 0.09 * tone(notes[3] * 2, 1.4, 2.6, (1, 0.3)))
-        if bar >= 1:
-            for b in range(4):
-                x = np.arange(int(0.16 * rate)) / rate
-                put(t0 + b * beat, 0.5 * np.sin(2 * np.pi * (48 + 70 * np.exp(-x * 40)) * x) * np.exp(-x * 20))
-                rng = np.random.default_rng(bar * 4 + b)
-                y = np.arange(int(0.04 * rate)) / rate
-                put(t0 + b * beat + beat / 2, 0.07 * rng.standard_normal(len(y)) * np.exp(-y * 90))
-    for f in (293.66, 369.99, 440.0, 587.33, 146.83):  # the end card's chord, held
-        put(end, 0.26 * tone(f, 5.8, 0.9))
+    def piano(m, d=1.6):
+        x, f = t_(d), hz(m)
+        return (np.sin(2 * np.pi * f * x) + 0.35 * np.sin(4 * np.pi * f * x) * np.exp(-x * 5) + 0.12 * np.sin(6 * np.pi * f * x) * np.exp(-x * 9)) \
+            * np.exp(-x * 2.6) * np.minimum(1, x / 0.004)
+
+    def pad(notes, d):
+        x = t_(d)
+        env = np.minimum(1, x / 1.2) * np.minimum(1, np.maximum(0, d - x) / 1.2)
+        return sum(np.sin(2 * np.pi * hz(m) * (1 + det) * x) for m in notes for det in (-0.003, 0, 0.003)) / (3 * len(notes)) * env
+
+    bar = beat * 4
+    for b in range(int(end_at / bar) + 1):
+        t0 = b * bar
+        notes, root = prog[b % 4]
+        put(t0, pad(notes, bar + 0.6), 0.32)
+        put(t0, piano(root, bar), 0.45)
+        for k in range(4):  # plucked chord tones on the beat, the tune on the off-beats from bar three
+            if t0 + k * beat < end_at:
+                put(t0 + k * beat, piano(notes[(k + 1) % 4]), 0.16)
+                if b >= 2:
+                    put(t0 + k * beat + beat / 2, piano(tune[(b * 2 + k) % 8], 1.2), 0.12)
+        if 1 <= b and t0 < end_at:
+            for k in range(4):
+                x = t_(0.18)
+                put(t0 + k * beat, np.sin(2 * np.pi * (46 + 60 * np.exp(-x * 35)) * x) * np.exp(-x * 18), 0.42 if k in (0, 2) else 0.22)
+        put(t0, piano(notes[3] + 12, 2.0), 0.05)
+    for m in (50, 62, 66, 69, 74, 78):  # the end card's chord, held
+        put(end_at, piano(m, seconds - end_at), 0.16)
+    put(end_at, pad([62, 66, 69, 74], seconds - end_at), 0.3)
     out *= 0.9 / max(1e-6, np.max(np.abs(out)))
     with wave.open(path, "wb") as w:
         w.setnchannels(1)
@@ -144,54 +156,81 @@ def music(seconds, path, rate=44100):
     return path
 
 
-def build(webm, starts, clips, out_dir):
-    """Voice delayed to each beat, the bed ducked under it, loudness normalised; plus captions and a poster."""
-    total = starts[-1] + max(clips[-1][1], HOLD[-1]) + 1.2
-    lead = 0.0
-    bed = music(total, os.path.join(out_dir, "bed.wav"))
-    inputs, filters = ["-f", "concat", "-safe", "0", "-i", webm, "-i", bed], []
-    for i, ((mp3, _), start) in enumerate(zip(clips, starts)):
-        inputs += ["-i", mp3]
-        ms = int((start - lead) * 1000) + 250
-        filters.append(f"[{i + 2}:a]adelay={ms}|{ms}[a{i}]")
-    mix = ("".join(f"[a{i}]" for i in range(len(clips))) + f"amix=inputs={len(clips)}:normalize=0,apad[v0];[v0]asplit=2[voice][vkey];"
-           f"[1:a]volume=0.8,afade=t=in:d=0.6,afade=t=out:st={total - lead - 2.5:.2f}:d=2.5[bed];"
-           "[bed][vkey]sidechaincompress=threshold=0.02:ratio=8:attack=15:release=450[ducked];"
-           "[voice][ducked]amix=inputs=2:normalize=0:duration=longest[m];[m]loudnorm=I=-16:TP=-1.5:LRA=11[aout];"
-           "[0:v]scale=1080:1920:flags=lanczos,tpad=stop_mode=clone:stop_duration=10,fps=30,format=yuv420p[vout]")
-    mp4 = os.path.join(out_dir, "talli-promo.mp4")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(filters + [mix]), "-map", "[vout]", "-map", "[aout]",
-                    "-t", f"{total - lead:.2f}", "-c:v", "libx264", "-crf", "24", "-preset", "slow", "-pix_fmt", "yuv420p", "-r", "30",
-                    "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", mp4], check=True)
-    vtt = os.path.join(out_dir, "talli-promo.vtt")
-    rel = [s - lead + 0.25 for s in starts]
-    ends = rel[1:] + [duration(mp4)]
-    with open(vtt, "w") as f:
-        f.write("WEBVTT\n\n")
-        for (_, shown, _), s, e in zip(SEGMENTS, rel, ends):
-            f.write(f"{clock(s)} --> {clock(e - 0.05)}\n{shown}\n\n")
-    poster = os.path.join(out_dir, "talli-promo-poster.jpg")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{rel[0] + 2.5:.2f}", "-i", mp4, "-frames:v", "1", "-q:v", "3", poster], check=True)
-    return mp4, vtt, poster
-
-
 def main():
     key = voice.eleven_key()
     if not key:
         sys.exit("No ELEVENLABS_API_KEY in the environment or the fish secrets file.")
     work = tempfile.mkdtemp()
-    server = subprocess.Popen(["node", "src/api.js"], cwd=REPO, env={**os.environ, "PORT": str(PORT), "DEMO_PASSWORD": DEMO_PASSWORD,
-                              "CORS_ORIGINS": BASE}, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    clips = narrate(key)
+    durs = [max(s["min"], c[1] + VO_IN + 0.6) for s, c in zip(SHOTS, clips)]
+
+    # 2. the app, for the phone shots, each held as long as its shot
+    app_dir = os.path.join(work, "app")
+    os.makedirs(app_dir)
+    phone = [i for i, s in enumerate(SHOTS) if s["kind"] == "phone"]
+    server = subprocess.Popen(["node", "src/api.js"], cwd=REPO, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                              env={**os.environ, "PORT": str(APP_PORT), "DEMO_PASSWORD": DEMO_PASSWORD, "CORS_ORIGINS": f"http://localhost:{APP_PORT}"})
     try:
         time.sleep(3)
-        clips = narrate(key)
-        webm, starts = record(clips, work)
-        mp4, vtt, poster = build(webm, starts, clips, work)
+        app = record(["app", f"http://localhost:{APP_PORT}", DEMO_PASSWORD, app_dir,
+                      json.dumps([{"action": SHOTS[i]["action"], "hold": durs[i] + 0.5} for i in phone])])
     finally:
         server.terminate()
+    t_app = app["starts"][0]
+    stage_dir = os.path.join(work, "stage")
+    os.makedirs(os.path.join(stage_dir, "art"))
+    frames_to_video(app, t_app, app_dir, "screen", "1080:1920:flags=lanczos")
+    shutil.copy(os.path.join(app_dir, "screen.mp4"), stage_dir)
+
+    # 3. the stage, played once and recorded at 1080p
+    shutil.copy(os.path.join(REPO, "launch", "stage.html"), stage_dir)
+    shutil.copy(os.path.join(REPO, "web", "icon.svg"), stage_dir)
+    for s in SHOTS:
+        shutil.copy(os.path.join(REPO, "web", "art", s["art"]), os.path.join(stage_dir, "art"))
+    plan = []
+    for i, s in enumerate(SHOTS):
+        p = {k: s[k] for k in ("kind", "art", "lines", "label", "center") if k in s}
+        p["dur"] = durs[i]
+        if s["kind"] == "phone":
+            p["at"] = app["starts"][phone.index(i)] - t_app
+        plan.append(p)
+    http = subprocess.Popen([sys.executable, "-m", "http.server", str(STAGE_PORT), "--directory", stage_dir], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        time.sleep(1)
+        rec_dir = os.path.join(work, "rec")
+        os.makedirs(rec_dir)
+        stage = record(["stage", f"http://localhost:{STAGE_PORT}/stage.html", rec_dir, json.dumps(plan)])
+    finally:
+        http.terminate()
+    picture = frames_to_video(stage, stage["starts"][0], rec_dir, "picture", "1920:1080")
+
+    # 4. the mix: each line on its cut, the bed ducked under the voice
+    cuts = [sum(durs[:i]) for i in range(len(durs))]
+    total = sum(durs)
+    bed = music(total, cuts[-1], os.path.join(work, "bed.wav"))
+    inputs, filters = ["-i", picture, "-i", bed], []
+    for i, ((mp3, _), at) in enumerate(zip(clips, cuts)):
+        inputs += ["-i", mp3]
+        ms = int((at + VO_IN) * 1000)
+        filters.append(f"[{i + 2}:a]adelay={ms}|{ms}[a{i}]")
+    mix = ("".join(f"[a{i}]" for i in range(len(clips))) + f"amix=inputs={len(clips)}:normalize=0,apad[v0];[v0]asplit=2[voice][vkey];"
+           f"[1:a]volume=0.85,afade=t=in:d=0.4,afade=t=out:st={total - 2:.2f}:d=2[bed];"
+           "[bed][vkey]sidechaincompress=threshold=0.025:ratio=6:attack=20:release=400[ducked];"
+           "[voice][ducked]amix=inputs=2:normalize=0:duration=longest[m];[m]loudnorm=I=-16:TP=-1.5:LRA=11[aout];"
+           f"[0:v]fade=t=in:d=0.4,fade=t=out:st={total - 0.6:.2f}:d=0.6,format=yuv420p[vout]")
+    mp4 = os.path.join(work, "talli-promo.mp4")
+    ff(*inputs, "-filter_complex", ";".join(filters + [mix]), "-map", "[vout]", "-map", "[aout]", "-t", f"{total:.2f}",
+       "-c:v", "libx264", "-crf", "23", "-maxrate", "6M", "-bufsize", "12M", "-tune", "grain", "-preset", "slow", "-r", "30", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", mp4)
+    vtt = os.path.join(work, "talli-promo.vtt")
+    with open(vtt, "w") as f:
+        f.write("WEBVTT\n\n")
+        for text, at, d in zip(CAPTIONS, cuts, durs):
+            f.write(f"{clock(at + VO_IN)} --> {clock(at + d - 0.05)}\n{text}\n\n")
+    poster = os.path.join(work, "talli-promo-poster.jpg")
+    ff("-ss", f"{cuts[2] + 2.2:.2f}", "-i", mp4, "-frames:v", "1", "-q:v", "3", poster)
     for path in (mp4, vtt, poster):
         shutil.copy(path, os.path.join(REPO, "launch", os.path.basename(path)))
-    print(json.dumps({"seconds": round(duration(mp4), 1), "mb": round(os.path.getsize(mp4) / 1e6, 2), "beats": [round(s, 1) for s in starts]}))
+    print(json.dumps({"seconds": round(duration(mp4), 1), "mb": round(os.path.getsize(mp4) / 1e6, 2), "cuts": [round(c, 1) for c in cuts]}))
 
 
 if __name__ == "__main__":

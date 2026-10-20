@@ -2308,8 +2308,9 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
 
       {/* Header */}
       <div style={{padding:'4px 20px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <span style={{fontSize:15,fontWeight:700,letterSpacing:'-0.04em',color:t.text}}>
-          talli<span style={{color:t.accent}}>.</span>
+        <span style={{display:'flex',alignItems:'center',gap:8}}>
+          <img src="/icon.svg" width="24" height="24" alt="" style={{display:'block',borderRadius:'22%'}}/>
+          <span style={{fontSize:13,fontWeight:500,letterSpacing:'0.16em',textTransform:'uppercase',color:t.text}}>Talli</span>
         </span>
         <button onClick={()=>setTab('settings')} title="Settings" style={{width:32,height:32,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,boxShadow:`0 0 0 1px ${t.border2}`,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0,animation:refreshing?'spin 0.8s linear infinite':'none'}}>
           {avatarUrl

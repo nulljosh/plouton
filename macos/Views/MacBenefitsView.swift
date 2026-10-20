@@ -9,13 +9,13 @@ struct MacBenefitsView: View {
     @ViewBuilder
     private var incomeCard: some View {
         if let income = appState.dashboard?.income {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 12) {
                 Text("YOUR MONTHLY INCOME")
-                    .font(.system(size: 11, weight: .semibold))
-                    .ltrTracking(1.5)
+                    .font(.system(size: 13, weight: .semibold))
+                    .ltrTracking(0.5)
                     .foregroundStyle(.secondary)
 
-                HStack(spacing: 20) {
+                HStack(spacing: 16) {
                     incomeCell("PWD", income.pwdMonthly)
                     incomeCell("CDB", income.cdbMonthly)
                     incomeCell("Total", income.totalMonthly)
@@ -23,7 +23,7 @@ struct MacBenefitsView: View {
                 if let year = income.yearTotal, let left = income.yearRemaining, let n = income.paymentsLeft, year > 0 {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
                     Text("\(year.formatted(cad)) this year at today's rate: \((year - left).formatted(cad)) in, \(left.formatted(cad)) to come")
-                        .font(.footnote)
+                        .font(.system(size: 13))
                         .foregroundStyle(.secondary)
                 }
 
@@ -31,7 +31,7 @@ struct MacBenefitsView: View {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
                     let isOver = (earnings.over ?? 0) > 0
                     Text("Work earnings \(y): \(earned.formatted(cad)) of \(exemption.formatted(cad)), \(left.formatted(cad)) left")
-                        .font(.footnote)
+                        .font(.system(size: 13))
                         .foregroundStyle(isOver ? .red : .secondary)
                 }
 
@@ -40,11 +40,11 @@ struct MacBenefitsView: View {
                     let isOver = assets.over ?? false
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Assets: \(counted.formatted(cad)) of \(limit.formatted(cad)), \(left.formatted(cad)) left")
-                            .font(.footnote)
+                            .font(.system(size: 13))
                             .foregroundStyle(isOver ? .red : .secondary)
                         if let exempt = assets.exempt, exempt > 0 {
                             Text("RDSP \(exempt.formatted(cad)) not counted")
-                                .font(.caption)
+                                .font(.system(size: 13))
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -54,14 +54,14 @@ struct MacBenefitsView: View {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
                     VStack(alignment: .leading, spacing: 4) {
                         Text("\(String(review.year))\(review.complete ? "" : " so far"): \(review.totals.all.formatted(cad))")
-                            .font(.footnote)
+                            .font(.system(size: 13))
                         Text("\(review.totals.benefits.formatted(cad)) benefits, \(review.totals.credits.formatted(cad)) credits, \(review.totals.earnings.formatted(cad)) work earnings")
-                            .font(.caption)
+                            .font(.system(size: 13))
                             .foregroundStyle(.secondary)
                         ShareLink(item: review.csvFile()) {
                             Label("Export for tax time", systemImage: "square.and.arrow.up")
                         }
-                        .font(.footnote)
+                        .font(.system(size: 13))
                     }
                 }
             }
@@ -70,168 +70,72 @@ struct MacBenefitsView: View {
     }
 
     private func incomeCell(_ label: String, _ amount: Double) -> some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(label)
-                .font(.system(size: 10, weight: .semibold))
-                .ltrTracking(1.1)
+                .font(.system(size: 13))
                 .foregroundStyle(.secondary)
             Text(amount.formatted(.currency(code: "CAD").precision(.fractionLength(0))))
-                .font(.system(size: 17, weight: .semibold))
+                .font(.system(size: 22, weight: .semibold))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 24) {
                 statusCard
                 incomeCard
-                callToAction
 
-                DisclosureGroup("Money tools") {
-                    DisclosureGroup("Budget against paydays") {
-                        BudgetView { try await MacAPIClient.shared.budget(save: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
+                section("Tools") { group(tools) }
+                section("Help and papers") { group(papers) }
 
-                    DisclosureGroup("Benefit finder") {
-                        BenefitFinderView { try await MacAPIClient.shared.benefitFinder(answers: $0) }
-                            .padding(.top, 8)
+                section("From your tax return", note: "File your taxes first. These are worked out from your return.") {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: 16, alignment: .top)], spacing: 16) {
+                        ForEach(benefits, id: \.title) { benefitCard($0) }
                     }
-                    .font(.headline)
-
-                    DisclosureGroup("RDSP grants and bonds") {
-                        RdspTrackerView { try await MacAPIClient.shared.rdspTracker(patch: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("What if I take a job") {
-                        WhatIfView { try await MacAPIClient.shared.whatIf($0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("My household and rent") {
-                        HouseholdView { try await MacAPIClient.shared.household(save: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
                 }
-                .font(.headline)
 
-                DisclosureGroup("Help and papers") {
-                    DisclosureGroup("Turning 65 or moving out of BC") {
-                        LifeChangeView { try await MacAPIClient.shared.lifeChange(save: $0) }
-                            .padding(.top, 8)
+                section("Apply separately") {
+                    VStack(spacing: 0) {
+                        ForEach(Array(applyRows.enumerated()), id: \.offset) { i, row in
+                            if i > 0 { Divider().padding(.leading, 16) }
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(row.0).font(.system(size: 15, weight: .semibold))
+                                Text(row.1).font(.system(size: 13)).foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 16)
+                        }
                     }
-                    .font(.headline)
-
-                    DisclosureGroup("Reconsideration helper") {
-                        ReconsiderationView { try await MacAPIClient.shared.reconsideration(received: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Service requests") {
-                        ServiceRequestsView { try await MacAPIClient.shared.serviceRequests() }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Document vault") {
-                        VaultView(api: MacAPIClient.shared.vault)
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Trusted helper") {
-                        TrustedHelperView(api: MacAPIClient.shared.trustedHelpers)
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-                }
-                .font(.headline)
-                // Two columns once the window is wide enough, so a big window is not one long strip.
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16, alignment: .top)], spacing: 16) {
-                    // Automatic benefits
-                    benefitCard(
-                        title: "GST/HST Credit",
-                        difficulty: "Automatic",
-                        color: Color(red: 52/255, green: 199/255, blue: 89/255),
-                        rows: [("Single", "$533/yr"), ("Couple", "$698/yr"), ("Per child", "+$184/yr")],
-                        how: "Auto -- file your tax return. Quarterly payments.",
-                        note: "25% permanent increase starting Jul 2026."
-                    )
-                    benefitCard(
-                        title: "Canada Child Benefit",
-                        difficulty: "Automatic",
-                        color: .red,
-                        rows: [("Under 6", "$7,997/yr"), ("6 to 17", "$6,748/yr"), ("Disability +", "+$3,411/yr")],
-                        how: "Auto -- file your tax return.",
-                        note: "Tax-free, paid monthly."
-                    )
-                    benefitCard(
-                        title: "BC Family Benefit",
-                        difficulty: "Automatic",
-                        color: Color.bcLight,
-                        rows: [("1st child", "$1,750/yr"), ("2nd child", "$1,100/yr"), ("Single-parent", "up to $500/yr")],
-                        how: "Auto if registered for CCB.",
-                        note: "Full amount under $29,526 income."
-                    )
-
-                    // Claim on return
-                    benefitCard(
-                        title: "BC Renter's Tax Credit",
-                        difficulty: "Claim on return",
-                        color: .red,
-                        rows: [("Maximum", "$400/yr"), ("Phase-out", "starts $64,764")],
-                        how: "Claim on tax return.",
-                        note: "Must have rented 6+ months."
-                    )
-                    benefitCard(
-                        title: "Canada Workers Benefit",
-                        difficulty: "Claim on return",
-                        color: .orange,
-                        rows: [("Single", "$1,633/yr"), ("Family", "$2,813/yr"), ("Disability +", "+$843/yr")],
-                        how: "Claim on tax return (Schedule 6).",
-                        note: "Working income > $3,000."
-                    )
-
-                    // Application
-                    benefitCard(
-                        title: "Canadian Dental Care Plan",
-                        difficulty: "Application required",
-                        color: Color.bcPrimary,
-                        rows: [("Under $70K", "Free"), ("$70K-$80K", "40% co-pay"), ("$80K-$90K", "60% co-pay")],
-                        how: "Apply through CRA. Must not have private dental.",
-                        note: "Covers preventive, basic, and major dental."
-                    )
-
-                    mustApplySection
+                    .macGlassCard(padding: 0)
                 }
             }
-            .padding(24)
+            .frame(maxWidth: 960)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+            .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
+    // MARK: - Pieces
+
     // Same summary as the web Status tab. PWD and CDB count as approved; there is no button for it.
     private var statusCard: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 16) {
             Image(systemName: "checkmark")
-                .font(.system(size: 16, weight: .bold))
+                .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(.white)
                 .frame(width: 40, height: 40)
                 .background(Color.bcPrimary, in: Circle())
             VStack(alignment: .leading, spacing: 4) {
-                Text("Active, receiving benefits").font(.headline)
-                Text("PWD approved · CDB approved").font(.subheadline).foregroundStyle(.secondary)
+                Text("Active, receiving benefits").font(.system(size: 17, weight: .semibold))
+                Text("PWD approved · CDB approved").font(.system(size: 15)).foregroundStyle(.secondary)
             }
-            Spacer()
+            Spacer(minLength: 8)
             Text("Approved")
-                .font(.caption.weight(.semibold))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Color.bcPrimary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
@@ -240,84 +144,118 @@ struct MacBenefitsView: View {
         .macGlassCard()
     }
 
-    private var callToAction: some View {
+    private func section(_ title: LocalizedStringKey, note: LocalizedStringKey? = nil, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("File Your Taxes First")
-                .font(.title3.weight(.semibold))
-            Text("Most benefits are calculated automatically from your tax return. No separate application needed.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
-        .background {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.ultraThinMaterial)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(Color.bcPrimary.opacity(0.08))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .strokeBorder(Color.bcPrimary.opacity(0.2), lineWidth: 0.5)
-                )
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title).font(.system(size: 22, weight: .semibold))
+                if let note { Text(note).font(.system(size: 15)).foregroundStyle(.secondary) }
+            }
+            .padding(.bottom, 4)
+            content()
         }
     }
 
-    private func benefitCard(title: String, difficulty: String, color: Color, rows: [(String, String)], how: String, note: String) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 10) {
-                Circle().fill(color).frame(width: 10, height: 10)
-                Text(title).font(.headline)
-                Spacer()
-                Text(difficulty)
-                    .font(.caption2.weight(.medium))
-                    .foregroundStyle(difficulty == "Automatic" ? .green : difficulty == "Claim on return" ? .orange : .red)
-            }
+    // Tools open as rows in an inset grouped list, never nested folds. Each pushes its own page.
+    private struct Tool { let title: LocalizedStringKey; let symbol: String; let view: AnyView }
 
-            ForEach(rows, id: \.0) { row in
-                HStack {
-                    Text(row.0).font(.subheadline).foregroundStyle(.secondary)
-                    Spacer()
-                    Text(row.1).font(.subheadline.weight(.semibold))
+    private var tools: [Tool] {
+        let api = MacAPIClient.shared
+        return [
+            Tool(title: "Budget against paydays", symbol: "chart.bar", view: AnyView(BudgetView { try await api.budget(save: $0) })),
+            Tool(title: "Benefit finder", symbol: "magnifyingglass", view: AnyView(BenefitFinderView { try await api.benefitFinder(answers: $0) })),
+            Tool(title: "RDSP grants and bonds", symbol: "banknote", view: AnyView(RdspTrackerView { try await api.rdspTracker(patch: $0) })),
+            Tool(title: "What if I take a job", symbol: "briefcase", view: AnyView(WhatIfView { try await api.whatIf($0) })),
+            Tool(title: "My household and rent", symbol: "house", view: AnyView(HouseholdView { try await api.household(save: $0) })),
+        ]
+    }
+
+    private var papers: [Tool] {
+        let api = MacAPIClient.shared
+        return [
+            Tool(title: "Turning 65 or moving out of BC", symbol: "calendar", view: AnyView(LifeChangeView { try await api.lifeChange(save: $0) })),
+            Tool(title: "Reconsideration helper", symbol: "arrow.uturn.backward", view: AnyView(ReconsiderationView { try await api.reconsideration(received: $0) })),
+            Tool(title: "Service requests", symbol: "tray", view: AnyView(ServiceRequestsView { try await api.serviceRequests() })),
+            Tool(title: "Document vault", symbol: "lock", view: AnyView(VaultView(api: api.vault))),
+            Tool(title: "Trusted helper", symbol: "person.2", view: AnyView(TrustedHelperView(api: api.trustedHelpers))),
+        ]
+    }
+
+    private func group(_ items: [Tool]) -> some View {
+        VStack(spacing: 0) {
+            ForEach(Array(items.enumerated()), id: \.offset) { i, tool in
+                if i > 0 { Divider().padding(.leading, 48) }
+                NavigationLink {
+                    ScrollView { tool.view.frame(maxWidth: 680).padding(.horizontal, 20).padding(.vertical, 24).frame(maxWidth: .infinity) }
+                        .navigationTitle(tool.title)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: tool.symbol)
+                            .font(.system(size: 15))
+                            .foregroundStyle(Color.bcPrimary)
+                            .frame(width: 20)
+                        Text(tool.title).font(.system(size: 15))
+                        Spacer(minLength: 8)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 16)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .macGlassCard(padding: 0)
+    }
+
+    private struct Benefit { let title: String; let kind: String; let rows: [(String, String)]; let note: String }
+
+    private let benefits = [
+        Benefit(title: "GST/HST Credit", kind: "Automatic", rows: [("Single", "$533/yr"), ("Couple", "$698/yr"), ("Per child", "+$184/yr")],
+                note: "Paid every quarter. Up 25 percent for good from July 2026."),
+        Benefit(title: "Canada Child Benefit", kind: "Automatic", rows: [("Under 6", "$7,997/yr"), ("6 to 17", "$6,748/yr"), ("Disability", "+$3,411/yr")],
+                note: "Tax-free, paid monthly."),
+        Benefit(title: "BC Family Benefit", kind: "Automatic", rows: [("First child", "$1,750/yr"), ("Second child", "$1,100/yr"), ("Single parent", "up to $500/yr")],
+                note: "Comes with the Canada Child Benefit. Full amount under $29,526 income."),
+        Benefit(title: "BC Renter's Tax Credit", kind: "Claim on return", rows: [("Maximum", "$400/yr"), ("Phases out from", "$64,764")],
+                note: "You must have rented for 6 months or more."),
+        Benefit(title: "Canada Workers Benefit", kind: "Claim on return", rows: [("Single", "$1,633/yr"), ("Family", "$2,813/yr"), ("Disability", "+$843/yr")],
+                note: "Schedule 6. For working income over $3,000."),
+        Benefit(title: "Canadian Dental Care Plan", kind: "Apply", rows: [("Under $70K", "Free"), ("$70K to $80K", "40% co-pay"), ("$80K to $90K", "60% co-pay")],
+                note: "Apply through the CRA. Not if you have private dental."),
+    ]
+
+    private func benefitCard(_ b: Benefit) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text(b.title).font(.system(size: 17, weight: .semibold))
+                Spacer(minLength: 8)
+                Text(b.kind).font(.system(size: 13)).foregroundStyle(.secondary)
+            }
+            VStack(spacing: 8) {
+                ForEach(b.rows, id: \.0) { row in
+                    HStack {
+                        Text(row.0).foregroundStyle(.secondary)
+                        Spacer(minLength: 8)
+                        Text(row.1).fontWeight(.medium)
+                    }
+                    .font(.system(size: 15))
                 }
             }
-
-            Text(how)
-                .font(.caption.weight(.medium))
-                .foregroundStyle(color)
-
-            Text(note)
-                .font(.caption)
+            Text(b.note)
+                .font(.system(size: 13))
                 .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .macGlassCard()
     }
 
-    private var mustApplySection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("MUST APPLY SEPARATELY")
-                .font(.caption.weight(.medium))
-                .foregroundStyle(.secondary)
-                .ltrTracking(0.5)
-
-            applyRow("National Pharmacare", desc: "Free diabetes/hormone/contraceptive meds", color: .green)
-            applyRow("Fair PharmaCare", desc: "Income-based prescription coverage", color: .green)
-            applyRow("SAFER", desc: "Rent subsidy for 60+ renters", color: Color.bcPrimary)
-            applyRow("RAP", desc: "Rent subsidy for families (~$700/mo avg)", color: Color.bcLight)
-            applyRow("BC Bus Pass", desc: "$45/yr transit for PWD/GIS seniors", color: Color.bcPrimary)
-        }
-        .macGlassCard()
-    }
-
-    private func applyRow(_ title: String, desc: String, color: Color) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Circle().fill(color).frame(width: 8, height: 8).padding(.top, 5)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.subheadline.weight(.semibold))
-                Text(desc).font(.caption).foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 0)
-        }
-    }
+    private let applyRows = [
+        ("National Pharmacare", "Free diabetes, hormone and contraceptive medicine"),
+        ("Fair PharmaCare", "Prescription coverage based on income"),
+        ("SAFER", "Rent help for renters 60 and over"),
+        ("RAP", "Rent help for families, about $700 a month on average"),
+        ("BC Bus Pass", "$45 a year transit for PWD and GIS seniors"),
+    ]
 }

@@ -2,11 +2,12 @@ import SwiftUI
 
 struct MacDashboardView: View {
     @Environment(MacAppState.self) private var appState
-    @Environment(\.colorScheme) private var colorScheme
+    @State private var showDetails = false
 
     var body: some View {
+        ScrollViewReader { scroller in
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 if appState.isOffline {
                     offlineBanner
                 } else if appState.isSyncStale {
@@ -24,53 +25,64 @@ struct MacDashboardView: View {
                     arrived: { try? await MacAPIClient.shared.markPaid(month: $0) }
                 )
 
-                // the whole first screen is the number; Details sits below the fold
-                paymentCard
-                    .containerRelativeFrame(.vertical) { length, _ in length - 48 }
+                // The first screen is the number, centred, with one quiet action under it.
+                VStack(spacing: 24) {
+                    paymentCard
+                    Button {
+                        withAnimation(.easeOut(duration: 0.2)) { showDetails.toggle() }
+                        if showDetails { withAnimation { scroller.scrollTo("details", anchor: .top) } }
+                    } label: {
+                        Label(showDetails ? "Hide details" : "Details", systemImage: showDetails ? "chevron.up" : "chevron.down")
+                    }
+                    .capsuleAction(prominent: false)
+                }
+                .frame(maxHeight: .infinity)
+                .containerRelativeFrame(.vertical) { length, _ in length - 48 }
 
-                DisclosureGroup("Details") {
-                    VStack(spacing: 20) {
+                if showDetails {
+                    VStack(spacing: 16) {
                         calendarCard
                         if !appState.statusMessages.isEmpty {
                             recentMessagesCard
                         }
                     }
-                    .padding(.top, 12)
+                    .id("details")
                 }
-                .font(.footnote)
-                .foregroundStyle(.secondary)
             }
+            .frame(maxWidth: 960)
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
+            .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
     }
 
     // MARK: - Payment Card
 
-    // Same hero as the web dashboard: thin tabular digits, a green dollar sign. The amount is set
-    // huge and scales down to whatever the window gives it, so it always fills the width.
+    // Same hero as the web dashboard: thin digits, a green dollar sign. The amount is set huge and
+    // scales down to the window, so it fills the width; the label and date hug it.
     private var paymentCard: some View {
         VStack(spacing: 8) {
             Text("NEXT PAYMENT")
-                .font(.caption.weight(.medium))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .ltrTracking(0.5)
 
             (Text("$").foregroundStyle(Color.green)
              + Text(appState.paymentAmountText.replacingOccurrences(of: ".00", with: "").replacingOccurrences(of: "$", with: "")))
-                .font(.system(size: 600, weight: .thin).monospacedDigit())
+                .font(.system(size: 600, weight: .thin))
                 .minimumScaleFactor(0.05)
                 .lineLimit(1)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity)
                 .contentTransition(.numericText())
 
             Text(appState.countdownText)
-                .font(.title.weight(.light))
+                .font(.system(size: 22))
                 .foregroundStyle(Color.bcLight)
 
             Text(appState.nextPaymentDateText)
-                .font(.subheadline)
+                .font(.system(size: 15))
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
@@ -79,14 +91,12 @@ struct MacDashboardView: View {
     // MARK: - Calendar
 
     private var calendarCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 16) {
             MacPaymentCalendarView(paymentDate: appState.parsedNextPaymentDate)
             Divider()
             SupplementsView { try await MacAPIClient.shared.supplements(save: $0) }
         }
-        .frame(maxWidth: .infinity)
-        .padding(20)
-            .background(macCard)
+        .macGlassCard()
     }
 
     // MARK: - Recent Messages
@@ -96,8 +106,8 @@ struct MacDashboardView: View {
             HStack {
                 Image(systemName: "envelope.fill")
                     .foregroundStyle(Color.bcPrimary)
-                Text("Recent Messages")
-                    .font(.headline)
+                Text("Recent messages")
+                    .font(.system(size: 17, weight: .semibold))
                 Spacer()
                 Text("\(appState.statusMessages.count) total")
                     .font(.caption)
@@ -107,17 +117,17 @@ struct MacDashboardView: View {
             Divider()
 
             ForEach(appState.statusMessages.prefix(3)) { message in
-                HStack(alignment: .top, spacing: 10) {
+                HStack(alignment: .top, spacing: 12) {
                     Circle()
                         .fill(Color.bcLight)
                         .frame(width: 6, height: 6)
                         .padding(.top, 6)
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: 4) {
                         Text(message.text)
                             .font(.subheadline)
                             .lineLimit(2)
                         if let ts = message.timestamp, let date = MacDateParsing.parse(ts) {
-                            Text(date.formatted(date: .abbreviated, time: .shortened))
+                            Text(date.formatted(date: .abbreviated, time: .omitted))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -125,18 +135,16 @@ struct MacDashboardView: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
-        .background(macCard)
+        .macGlassCard()
     }
 
     // MARK: - Shared
 
     private var filingWindowBanner: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             Image(systemName: "exclamationmark.circle.fill")
                 .foregroundStyle(Color.orange)
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text("Report window open")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(Color.orange)
@@ -151,13 +159,13 @@ struct MacDashboardView: View {
             .font(.caption.weight(.semibold))
             .controlSize(.small)
         }
-        .padding(12)
-        .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(Color.orange.opacity(0.3), lineWidth: 1))
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background(Color.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     private var reportFiledBanner: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(Color.green)
             Text("Report filed this month")
@@ -165,9 +173,9 @@ struct MacDashboardView: View {
                 .foregroundStyle(Color.green)
             Spacer()
         }
-        .padding(12)
-        .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(Color.green.opacity(0.3), lineWidth: 1))
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     private var staleSyncBanner: some View {
@@ -175,12 +183,13 @@ struct MacDashboardView: View {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.caption)
             Text(appState.lastSyncDate.map {
-                "Not up to date -- last synced \($0.formatted(.relative(presentation: .named)))"
-            } ?? "Not up to date -- never synced")
+                "Not up to date. Last synced \($0.formatted(.relative(presentation: .named)))"
+            } ?? "Not up to date. Never synced.")
                 .font(.caption)
             Spacer()
         }
-        .padding(10)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
@@ -188,21 +197,12 @@ struct MacDashboardView: View {
         HStack {
             Image(systemName: "wifi.slash")
                 .font(.caption)
-            Text("Offline -- showing cached data")
+            Text("Offline. Showing saved data.")
                 .font(.caption)
             Spacer()
         }
-        .padding(10)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-    }
-
-    private var macCard: some View {
-        RoundedRectangle(cornerRadius: 20, style: .continuous)
-            .fill(colorScheme == .dark ? .regularMaterial : .ultraThinMaterial)
-            .shadow(color: .black.opacity(colorScheme == .dark ? 0.25 : 0.06), radius: 10, y: 3)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(Color.primary.opacity(colorScheme == .dark ? 0.12 : 0.05), lineWidth: 1)
-            )
     }
 }

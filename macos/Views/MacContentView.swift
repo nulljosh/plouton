@@ -27,7 +27,6 @@ private struct AuthenticatedShell: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .safeAreaInset(edge: .bottom) { navBar }
         }
-        .navigationTitle(appState.selectedSection.rawValue)
         .sheet(isPresented: $showSettings) {
             MacSettingsView()
                 .frame(minWidth: 420, minHeight: 360)

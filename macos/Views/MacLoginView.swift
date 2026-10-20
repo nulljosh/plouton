@@ -37,7 +37,7 @@ struct MacLoginView: View {
             Button {
                 Task { await appState.login(username: username, password: password) }
             } label: {
-                HStack(spacing: 6) {
+                HStack(spacing: 8) {
                     if appState.isLoading {
                         ProgressView()
                             .controlSize(.small)

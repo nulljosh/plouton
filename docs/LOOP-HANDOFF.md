@@ -10,13 +10,13 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 - The site's CSP now allows the Cloudflare Web Analytics beacon, which was blocked on every page.
 - iOS: Settings and Sign Out are reachable again, since each tab owns its own NavigationStack. Liquid Glass and Jony Ive pass: no redundant tab titles, Home built around one number with a full-width 48 pt glass action, money tiles, calendar and Details; Status is one inset grouped list; one radius set. Mac has a native sidebar instead of a phone-style tab bar.
 - Landing page in the Hermes style (thin caps, grainy blue bands, public domain halftone art, engraved glyph footer). Brand kit at /brand. The tally icon was redone in Icon Composer and centred, and the iOS app target uses Talli.icon.
-- Versions: iOS 4.0.0 is being archived and submitted. Mac 3.6.1's review was pulled, and that build was relabelled 4.0.0 and is also being submitted. Waiting for Review on either is not yet confirmed.
+- Versions: iOS 4.0.0 is Waiting for Review. Mac 4.0.0 (build 202610201044) is uploaded and attached but not submitted: Apple's five open review submissions limit is full until the iOS review clears.
 - QA 2026-10-20: npm test passes. The live API on talli.jaybulb.com returns 200 with a session and 401 without on every path the iOS app calls. Landing, privacy, manifest, robots and sitemap are 200.
 - Open in roadmap.md: verify the contribution figures against the real account; confirm the store build on the phone; flip the GitHub release when Apple approves the Mac build.
 
 ## Next, in order
 
-1. Confirm both 4.0.0 builds reach Waiting for Review (`asc versions list --app 6782366555` for the real state). If either is rejected, read the reason, fix it in the loop and resubmit.
+1. Once iOS 4.0.0 leaves review, submit Mac: `asc review submit --app 6782366555 --version 4.0.0 --build-id e40c498e-4746-4428-ac75-683b8445640b --platform MAC_OS --confirm`. Check real state with `asc versions list --app 6782366555`. If either is rejected, read the reason, fix it in the loop and resubmit.
 2. When Apple approves, flip the GitHub release for 4.0.0 from pre-release to Latest (check `gh release list` first).
 3. Joshua checks the new build on his phone with his real login: Home loads, Settings opens from the avatar, Sign Out works. The earlier blank-home report came from the old build calling the lapsed host; 3.6.2 already carries the fix.
 4. Real-account read-only checks and real-device checks (reminders, Watch handoff, vault encryption) are Joshua's to do. List them here, do not wait on them.

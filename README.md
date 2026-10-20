@@ -3,7 +3,7 @@
 # Talli
 
 ![version](https://img.shields.io/badge/version-v4.0.0-blue)
-![license](https://img.shields.io/badge/license-MIT-green) [![GitHub](https://img.shields.io/badge/GitHub-nulljosh%2Ftalli-black?logo=github)](https://github.com/nulljosh/talli)
+![license](https://img.shields.io/badge/license-Apache%202.0-green)
 
 Live at [talli.jaybulb.com](https://talli.jaybulb.com) · [App Store](https://apps.apple.com/app/talli/id6782366555)
 
@@ -52,4 +52,4 @@ talli tui           # full screen, the amount centred; r refreshes, q quits
 
 ## License
 
-MIT 2026 Joshua Trommel
+Apache License 2.0. Copyright 2026 Joshua Trommel. The Talli Display font is under the SIL Open Font License (`fonts/OFL.txt`).

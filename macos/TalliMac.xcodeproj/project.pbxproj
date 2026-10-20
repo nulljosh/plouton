@@ -49,11 +49,13 @@
 		ADBE475EB7B2A87AEB9C56F5 /* MacBenefitsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */; };
 		B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829CFD35783E267E334AD80F /* MacTheme.swift */; };
 		B884C9F0B1B9912B814147B5 /* MacDashboardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE300DF4D1CB8C872ECF1C6 /* MacDashboardData.swift */; };
+		BDC744FFF1162ECF0623389E /* TalliDisplay-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 209EE4F5C455FD9A9AD18F94 /* TalliDisplay-Semibold.ttf */; };
 		C1BB49D27DA0F229F5BCB559 /* Talli.icon in Resources */ = {isa = PBXBuildFile; fileRef = 251C0D379D90012F2C004BED /* Talli.icon */; };
 		EC8B2E6E71DE81EF6AE90BDF /* MacPaymentWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B70B1E59CAC8CFE93C5192 /* MacPaymentWidgetView.swift */; };
 		F4FDF05C00F33D7F703A260E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEEEC581169CEBE335A51EF3 /* Assets.xcassets */; };
 		F70A221F7E7CE17DEFD24A8F /* MacScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1777E1F0FD107545870F598B /* MacScreenshot.swift */; };
 		F8E7098F7259513AA5938E0D /* ReconsiderationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54336877769FA2F896CFAEAA /* ReconsiderationView.swift */; };
+		FD8A8D1A2A57771ED855B2F8 /* HeroAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C04BA39F17A61EF58E09E9 /* HeroAmountView.swift */; };
 		FE0CCA838AA6BF0996DF72CD /* BenefitFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */; };
 /* End PBXBuildFile section */
 
@@ -94,7 +96,9 @@
 		05C53A51618D2F7455BED586 /* TalliWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TalliWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		062CBBD651BF3B7840A05137 /* MacBenefitsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBenefitsWidgetView.swift; sourceTree = "<group>"; };
 		143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyDraftView.swift; sourceTree = "<group>"; };
+		15C04BA39F17A61EF58E09E9 /* HeroAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroAmountView.swift; sourceTree = "<group>"; };
 		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
+		209EE4F5C455FD9A9AD18F94 /* TalliDisplay-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TalliDisplay-Semibold.ttf"; sourceTree = "<group>"; };
 		251C0D379D90012F2C004BED /* Talli.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = Talli.icon; sourceTree = "<group>"; };
 		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
 		2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCrypto.swift; sourceTree = "<group>"; };
@@ -163,10 +167,20 @@
 			path = Providers;
 			sourceTree = "<group>";
 		};
+		2BF87326ABCB45BC0E0A128F /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				209EE4F5C455FD9A9AD18F94 /* TalliDisplay-Semibold.ttf */,
+			);
+			name = fonts;
+			path = ../fonts;
+			sourceTree = "<group>";
+		};
 		2C7C8436AFBC9B947CB4B56A = {
 			isa = PBXGroup;
 			children = (
 				D2F09362310FBA9BC12F44AF /* API */,
+				2BF87326ABCB45BC0E0A128F /* fonts */,
 				BA3254AC0D366A2B19C3603F /* Helpers */,
 				B95C375D38861B1A1EDE2090 /* macos */,
 				78C63CA92784404D8EC46A10 /* Models */,
@@ -194,6 +208,7 @@
 			children = (
 				A35803128BD01A8F7B732D9B /* BenefitFinderView.swift */,
 				672B870569D2E3A8219AD924 /* BudgetView.swift */,
+				15C04BA39F17A61EF58E09E9 /* HeroAmountView.swift */,
 				3957E7C2F9B33E31A48633BD /* HouseholdView.swift */,
 				C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */,
 				0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */,
@@ -443,6 +458,7 @@
 				9BAFF0507C634EDA6EF0F6E2 /* ExportOptions.plist in Resources */,
 				18606EA8270968C7308DC823 /* Localizable.xcstrings in Resources */,
 				C1BB49D27DA0F229F5BCB559 /* Talli.icon in Resources */,
+				BDC744FFF1162ECF0623389E /* TalliDisplay-Semibold.ttf in Resources */,
 				0D9CD3FBC94EA80A07221C5C /* TalliWidgets-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,6 +488,7 @@
 			files = (
 				FE0CCA838AA6BF0996DF72CD /* BenefitFinderView.swift in Sources */,
 				5AE912C79A2126B8E32B1B0F /* BudgetView.swift in Sources */,
+				FD8A8D1A2A57771ED855B2F8 /* HeroAmountView.swift in Sources */,
 				1623130FC8E0A8FF3C7C74CB /* HouseholdView.swift in Sources */,
 				68757DD630674D89FA11A436 /* LifeChangeView.swift in Sources */,
 				A839CE61888A245D80B8D1F0 /* MacAPIClient.swift in Sources */,
@@ -602,7 +619,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 202610201044;
+				CURRENT_PROJECT_VERSION = 202610021704;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -677,7 +694,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 202610201044;
+				CURRENT_PROJECT_VERSION = 202610021704;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

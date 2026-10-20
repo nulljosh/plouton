@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d0c0b" media="(prefers-color-scheme: dark)">
   <title>Talli</title>
+  <link rel="preload" href="/fonts/TalliDisplay-Semibold.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -25,7 +26,11 @@
     #app-shell {
       width: 100%; height: 100dvh; overflow: hidden;
     }
+    @font-face { font-family:'Talli Display'; src:url('/fonts/TalliDisplay-Semibold.woff2') format('woff2'); font-weight:600; font-display:block; }
     @keyframes countUp   { from { opacity:0; transform:translateY(14px) scale(0.94); } to { opacity:1; transform:translateY(0) scale(1); } }
+    /* The amount breathes: a slow swell, about ten breaths a minute. */
+    @keyframes breathe   { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.025); opacity:0.88; } }
+    @media (prefers-reduced-motion: reduce) { .hero-amount { animation:none !important; } }
     .home-details>summary::-webkit-details-marker{display:none}
     @keyframes fadeUp    { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
@@ -128,6 +133,28 @@ function nextScheduledPayDate(from) {
     m++; if (m > 11) { m = 0; y++; }
   }
   return new Date(from.getFullYear(), from.getMonth() + 1, from.getDate());
+}
+
+// The Home amount in Talli Display (scripts/gen_font.py), drawn as SVG so it fills a box exactly. The figures are up
+// to half the screen tall at the font's own proportions; when the column is too narrow for that they stretch taller,
+// never more than 1.5x, so a phone reads like a tall sign, not a squashed photo. The $ is half size and raised to
+// the top of the figures, the way prices are set. Advances are the font's, per 1000 units; the box runs from the
+// top of the figures (-712) to the foot of the comma (+93).
+const TD_ADVANCE = {'0':450,'1':296,'2':451,'3':435,'4':502,'5':437,'6':438,'7':440,'8':434,'9':438,',':199,'.':211};
+const TD_TOP = 712, TD_BOX = 805, TD_STRETCH = 1.5, TD_DOLLAR = 0.5, TD_GAP = 36;
+function HeroAmount({digits, t, paid}) {
+  const figures = [...digits].reduce((w, c) => w + (TD_ADVANCE[c] || 450), 0);
+  const lead = Math.round(434 * TD_DOLLAR) + TD_GAP, natural = lead + figures;
+  const h = `min(50vh, calc((100vw - 40px) * ${(TD_BOX * TD_STRETCH / natural).toFixed(4)}))`;
+  const face = {fontFamily:"'Talli Display', -apple-system, BlinkMacSystemFont, sans-serif",fontWeight:600};
+  return (
+    <svg viewBox={`0 -${TD_TOP} ${natural} ${TD_BOX}`} preserveAspectRatio="none" aria-hidden="true"
+      style={{display:'block',height:h,width:`min(100%, calc(${h} * ${(natural / TD_BOX).toFixed(4)}))`}}>
+      <text x="0" y={-TD_TOP + Math.round(788 * TD_DOLLAR)} style={{...face,fontSize:1000 * TD_DOLLAR}} fill={t.success}>$</text>
+      <text x={lead} y="0" textLength={figures} lengthAdjust="spacingAndGlyphs" style={{...face,fontSize:1000}} fill={t.text}>{digits}</text>
+      {paid && <line x1={lead} y1="-350" x2={natural} y2="-350" stroke={t.muted} strokeWidth="24"/>}
+    </svg>
+  );
 }
 
 // The next n cheque days on or after today, straight from PAY_SCHEDULE.
@@ -561,14 +588,14 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
       <MissedPayment dark={dark} onPaidChange={onPaidChange}/>
 
       <div style={{flex:'1 0 auto',display:'flex',flexDirection:'column',paddingBottom:16}}>
-      {/* Hero: the cheque, centred in the top 58% of the view */}
-      <div style={{height:'58vh',minHeight:340,flexShrink:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',textAlign:'center'}}>
-        <div style={{fontSize:11,fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:t.muted,marginBottom:24,animation:'fadeUp 0.45s 0s ease both'}}>
+      {/* Hero: the cheque. The amount is drawn into a box half the screen tall, so it owns the top of the view. */}
+      <div style={{flexShrink:0,display:'flex',flexDirection:'column',alignItems:'center',paddingTop:24,textAlign:'center'}}>
+        <div style={{fontSize:13,fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:t.muted,marginBottom:16,animation:'fadeUp 0.45s 0s ease both'}}>
           Next payment
         </div>
 
-        <div style={{fontSize:`min(calc((100vw - 40px) / ${(digits.length*0.46+0.6).toFixed(2)}), 32vh)`,whiteSpace:'nowrap',fontWeight:200,fontVariantNumeric:'tabular-nums',letterSpacing:'-0.045em',lineHeight:1,color:t.text,opacity:paid?.28:1,transition:'opacity 0.35s ease, filter 0.25s ease',filter:hidden?'blur(22px)':'none',userSelect:'none',WebkitUserSelect:'none',WebkitTouchCallout:'none',textDecorationLine:paid?'line-through':'none',textDecorationColor:t.muted,animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both'}} onPointerDown={()=>{holdAmount.current=setTimeout(toggleHidden,HOLD_MS);}} onPointerUp={()=>clearTimeout(holdAmount.current)} onPointerLeave={()=>clearTimeout(holdAmount.current)} onPointerCancel={()=>clearTimeout(holdAmount.current)} onContextMenu={e=>e.preventDefault()}>
-          <span style={{position:'relative',display:'inline-block'}}><span style={{position:'absolute',right:'100%',top:'0.2em',marginRight:'0.04em',fontSize:'0.36em',fontWeight:300,color:t.success,letterSpacing:0,lineHeight:1}}>$</span>{digits}</span>
+        <div className="hero-amount" role="img" aria-label={'$'+digits} style={{width:'100%',display:'flex',justifyContent:'center',opacity:paid?.28:1,transition:'opacity 0.35s ease, filter 0.25s ease',filter:hidden?'blur(22px)':'none',userSelect:'none',WebkitUserSelect:'none',WebkitTouchCallout:'none',animation:'countUp 0.65s cubic-bezier(0.22,1,0.36,1) both, breathe 6s 0.8s ease-in-out infinite'}} onPointerDown={()=>{holdAmount.current=setTimeout(toggleHidden,HOLD_MS);}} onPointerUp={()=>clearTimeout(holdAmount.current)} onPointerLeave={()=>clearTimeout(holdAmount.current)} onPointerCancel={()=>clearTimeout(holdAmount.current)} onContextMenu={e=>e.preventDefault()}>
+          <HeroAmount digits={digits} t={t} paid={paid}/>
         </div>
 
         <div style={{marginTop:24,fontSize:28,fontWeight:600,letterSpacing:'-0.02em',lineHeight:1,color:isToday?t.success:t.accent,transition:'color 0.3s',animation:'fadeUp 0.45s 0.1s ease both'}}>
@@ -2350,11 +2377,7 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
       <div style={{height:'max(env(safe-area-inset-top,0px),16px)',flexShrink:0}}/>
 
       {/* Header */}
-      <div style={{padding:'4px 20px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <span style={{display:'flex',alignItems:'center',gap:8}}>
-          <img src="/icon.svg" width="24" height="24" alt="" style={{display:'block',borderRadius:'22%'}}/>
-          <span style={{fontSize:13,fontWeight:500,letterSpacing:'0.16em',textTransform:'uppercase',color:t.text}}>Talli</span>
-        </span>
+      <div style={{padding:'4px 20px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
         <button onClick={()=>setTab('settings')} title="Settings" style={{width:32,height:32,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,boxShadow:`0 0 0 1px ${t.border2}`,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0,animation:refreshing?'spin 0.8s linear infinite':'none'}}>
           {avatarUrl
             ? <img src={avatarUrl} width={32} height={32} style={{display:'block',borderRadius:'50%',objectFit:'cover'}} alt="avatar" onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex';onAvatarBroken&&onAvatarBroken();}} />

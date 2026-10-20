@@ -14,7 +14,7 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 ## Next, in order
 
 1. When Mac is approved, flip the GitHub 4.0.0 release to Latest (#62).
-2. 5.0: open data on iPhone and Mac, zh and pa strings (reviewed, not machine), real-device pass.
+2. 5.0: zh and pa strings (reviewed, not machine), real-device pass. Open data stays a web and JSON thing (`/open-data`); the apps already show the same dates and rates.
 3. Retake the Mac Settings shot (snapshot mode now signs in as your.username) and add it as the fourth desktop shot.
 
 ## For Joshua

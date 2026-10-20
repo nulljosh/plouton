@@ -53,7 +53,7 @@ struct MacBenefitsView: View {
                 if let review = appState.yearReview, !review.items.isEmpty {
                     let cad = FloatingPointFormatStyle<Double>.Currency(code: "CAD").precision(.fractionLength(0))
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("\(String(review.year)) in review\(review.complete ? "" : " so far"): \(review.totals.all.formatted(cad))")
+                        Text("\(String(review.year))\(review.complete ? "" : " so far"): \(review.totals.all.formatted(cad))")
                             .font(.footnote)
                         Text("\(review.totals.benefits.formatted(cad)) benefits, \(review.totals.credits.formatted(cad)) credits, \(review.totals.earnings.formatted(cad)) work earnings")
                             .font(.caption)
@@ -65,9 +65,7 @@ struct MacBenefitsView: View {
                     }
                 }
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 20))
+            .macGlassCard()
         }
     }
 
@@ -86,6 +84,7 @@ struct MacBenefitsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
+                statusCard
                 incomeCard
                 callToAction
 
@@ -154,65 +153,91 @@ struct MacBenefitsView: View {
                     .font(.headline)
                 }
                 .font(.headline)
-                // Automatic benefits
-                benefitCard(
-                    title: "GST/HST Credit",
-                    difficulty: "Automatic",
-                    color: Color(red: 52/255, green: 199/255, blue: 89/255),
-                    rows: [("Single", "$533/yr"), ("Couple", "$698/yr"), ("Per child", "+$184/yr")],
-                    how: "Auto -- file your tax return. Quarterly payments.",
-                    note: "25% permanent increase starting Jul 2026."
-                )
-                benefitCard(
-                    title: "Canada Child Benefit",
-                    difficulty: "Automatic",
-                    color: .red,
-                    rows: [("Under 6", "$7,997/yr"), ("6 to 17", "$6,748/yr"), ("Disability +", "+$3,411/yr")],
-                    how: "Auto -- file your tax return.",
-                    note: "Tax-free, paid monthly."
-                )
-                benefitCard(
-                    title: "BC Family Benefit",
-                    difficulty: "Automatic",
-                    color: Color.bcLight,
-                    rows: [("1st child", "$1,750/yr"), ("2nd child", "$1,100/yr"), ("Single-parent", "up to $500/yr")],
-                    how: "Auto if registered for CCB.",
-                    note: "Full amount under $29,526 income."
-                )
+                // Two columns once the window is wide enough, so a big window is not one long strip.
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16, alignment: .top)], spacing: 16) {
+                    // Automatic benefits
+                    benefitCard(
+                        title: "GST/HST Credit",
+                        difficulty: "Automatic",
+                        color: Color(red: 52/255, green: 199/255, blue: 89/255),
+                        rows: [("Single", "$533/yr"), ("Couple", "$698/yr"), ("Per child", "+$184/yr")],
+                        how: "Auto -- file your tax return. Quarterly payments.",
+                        note: "25% permanent increase starting Jul 2026."
+                    )
+                    benefitCard(
+                        title: "Canada Child Benefit",
+                        difficulty: "Automatic",
+                        color: .red,
+                        rows: [("Under 6", "$7,997/yr"), ("6 to 17", "$6,748/yr"), ("Disability +", "+$3,411/yr")],
+                        how: "Auto -- file your tax return.",
+                        note: "Tax-free, paid monthly."
+                    )
+                    benefitCard(
+                        title: "BC Family Benefit",
+                        difficulty: "Automatic",
+                        color: Color.bcLight,
+                        rows: [("1st child", "$1,750/yr"), ("2nd child", "$1,100/yr"), ("Single-parent", "up to $500/yr")],
+                        how: "Auto if registered for CCB.",
+                        note: "Full amount under $29,526 income."
+                    )
 
-                // Claim on return
-                benefitCard(
-                    title: "BC Renter's Tax Credit",
-                    difficulty: "Claim on return",
-                    color: .red,
-                    rows: [("Maximum", "$400/yr"), ("Phase-out", "starts $64,764")],
-                    how: "Claim on tax return.",
-                    note: "Must have rented 6+ months."
-                )
-                benefitCard(
-                    title: "Canada Workers Benefit",
-                    difficulty: "Claim on return",
-                    color: .orange,
-                    rows: [("Single", "$1,633/yr"), ("Family", "$2,813/yr"), ("Disability +", "+$843/yr")],
-                    how: "Claim on tax return (Schedule 6).",
-                    note: "Working income > $3,000."
-                )
+                    // Claim on return
+                    benefitCard(
+                        title: "BC Renter's Tax Credit",
+                        difficulty: "Claim on return",
+                        color: .red,
+                        rows: [("Maximum", "$400/yr"), ("Phase-out", "starts $64,764")],
+                        how: "Claim on tax return.",
+                        note: "Must have rented 6+ months."
+                    )
+                    benefitCard(
+                        title: "Canada Workers Benefit",
+                        difficulty: "Claim on return",
+                        color: .orange,
+                        rows: [("Single", "$1,633/yr"), ("Family", "$2,813/yr"), ("Disability +", "+$843/yr")],
+                        how: "Claim on tax return (Schedule 6).",
+                        note: "Working income > $3,000."
+                    )
 
-                // Application
-                benefitCard(
-                    title: "Canadian Dental Care Plan",
-                    difficulty: "Application required",
-                    color: Color.bcPrimary,
-                    rows: [("Under $70K", "Free"), ("$70K-$80K", "40% co-pay"), ("$80K-$90K", "60% co-pay")],
-                    how: "Apply through CRA. Must not have private dental.",
-                    note: "Covers preventive, basic, and major dental."
-                )
+                    // Application
+                    benefitCard(
+                        title: "Canadian Dental Care Plan",
+                        difficulty: "Application required",
+                        color: Color.bcPrimary,
+                        rows: [("Under $70K", "Free"), ("$70K-$80K", "40% co-pay"), ("$80K-$90K", "60% co-pay")],
+                        how: "Apply through CRA. Must not have private dental.",
+                        note: "Covers preventive, basic, and major dental."
+                    )
 
-                mustApplySection
+                    mustApplySection
+                }
             }
             .padding(24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+    }
+
+    // Same summary as the web Status tab. PWD and CDB count as approved; there is no button for it.
+    private var statusCard: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 40, height: 40)
+                .background(Color.bcPrimary, in: Circle())
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Active, receiving benefits").font(.headline)
+                Text("PWD approved · CDB approved").font(.subheadline).foregroundStyle(.secondary)
+            }
+            Spacer()
+            Text("Approved")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Color.bcPrimary)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 4)
+                .background(Color.bcPrimary.opacity(0.12), in: Capsule())
+        }
+        .macGlassCard()
     }
 
     private var callToAction: some View {
@@ -266,13 +291,7 @@ struct MacBenefitsView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.06), radius: 10, y: 3)
-        )
+        .macGlassCard()
     }
 
     private var mustApplySection: some View {
@@ -288,13 +307,7 @@ struct MacBenefitsView: View {
             applyRow("RAP", desc: "Rent subsidy for families (~$700/mo avg)", color: Color.bcLight)
             applyRow("BC Bus Pass", desc: "$45/yr transit for PWD/GIS seniors", color: Color.bcPrimary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.06), radius: 10, y: 3)
-        )
+        .macGlassCard()
     }
 
     private func applyRow(_ title: String, desc: String, color: Color) -> some View {

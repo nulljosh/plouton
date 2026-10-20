@@ -123,7 +123,7 @@ iOS structure ported to macOS. Separate App State, Models, API client, Keychain 
 | `macos/Models/MacKeychainHelper.swift` | Keychain access (64 lines, macOS variant). |
 | `macos/Models/MacDateParsing.swift` + `MacDashboardData.swift` | macOS versions of date parsing and data shapes. |
 | `macos/Views/` | 10 view files: MacContentView (shell), MacDashboardView, MacLoginView, MacMessagesView, MacPaymentCalendarView, MacSettingsView, MacBenefitsView, MacTheme, MenuBarView. Responsive layout for larger screens. |
-| `macos/UITests-mac/MacScreenshot.swift` | Snapshot test for macOS. |
+| `macos/UITests-mac/MacScreenshot.swift` | Snapshot test for macOS: Home, Status and Messages in light and dark (`UITEST_SNAPSHOT=1`, `UITEST_APPEARANCE=light/dark`). Export the shots with `xcrun xcresulttool export attachments`. |
 | `widgets-macos/` | Widget bundle + providers/views. Mirrors iOS widgets but macOS-specific styling. |
 
 ## watchOS

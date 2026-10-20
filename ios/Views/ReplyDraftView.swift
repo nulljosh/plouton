@@ -32,8 +32,7 @@ struct ReplyDraftView: View {
                     withAnimation(.easeOut(duration: 0.2)) { open = draft != nil }
                 }
             }
-            .buttonStyle(.bordered)
-            .font(.footnote)
+            .capsuleAction(prominent: false)
 
             if open, let d = draft {
                 VStack(alignment: .leading, spacing: 8) {

@@ -21,19 +21,11 @@ private struct AuthenticatedShell: View {
     var body: some View {
         @Bindable var state = appState
 
-        // A Mac app gets a sidebar, not a phone tab bar. On macOS 26 the sidebar is Liquid Glass for free.
-        NavigationSplitView {
-            List(MacAppState.AppSection.allCases, selection: Binding(
-                get: { appState.selectedSection },
-                set: { if let section = $0 { appState.selectedSection = section } }
-            )) { section in
-                Label(LocalizedStringKey(section.rawValue), systemImage: section.icon)
-                    .tag(section)
-            }
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 240)
-        } detail: {
+        // A floating glass nav bar, the same three tabs as the web and iPhone. Cmd-1/2/3 switch.
+        NavigationStack {
             detailView
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .safeAreaInset(edge: .bottom) { navBar }
         }
         .navigationTitle(appState.selectedSection.rawValue)
         .sheet(isPresented: $showSettings) {
@@ -65,6 +57,29 @@ private struct AuthenticatedShell: View {
                 .padding(.top, 8)
             }
         }
+    }
+
+    private var navBar: some View {
+        HStack(spacing: 4) {
+            ForEach(Array(MacAppState.AppSection.allCases.enumerated()), id: \.element) { i, section in
+                let on = appState.selectedSection == section
+                Button { appState.selectedSection = section } label: {
+                    Label(LocalizedStringKey(section.rawValue), systemImage: section.icon)
+                        .font(.body.weight(on ? .semibold : .regular))
+                        .foregroundStyle(on ? Color.bcPrimary : .secondary)
+                        .padding(.horizontal, 16)
+                        .frame(height: 40)
+                        .background(on ? Color.bcPrimary.opacity(0.12) : .clear, in: Capsule())
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .keyboardShortcut(KeyEquivalent(Character(String(i + 1))), modifiers: .command)
+            }
+        }
+        .padding(4)
+        .liquidGlass(in: Capsule())
+        .shadow(color: .black.opacity(0.12), radius: 16, y: 6)
+        .padding(.bottom, 16)
     }
 
     @ViewBuilder

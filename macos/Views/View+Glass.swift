@@ -14,4 +14,15 @@ extension View {
             self.background(fallback, in: shape)
         }
     }
+
+    /// Capsule button, glass on 26+. Same helper as ios/View+Glass.swift.
+    @ViewBuilder
+    func capsuleAction(prominent: Bool = true) -> some View {
+        let base = self.buttonBorderShape(.capsule).controlSize(.large)
+        if #available(macOS 26, *) {
+            if prominent { base.buttonStyle(.glassProminent) } else { base.buttonStyle(.glass) }
+        } else {
+            if prominent { base.buttonStyle(.borderedProminent) } else { base.buttonStyle(.bordered) }
+        }
+    }
 }

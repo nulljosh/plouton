@@ -33,13 +33,7 @@ struct MacMessagesView: View {
 
             ReplyDraftView(text: message.text) { try await MacAPIClient.shared.messageReply(text: $0) }
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.06), radius: 10, y: 3)
-        )
+        .macGlassCard()
     }
 
     private var emptyState: some View {

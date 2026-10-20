@@ -11,7 +11,7 @@ final class MacScreenshot: XCTestCase {
         try capture(dark: false)
     }
 
-    /// Every sidebar page in dark mode too, for QA. Same files, a "-dark" suffix.
+    /// Every tab in dark mode too, for QA. Same files, a "-dark" suffix.
     func testCaptureMacScreenshotDark() throws {
         try capture(dark: true)
     }
@@ -21,8 +21,7 @@ final class MacScreenshot: XCTestCase {
         // An environment flag, not a launch argument: AppKit reads a bare argument
         // as a file to open, and SwiftUI then skips the main window.
         app.launchEnvironment["UITEST_SNAPSHOT"] = "1"
-        // A key-value pair is a defaults override, not a file, so this one is safe.
-        app.launchArguments += ["-AppleInterfaceStyle", dark ? "Dark" : "Light"]
+        app.launchEnvironment["UITEST_APPEARANCE"] = dark ? "dark" : "light"
         app.launch()
         app.activate()
         XCTAssertTrue(app.windows.firstMatch.waitForExistence(timeout: 20), "App window never appeared")
@@ -30,7 +29,7 @@ final class MacScreenshot: XCTestCase {
         let suffix = dark ? "-dark" : ""
         save(app, "1-main" + suffix)
         for (i, page) in ["Status", "Messages"].enumerated() {
-            let item = app.staticTexts[page].firstMatch
+            let item = app.buttons[page].firstMatch
             guard item.waitForExistence(timeout: 5) else { continue }
             item.click()
             sleep(2)

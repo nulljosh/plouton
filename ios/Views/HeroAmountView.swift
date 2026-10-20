@@ -22,6 +22,8 @@ struct HeroAmountView: View {
     // Font units per 1000: top of the figures, foot of the comma, the $ top, cap stretch limit, gap after the $.
     private static let top: CGFloat = 712, box: CGFloat = 805, dollarTop: CGFloat = 788
     private static let maxStretch: CGFloat = 1.5, dollarScale: CGFloat = 0.5, gap: CGFloat = 36
+    /// Room on each side so the figures never run to the screen edge (points, same 24 as the web).
+    static let inset: CGFloat = 24
 
     /// Registers the bundled font once per process; no Info.plist entry needed.
     private static let registered: Bool = {
@@ -40,7 +42,7 @@ struct HeroAmountView: View {
     static func layout(digits: String, width: CGFloat, maxHeight: CGFloat) -> (size: CGFloat, stretch: CGFloat) {
         let natural = units("$", size: 1000 * dollarScale) + gap + units(digits)
         let byHeight = maxHeight / box * 1000
-        let byWidth = width / natural * 1000
+        let byWidth = max(0, width - 2 * inset) / natural * 1000
         if byHeight <= byWidth { return (byHeight, 1) }
         return (byWidth, min(byHeight / byWidth, maxStretch))
     }

@@ -149,7 +149,7 @@ function HeroAmount({digits, t, paid}) {
   const face = {fontFamily:"'Talli Display', -apple-system, BlinkMacSystemFont, sans-serif",fontWeight:600};
   return (
     <svg viewBox={`0 -${TD_TOP} ${natural} ${TD_BOX}`} preserveAspectRatio="none" aria-hidden="true"
-      style={{display:'block',height:h,width:`min(100%, calc(${h} * ${(natural / TD_BOX).toFixed(4)}))`}}>
+      style={{display:'block',height:h,width:`min(100% - 48px, calc(${h} * ${(natural / TD_BOX).toFixed(4)}))`}}>
       <text x="0" y={-TD_TOP + Math.round(788 * TD_DOLLAR)} style={{...face,fontSize:1000 * TD_DOLLAR}} fill={t.success}>$</text>
       <text x={lead} y="0" textLength={figures} lengthAdjust="spacingAndGlyphs" style={{...face,fontSize:1000}} fill={t.text}>{digits}</text>
       {paid && <line x1={lead} y1="-350" x2={natural} y2="-350" stroke={t.muted} strokeWidth="24"/>}

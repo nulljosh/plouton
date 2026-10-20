@@ -564,7 +564,7 @@ app.use((req, res, next) => {
 // canonical tokens.css from there, and blocking it takes the whole design system
 // with it -- serif fallback, no colours, and a dark-mode toggle that does nothing
 // because [data-theme="dark"] never defines a single variable.
-const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://jaybulb.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca; frame-ancestors 'self' https://jaybulb.com; object-src 'none'; base-uri 'self'";
+const CSP_HEADER = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://jaybulb.com; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://myselfserve.gov.bc.ca https://cloudflareinsights.com; frame-ancestors 'self' https://jaybulb.com; object-src 'none'; base-uri 'self'";
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');

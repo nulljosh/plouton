@@ -12,6 +12,7 @@
     "familyTiers": [{ "upTo": 2612, "keep": 1 }, { "upTo": 3349, "keep": 0.5 }, { "upTo": null, "keep": 0 }]
   },
   "paid": "Four business days before the 1st by direct deposit.",
+  "payDates": ["2025-12-22", "2026-01-27", "2026-02-24", "2026-03-26", "2026-04-27", "2026-05-26", "2026-06-25", "2026-07-28", "2026-08-26", "2026-09-24", "2026-10-27", "2026-11-25", "2026-12-22"],
   "apply": "https://www.alberta.ca/aish-how-to-apply",
   "payments": "https://www.alberta.ca/aish-adap-and-income-support-payment-dates",
   "confidence": "official links, amounts from news and benefit guides: check the official page",

@@ -5,6 +5,7 @@
 const bc = require('../../data/provinces/bc.json');
 const ab = require('../../data/provinces/ab.json');
 const on = require('../../data/provinces/on.json');
+const { CHEQUE_ISSUE_DATES } = require('../pay-dates');
 
 const PROVINCES = { bc, ab, on };
 const money = (n) => '$' + Math.round(n).toLocaleString('en-CA');
@@ -42,13 +43,26 @@ function describeRule(p, family = false) {
   return parts.join(' ');
 }
 
-function listProvinces() {
+// Issue dates from each province's published schedule (payDates in the JSON; BC keeps its
+// table in pay-dates.js). Next date on or after today, or null once the list runs out:
+// showing nothing beats guessing a benefits payment date.
+const payDatesFor = (p) => (p.code === 'bc' ? CHEQUE_ISSUE_DATES : p.payDates || []);
+function nextPayDate(code, today = new Date()) {
+  const p = getProvince(code);
+  if (!p) return null;
+  const pad = (n) => String(n).padStart(2, '0');
+  const key = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+  return payDatesFor(p).find((d) => d >= key) || null;
+}
+
+function listProvinces(today = new Date()) {
   return Object.values(PROVINCES).map((p) => ({
     code: p.code, name: p.name, program: p.program, asOf: p.asOf, monthlySingle: p.monthlySingle,
     monthlyNote: p.monthlyNote, children: p.children || null, extra: p.extra || null, paid: p.paid,
     rule: describeRule(p), familyRule: p.earnings.familyTiers ? describeRule(p, true) : null,
     apply: p.apply, payments: p.payments || null, confidence: p.confidence,
+    payDates: payDatesFor(p), nextPayDate: nextPayDate(p.code, today),
   }));
 }
 
-module.exports = { PROVINCES, getProvince, listProvinces, monthlyDeduction, describeRule, tiersFor };
+module.exports = { PROVINCES, getProvince, listProvinces, nextPayDate, monthlyDeduction, describeRule, tiersFor };

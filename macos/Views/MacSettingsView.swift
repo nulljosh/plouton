@@ -9,7 +9,7 @@ struct MacSettingsView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 24) {
                 Text("Account")
                     .font(.headline)
                 AccountCard(username: appState.username) {
@@ -30,9 +30,11 @@ struct MacSettingsView: View {
                 AppearancePicker(rawTheme: $rawTheme)
                     .modifier(MacGlassCard())
             }
+            // a tab now, not a sheet: same reading column as Messages, no title (the nav bar names it)
+            .frame(maxWidth: 680)
             .padding(24)
+            .frame(maxWidth: .infinity)
         }
-        .navigationTitle("Settings")
     }
 }
 

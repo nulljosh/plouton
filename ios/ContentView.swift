@@ -37,8 +37,7 @@ private struct AuthenticatedTabShell: View {
     var body: some View {
         @Bindable var appState = appState
         TabView(selection: $appState.selectedTabIndex) {
-            // Each tab owns its NavigationStack: one stack around the TabView hides every toolbar item inside it,
-            // which is how the Settings avatar went missing.
+            // Each tab owns its NavigationStack: one stack around the TabView hides every toolbar item inside it.
             NavigationStack { DashboardScreen() }
                 .tabItem { Label("Home", systemImage: "house.fill") }
                 .tag(0)
@@ -49,6 +48,9 @@ private struct AuthenticatedTabShell: View {
                 .tabItem { Label("Messages", systemImage: "message.fill") }
                 .tag(2)
                 .badge(appState.unreadMessageCount)
+            NavigationStack { SettingsView() }
+                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+                .tag(3)
         }
         .onChange(of: appState.selectedTabIndex) { _, newTab in
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -171,7 +173,6 @@ private struct TimelineCard: View {
 private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
     @State private var now = Date()
-    @State private var showSettings = false
     /// The screen's content size, for the hero amount.
     @State private var viewport: CGSize = .zero
 
@@ -229,18 +230,6 @@ private struct DashboardScreen: View {
         }
         // no title: the tab bar already says Home, and the number is the headline
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showSettings) {
-            NavigationStack { SettingsView() }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button { showSettings = true } label: {
-                    AvatarView(size: 32)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Settings")
-            }
-        }
     }
 
     private var isFilingWindowOpen: Bool {

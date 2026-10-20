@@ -172,8 +172,11 @@ private struct DashboardScreen: View {
     @Environment(AppState.self) private var appState
     @State private var now = Date()
     @State private var showSettings = false
+    /// The screen's content size, for the hero amount.
+    @State private var viewport: CGSize = .zero
 
     var body: some View {
+        GeometryReader { geo in
         ScrollView {
             VStack(spacing: 24) {
                 if appState.isOffline {
@@ -216,6 +219,9 @@ private struct DashboardScreen: View {
         }
         // grouped background so the white cards read as cards in light mode
         .background(Color(.systemGroupedBackground))
+        .onAppear { viewport = geo.size }
+        .onChange(of: geo.size) { _, size in viewport = size }
+        }
         .refreshable { await appState.refreshDashboard() }
         .task {
             now = Date()
@@ -245,19 +251,21 @@ private struct DashboardScreen: View {
         !appState.pwdApproved && Calendar.current.component(.day, from: now) <= 5 && appState.isCurrentMonthFiled
     }
 
+    // Same hero as web and Mac: Talli Display figures up to half the screen tall, the $ small and raised.
     private var paymentCard: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(spacing: 8) {
             Text("NEXT PAYMENT")
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(size: 13, weight: .semibold))
                 .ltrTracking(1.5)
                 .foregroundStyle(.secondary)
+                .padding(.bottom, 8)
 
-            Text(appState.paymentAmountText.replacingOccurrences(of: ".00", with: ""))
-                .font(.system(size: 96, weight: .bold))
-                .tracking(-3)
-                .minimumScaleFactor(0.3)
-                .lineLimit(1)
-                .contentTransition(.numericText())
+            HeroAmountView(
+                digits: appState.paymentAmountText.replacingOccurrences(of: ".00", with: "").replacingOccurrences(of: "$", with: ""),
+                width: max(0, viewport.width - 40),
+                maxHeight: viewport.height * 0.5
+            )
+            .padding(.bottom, 8)
 
             if let days = appState.daysUntilPayment {
                 Group {
@@ -275,7 +283,7 @@ private struct DashboardScreen: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity)
     }
 
     /// PWD + CDB breakdown, mirroring the web dashboard's Bennies income block so
@@ -427,86 +435,4 @@ private struct DashboardScreen: View {
             .fill(Color(.secondarySystemGroupedBackground)))
     }
 
-}
-
-private struct OfflineBanner: View {
-    var body: some View {
-        HStack {
-            Text("Offline").font(.caption.weight(.semibold))
-            Spacer()
-            Text("Showing last saved data").font(.caption).foregroundStyle(.secondary)
-        }
-        .padding(12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-    }
-}
-
-private struct StaleSyncBanner: View {
-    @Environment(AppState.self) private var appState
-
-    private var detail: String {
-        guard let date = appState.lastSyncDate else { return "Never synced" }
-        return "Last synced \(date.formatted(.relative(presentation: .named)))"
-    }
-
-    var body: some View {
-        HStack {
-            Text("Not up to date").font(.caption.weight(.semibold))
-            Spacer()
-            Text(detail).font(.caption).foregroundStyle(.secondary)
-        }
-        .padding(12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .accessibilityElement(children: .combine)
-    }
-}
-
-private struct ReportingWindowBanner: View {
-    @Environment(AppState.self) private var appState
-
-    var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "exclamationmark.circle.fill")
-                .foregroundStyle(Color.talliBlue)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Report window open")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color.talliBlue)
-                Text("Closes the 5th")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-            Button("Already filed") {
-                Task { await appState.markMonthFiled() }
-            }
-            .font(.caption.weight(.semibold))
-            .buttonStyle(.bordered)
-            .controlSize(.mini)
-        }
-        .padding(12)
-        .background(Color.talliBlue.opacity(0.1), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(Color.talliBlue.opacity(0.3), lineWidth: 1))
-    }
-}
-
-private struct ReportFiledBanner: View {
-    var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundStyle(.green)
-            Text("Report filed this month")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.green)
-            Spacer()
-        }
-        .padding(12)
-        .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(Color.green.opacity(0.3), lineWidth: 1))
-    }
-}
-
-#Preview {
-    ContentView()
-        .environment(AppState())
 }

@@ -87,8 +87,8 @@ final class AppState {
                 return d.formatted(Date.ISO8601FormatStyle(timeZone: .current).year().month().day())
             }
             dashboard = DashboardData(
-                paymentAmount: "$1,080.00",
-                nextPaymentDate: day(18),
+                paymentAmount: "$1,750.00",
+                nextPaymentDate: day(1),
                 statusMessages: [
                     .init(text: "Your monthly report has been received.", timestamp: day(-1)),
                     .init(text: "PWD application resubmitted.", timestamp: day(-12))

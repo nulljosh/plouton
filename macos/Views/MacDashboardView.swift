@@ -3,8 +3,11 @@ import SwiftUI
 struct MacDashboardView: View {
     @Environment(MacAppState.self) private var appState
     @State private var showDetails = false
+    /// The window's content size, for the hero; set by the GeometryReader around the scroll view.
+    @State private var viewport: CGSize = .zero
 
     var body: some View {
+        GeometryReader { geo in
         ScrollViewReader { scroller in
         ScrollView {
             VStack(spacing: 16) {
@@ -56,30 +59,32 @@ struct MacDashboardView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
+        .onAppear { viewport = geo.size }
+        .onChange(of: geo.size) { _, size in viewport = size }
+        }
     }
 
     // MARK: - Payment Card
 
-    // Same hero as the web dashboard: thin digits, a green dollar sign. The amount is set huge and
-    // scales down to the window, so it fills the width; the label and date hug it.
+    // Same hero as the web dashboard: Talli Display figures up to half the window tall, the $ small and raised.
     private var paymentCard: some View {
         VStack(spacing: 8) {
             Text("NEXT PAYMENT")
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .ltrTracking(0.5)
+                .padding(.bottom, 8)
 
-            (Text("$").foregroundStyle(Color.green)
-             + Text(appState.paymentAmountText.replacingOccurrences(of: ".00", with: "").replacingOccurrences(of: "$", with: "")))
-                .font(.system(size: 600, weight: .thin))
-                .minimumScaleFactor(0.05)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity)
-                .contentTransition(.numericText())
+            HeroAmountView(
+                digits: appState.paymentAmountText.replacingOccurrences(of: ".00", with: "").replacingOccurrences(of: "$", with: ""),
+                width: max(0, min(viewport.width - 40, 960)),
+                maxHeight: viewport.height * 0.5
+            )
 
             Text(appState.countdownText)
-                .font(.system(size: 22))
+                .font(.system(size: 22, weight: .semibold))
                 .foregroundStyle(Color.bcLight)
+                .padding(.top, 16)
 
             Text(appState.nextPaymentDateText)
                 .font(.system(size: 15))

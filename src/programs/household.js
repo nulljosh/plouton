@@ -2,7 +2,7 @@
 // by family unit plus a shelter allowance of your actual rent between a minimum
 // and a maximum for the unit size. Figures are the ministry's table effective
 // 2025-12-01 (checked 2026-10-02); the annual earnings exemption lives in
-// profiles.js. Plouton shows the table; the cheque stub is the truth.
+// profiles.js. Talli shows the table; the cheque stub is the truth.
 const { EARNINGS_EXEMPTION } = require('./profiles');
 
 const TYPES = ['single', 'couple_one', 'couple_both', 'single_parent'];

@@ -1,7 +1,7 @@
 import SwiftUI
 
 // Reply helper under a ministry message, shared by iPhone and Mac. The read and the
-// draft come from src/programs/reply.js via /api/message-reply. Plouton writes the
+// draft come from src/programs/reply.js via /api/message-reply. Talli writes the
 // reply; the person sends it in My Self Serve or says it on the phone.
 struct MessageReply: Codable, Sendable {
     let kind: String

@@ -1,4 +1,4 @@
-// Footer band: Plouton's things in a row (tally, calendar, coins, envelope, house, mountain), cut like a line engraving
+// Footer band: Talli's things in a row (tally, coins, calendar, envelope, house, mountain), cut like a line engraving
 // in plain 2D canvas, after the Hermes footer. Faint rules run across the band; inside the glyphs they thicken, and
 // thicken again on the edge facing away from the light, so the glyphs look cut into the page. Drawn once per size and theme.
 // The glyphs are the same art/*.svg files the landing uses, so the band and the page never disagree.
@@ -8,7 +8,7 @@
   var ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  var NAMES = ['tally', 'calendar', 'coins', 'envelope', 'house', 'mountain'];
+  var NAMES = ['tally', 'coins', 'calendar', 'envelope', 'house', 'mountain'];
   var imgs = NAMES.map(function (n) { var i = new Image(); i.src = '/art/' + n + '.svg'; return i; });
 
   // One row, or two on a narrow band.

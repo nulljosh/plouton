@@ -47,7 +47,7 @@ enum MissedPaymentReminders {
             guard let fire = Calendar.current.date(from: parts), fire > now else { continue }
             let content = UNMutableNotificationContent()
             content.title = "Has your cheque arrived?"
-            content.body = "It was due yesterday and is not marked received. Open Plouton for what to say if it is missing."
+            content.body = "It was due yesterday and is not marked received. Open Talli for what to say if it is missing."
             content.sound = .default
             let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fire), repeats: false)
             try? await center.add(UNNotificationRequest(identifier: prefix + w.month, content: content, trigger: trigger))

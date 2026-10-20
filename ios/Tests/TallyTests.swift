@@ -1,5 +1,5 @@
 import XCTest
-@testable import Plouton
+@testable import Talli
 
 // MARK: - DateParsing
 

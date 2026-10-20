@@ -1,15 +1,15 @@
-# Plouton
+# Talli
 
 BC income-assistance tracker. Free. Web, iOS, macOS and watchOS. Versions live in App Store Connect (`asc versions list --app 6782366555`), not in this file.
 
 ## Rules
 - No emojis anywhere.
-- Live at plouton.jaybulb.com. `heyitsmejosh.com` lapsed on purpose; never reference it.
+- Live at talli.jaybulb.com. `heyitsmejosh.com` lapsed on purpose; never reference it.
 - Runs on Cloudflare Workers (`wrangler.jsonc`, `worker/index.mjs`). Deploy with `npm run deploy`. **A git push deploys nothing.**
 - Storage is Workers KV (`src/_blob.js`). `web/` is served by the assets binding; only `/` runs the Worker first.
 - Three tabs on every platform: Home, Status, Messages. Settings is a sheet from the avatar. Home is one number, one line, one action; the rest is under Details.
 - Design: `brand/index.html` is the kit, `brand/tokens.css` the tokens. Padding, margin and gap come only from the space scale (4, 8, 12, 16, 24, 32, 48). Side margin 20, controls 48 tall, system font, no webfonts.
-- `web/tokens.css` imports the canonical `jaybulb.com/tokens.css` and only aliases. Accent is Plouton blue `#5B9BD5`. Never redeclare a colour the canonical file owns.
+- `web/tokens.css` imports the canonical `jaybulb.com/tokens.css` and only aliases. Accent is Talli blue `#5B9BD5`. Never redeclare a colour the canonical file owns.
 - The CSP lives in `web/_headers`. A new external host must be added there or the browser blocks it.
 - Poll with `visibilityInterval()`, never a raw `setInterval`.
 

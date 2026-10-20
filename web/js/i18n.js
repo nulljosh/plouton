@@ -1,4 +1,4 @@
-// Plouton i18n runtime (vanilla, no framework). Loads generated locale JSON,
+// Talli i18n runtime (vanilla, no framework). Loads generated locale JSON,
 // swaps [data-i18n] text, and exposes locale-correct formatters.
 // The formatting helpers are the part browser auto-translate can never do.
 (function () {

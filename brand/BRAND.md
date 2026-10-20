@@ -1,6 +1,6 @@
-# Plouton brand kit and design system
+# Talli brand kit and design system
 
-Plouton keeps a tally of your benefits: what lands, when, and what you can still earn.
+Talli keeps a tally of your benefits: what lands, when, and what you can still earn.
 
 ## The mark
 One bold flat white glyph on an accent gradient tile. No text, no outline, no emblem.

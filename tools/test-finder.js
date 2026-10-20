@@ -63,7 +63,7 @@ test('junk input is dropped', () => {
   assert.strictEqual(findBenefits(null).complete, false);
 });
 
-test('prefill uses what Plouton already knows', () => {
+test('prefill uses what Talli already knows', () => {
   assert.deepStrictEqual(prefill({ pwd: { status: 'approved' }, dtc: { status: 'approved' }, rdsp: { status: 'none' }, cdb: { status: 'approved' } }),
     { status: ['pwd'], dtc: ['yes'], have: ['cdb'] });
 });

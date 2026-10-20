@@ -75,7 +75,7 @@ struct PaymentGlance: View {
                             .padding(.horizontal, 8)
                     }
                 } else {
-                    Text(WatchAPI.shared.apiToken.isEmpty ? "Open Plouton on your iPhone to sign in" : "No data")
+                    Text(WatchAPI.shared.apiToken.isEmpty ? "Open Talli on your iPhone to sign in" : "No data")
                         .multilineTextAlignment(.center)
                         .font(.caption)
                         .foregroundStyle(.secondary)

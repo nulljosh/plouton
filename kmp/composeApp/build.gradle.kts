@@ -51,7 +51,7 @@ compose.desktop {
                 org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb,
                 org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg,
             )
-            packageName = "Plouton"
+            packageName = "Talli"
             packageVersion = "3.5.13"
             description = "BC disability assistance, tracked."
         }

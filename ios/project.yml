@@ -1,4 +1,4 @@
-name: Plouton
+name: Talli
 options:
   bundleIdPrefix: com.heyitsmejosh
   deploymentTarget:
@@ -11,7 +11,7 @@ settings:
   MARKETING_VERSION: "4.0.0"
   CURRENT_PROJECT_VERSION: "202610021704"
 targets:
-  Plouton:
+  Talli:
     type: application
     platform: iOS
     sources:
@@ -42,7 +42,7 @@ targets:
           - ci_scripts
           - scripts
       # Icon Composer bundle; Xcode builds every icon size from it
-      - path: ../Plouton.icon
+      - path: ../Talli.icon
     settings:
       base:
         INFOPLIST_FILE: Info.plist
@@ -54,7 +54,7 @@ targets:
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
     entitlements:
-      path: Plouton.entitlements
+      path: Talli.entitlements
       properties:
         com.apple.security.application-groups:
           - group.com.heyitsmejosh.tally
@@ -73,7 +73,7 @@ targets:
           - "*.svg"
     settings:
       GENERATE_INFOPLIST_FILE: YES
-      INFOPLIST_KEY_CFBundleDisplayName: Plouton Widgets
+      INFOPLIST_KEY_CFBundleDisplayName: Talli Widgets
       INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright 2026 Joshua Trommel"
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.widgets
       ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: WidgetBackground
@@ -106,11 +106,11 @@ targets:
           - fastlane
     settings:
       GENERATE_INFOPLIST_FILE: YES
-      INFOPLIST_KEY_CFBundleDisplayName: Plouton
+      INFOPLIST_KEY_CFBundleDisplayName: Talli
       INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.heyitsmejosh.tally
       INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: YES
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.watchkitapp
-      ASSETCATALOG_COMPILER_APPICON_NAME: Plouton
+      ASSETCATALOG_COMPILER_APPICON_NAME: Talli
       PRODUCT_NAME: TalliWatch
       CODE_SIGN_STYLE: Automatic
   TalliTests:
@@ -121,7 +121,7 @@ targets:
         excludes:
           - test_payday_dates.swift # standalone `swift` script, top-level code
     dependencies:
-      - target: Plouton
+      - target: Talli
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.tests
@@ -132,16 +132,16 @@ targets:
     sources:
       - UITests
     dependencies:
-      - target: Plouton
+      - target: Talli
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.uitests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
-  Plouton:
+  Talli:
     build:
       targets:
-        Plouton: all
+        Talli: all
         TalliTests: [test]
         TalliUITests: [test]
     run:
@@ -155,7 +155,7 @@ schemes:
   TalliUITests:
     build:
       targets:
-        Plouton: all
+        Talli: all
         TalliUITests: all
     test:
       targets:

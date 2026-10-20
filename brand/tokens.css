@@ -1,9 +1,7 @@
-/* Plouton brand tokens. The accent is the only colour this app owns; spacing, radii and type come from the shared system.
-   #5B9BD5 is the brand blue (icon top, accent on dark). #2F6FB0 is the same blue deep enough for text and white-label fills on light. */
+/* Talli brand tokens. The accent is the only colour this app owns; spacing, radii and type come from the shared system. */
 :root {
-  --accent: #5B9BD5;
+  --accent: #2F6FB0;
   --accent-light: #5B9BD5;
   --accent-deep: #2F6FB0;
-  --accent-strong: #2F6FB0;
-  --accent-ring: color-mix(in srgb, #5B9BD5 30%, transparent);
+  --accent-ring: color-mix(in srgb, #2F6FB0 30%, transparent);
 }

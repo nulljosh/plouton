@@ -1,6 +1,6 @@
-# Plouton Money
+# Talli Money
 
-How Plouton makes money. The fleet-wide ledger is `GTM.md` in the Code root.
+How Talli makes money. The fleet-wide ledger is `GTM.md` in the Code root.
 
 ## Price
 
@@ -22,6 +22,6 @@ Nothing planned.
 
 `asc pricing schedule create --app 6782366555 --price 0.99 --base-territory USA --start-date YYYY-MM-DD` if that ever changes.
 
-Anyone who got Plouton while it was free keeps it free. Only new customers pay.
+Anyone who got Talli while it was free keeps it free. Only new customers pay.
 
 *ASC 6782366555. Set 2026-09-20.*

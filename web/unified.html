@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d0c0b" media="(prefers-color-scheme: dark)">
-  <title>Plouton</title>
+  <title>Talli</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -738,7 +738,7 @@ function VaultTool({dark}) {
       <div style={label}>{T('Document vault')}</div>
       <div style={card}>
         <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Keep your papers safe')}</div>
-        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('Your PWD letter, medical report, ID and lease. Files are locked on this device with a passphrase before they are saved. Plouton only holds the locked copy and cannot read it.')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('Your PWD letter, medical report, ID and lease. Files are locked on this device with a passphrase before they are saved. Talli only holds the locked copy and cannot read it.')}</div>
         <input type="password" autoComplete="new-password" placeholder={T('Choose a passphrase')} aria-label={T('Choose a passphrase')} value={pass} onChange={e=>setPass(e.target.value)} style={input}/>
         <input type="password" autoComplete="new-password" placeholder={T('Type it again')} aria-label={T('Type it again')} value={pass2} onChange={e=>setPass2(e.target.value)} style={input}/>
         <div style={{fontSize:11,color:t.warning,fontWeight:600,marginTop:10,lineHeight:1.5}}>{T('If you forget the passphrase, nobody can get your files back. Write it down somewhere safe.')}</div>
@@ -813,7 +813,7 @@ function ReconsiderationTool({dark}) {
       <div style={label}>{T('Reconsideration helper')}</div>
       <div style={card}>
         <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Denied? You can ask again.')}</div>
-        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('You have 20 business days from the day the letter arrived. Enter that day and Plouton counts it for you.')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('You have 20 business days from the day the letter arrived. Enter that day and Talli counts it for you.')}</div>
         <label style={{display:'block',fontSize:11,color:t.muted,marginTop:12}}>{T('Day the letter arrived')}
           <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{display:'block',width:'100%',boxSizing:'border-box',marginTop:4,padding:'10px 12px',borderRadius:8,border:`1px solid ${t.border2}`,background:'transparent',color:t.text,fontSize:14,fontFamily:'inherit'}}/>
         </label>
@@ -871,7 +871,7 @@ function RequestsTool({dark}) {
   return (
     <div>
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.14em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{T('Service requests')}</div>
-      <div style={{fontSize:12,color:t.mutedMid,lineHeight:1.5,marginBottom:12}}>{T('Pick what you need. Plouton gives you the words, the papers to have ready, and the way in.')}</div>
+      <div style={{fontSize:12,color:t.mutedMid,lineHeight:1.5,marginBottom:12}}>{T('Pick what you need. Talli gives you the words, the papers to have ready, and the way in.')}</div>
       <div style={{display:'flex',flexDirection:'column',gap:8}}>
         {list.map(r => { const isOpen = open === r.id; return (
           <div key={r.id} style={{background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`}}>
@@ -957,7 +957,7 @@ function HouseholdTool({dark}) {
       </div>
       <div style={{...card,marginTop:12}}>
         <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{T('Work earnings')}</div>
-        <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{d.earningsExemption!=null ? <>{T('You can earn')} <b>{usd(d.earningsExemption)}</b> {T('this year before your payment drops.')}{d.shared&&<> {T('The limit is shared by the two of you, so log both of your earnings.')}</>}</> : T('Ask the ministry what your yearly earnings limit is. Plouton does not have it for single parents.')}</div>
+        <div style={{fontSize:13,color:t.text,lineHeight:1.5}}>{d.earningsExemption!=null ? <>{T('You can earn')} <b>{usd(d.earningsExemption)}</b> {T('this year before your payment drops.')}{d.shared&&<> {T('The limit is shared by the two of you, so log both of your earnings.')}</>}</> : T('Ask the ministry what your yearly earnings limit is. Talli does not have it for single parents.')}</div>
       </div>
       {d.history.length>0 && <div style={{...card,marginTop:12}}>
         <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{T('Rent changes')}</div>
@@ -1052,7 +1052,7 @@ function WhatIfTool({dark}) {
     <div style={{animation:'fadeIn 0.2s ease both'}}>
       <div style={label}>{T('What if I take a job')}</div>
       <div style={card}>
-        <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Type a wage and weekly hours. Plouton shows how much of your yearly earnings limit it uses, when your assistance starts to drop, and what you end up with each month.')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Type a wage and weekly hours. Talli shows how much of your yearly earnings limit it uses, when your assistance starts to drop, and what you end up with each month.')}</div>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:12}}>
           <label style={{fontSize:11,color:t.muted}}>{T('Hourly wage')} ($)<input inputMode="decimal" value={f.wage} onChange={e=>setF({...f,wage:e.target.value})} style={input}/></label>
           <label style={{fontSize:11,color:t.muted}}>{T('Hours a week')}<input inputMode="decimal" value={f.hours} onChange={e=>setF({...f,hours:e.target.value})} style={input}/></label>
@@ -1066,7 +1066,7 @@ function WhatIfTool({dark}) {
         <button onClick={run} disabled={!ok} style={{marginTop:12,padding:'9px 16px',borderRadius:100,background:t.accent,color:'#fff',border:'none',fontSize:13,fontWeight:600,fontFamily:'inherit',cursor:'pointer',opacity:ok?1:0.5}}>{T('See what happens')}</button>
         {err && <div role="alert" style={{fontSize:12,color:t.warning,fontWeight:600,marginTop:10}}>{err}</div>}
       </div>
-      {r && r.unknown && <div style={{...card,marginTop:12,fontSize:13,color:t.text,lineHeight:1.5}}>{T('Plouton does not have the yearly earnings limit for your household. Ask the ministry what it is, then you can work this out.')}</div>}
+      {r && r.unknown && <div style={{...card,marginTop:12,fontSize:13,color:t.text,lineHeight:1.5}}>{T('Talli does not have the yearly earnings limit for your household. Ask the ministry what it is, then you can work this out.')}</div>}
       {r && !r.unknown && <>
         <div style={{...card,marginTop:12}}>
           <div style={{fontSize:12,color:t.mutedMid}}>{T('Over 12 months you earn')} {usd(r.totalEarnings)} {T('and keep')}</div>
@@ -1078,7 +1078,7 @@ function WhatIfTool({dark}) {
           {r.monthlyRule
             ? <div style={{fontSize:12,color:t.mutedMid,marginTop:8,lineHeight:1.5}}>{r.rule}{r.safeHours!=null&&<> {T('The first')} {usd(r.room)} {T('is about')} {r.safeHours} {T('hours a week at your wage.')}</>}</div>
             : r.room!=null && <div style={{fontSize:12,color:t.mutedMid,marginTop:8,lineHeight:1.5}}>{T('Room left under the limit this year:')} {usd(r.room)}.{r.safeHours!=null&&<> {T('That is about')} {r.safeHours} {T('hours a week from your start month to December.')}</>}</div>}
-          {r.assumed && <div style={{fontSize:11,color:t.muted,marginTop:8,lineHeight:1.5}}>{T('BC has not posted next year limit yet. Plouton assumes it stays the same.')}</div>}
+          {r.assumed && <div style={{fontSize:11,color:t.muted,marginTop:8,lineHeight:1.5}}>{T('BC has not posted next year limit yet. Talli assumes it stays the same.')}</div>}
         </div>
         <details style={{...card,marginTop:12}}>
           <summary style={{fontSize:13,fontWeight:600,color:t.text,cursor:'pointer'}}>{T('Month by month')}</summary>
@@ -1191,7 +1191,7 @@ function BudgetTool({dark}) {
     <div style={{animation:'fadeIn 0.2s ease both'}}>
       <div style={label}>{T('Budget against paydays')}</div>
       <div style={card}>
-        <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Add your bills and the day each is due. Plouton lines them up against the cheques that pay for them and warns you when one lands before the money does.')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Add your bills and the day each is due. Talli lines them up against the cheques that pay for them and warns you when one lands before the money does.')}</div>
         {data.bills.map(b => (
           <div key={b.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderTop:`1px solid ${t.border}`,marginTop:8,fontSize:13}}>
             <span style={{color:t.text,fontWeight:600}}>{b.name}</span>
@@ -1269,7 +1269,7 @@ function SupplementsManage({dark, data, onSave}) {
   return (
     <div style={{marginTop:24}}>
       <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:6}}>{T('Your supplements')}</div>
-      <div style={{fontSize:12,color:t.mutedMid,lineHeight:1.5,marginBottom:12}}>{T('Tick the ones you get. They show on the calendar and Plouton reminds you the day before.')}</div>
+      <div style={{fontSize:12,color:t.mutedMid,lineHeight:1.5,marginBottom:12}}>{T('Tick the ones you get. They show on the calendar and Talli reminds you the day before.')}</div>
       {data.derived.monthly > 0 && <div style={{fontSize:13,color:t.text,fontWeight:600,marginBottom:10}}>+${Math.round(data.derived.monthly).toLocaleString()} {T('a month on top of your cheque')}</div>}
       <div style={{display:'flex',flexDirection:'column',gap:8}}>
         {data.derived.items.map(it => (
@@ -1551,7 +1551,7 @@ function BenefitFinder({dark}) {
       <div style={label}>{T('Benefit finder')}</div>
       <div style={card}>
         <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('Find what you are missing')}</div>
-        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('A few questions, about a minute. Plouton checks every BC and federal program and tells you how to get each one.')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('A few questions, about a minute. Talli checks every BC and federal program and tells you how to get each one.')}</div>
         <button onClick={start} style={{...pill(true),marginTop:14}}>{T('Start')}</button>
       </div>
     </div>
@@ -1611,7 +1611,7 @@ function BenefitFinder({dark}) {
           </div>
         </div>;
       })}
-      <div style={{fontSize:11,color:t.muted,lineHeight:1.5}}>{T('Rates checked')} {data.verified}. {T('Plouton is a guide. Each program makes its own decision.')}</div>
+      <div style={{fontSize:11,color:t.muted,lineHeight:1.5}}>{T('Rates checked')} {data.verified}. {T('Talli is a guide. Each program makes its own decision.')}</div>
     </div>
   );
 }
@@ -1649,7 +1649,7 @@ function RdspTracker({dark}) {
       <div style={label}>{T('RDSP grants and bonds')}</div>
       <div style={card}>
         <div style={{fontSize:17,fontWeight:700,letterSpacing:'-0.3px',color:t.text}}>{T('See what your RDSP is owed')}</div>
-        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('Three details. Plouton works out what the government has matched, what is left this year and what carries forward.')}</div>
+        <div style={{fontSize:13,color:t.mutedMid,marginTop:6,lineHeight:1.5}}>{T('Three details. Talli works out what the government has matched, what is left this year and what carries forward.')}</div>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:14}}>
           <label style={{fontSize:11,color:t.muted}}>{T('Year you were born')}<input inputMode="numeric" maxLength={4} value={form.birthYear} onChange={e=>setForm({...form,birthYear:e.target.value})} style={{...input,marginTop:4}}/></label>
           <label style={{fontSize:11,color:t.muted}}>{T('Year DTC was approved')}<input inputMode="numeric" maxLength={4} value={form.dtcYear} onChange={e=>setForm({...form,dtcYear:e.target.value})} style={{...input,marginTop:4}}/></label>

@@ -10,7 +10,7 @@ import androidx.compose.ui.window.rememberWindowState
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Plouton",
+        title = "Talli",
         state = rememberWindowState(size = DpSize(880.dp, 660.dp)),
     ) {
         MaterialTheme { App() }

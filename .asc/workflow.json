@@ -5,7 +5,7 @@
   "workflows": {
     "ship-ios": { "description": "Bump, archive, upload, submit iOS", "steps": [
       { "name": "bump", "run": "cd ios && asc xcode version edit --version \"$VERSION\" --build-number \"$(date +%Y%m%d%H%M)\"" },
-      { "name": "archive", "run": "cd ios && asc xcode archive --project Plouton.xcodeproj --scheme Plouton --archive-path ../.asc/artifacts/Talli.xcarchive --overwrite --xcodebuild-flag=-skipPackagePluginValidation --xcodebuild-flag=-allowProvisioningUpdates --output json" },
+      { "name": "archive", "run": "cd ios && asc xcode archive --project Talli.xcodeproj --scheme Talli --archive-path ../.asc/artifacts/Talli.xcarchive --overwrite --xcodebuild-flag=-skipPackagePluginValidation --xcodebuild-flag=-allowProvisioningUpdates --output json" },
       { "name": "export", "run": "cd ios && asc xcode export --archive-path ../.asc/artifacts/Talli.xcarchive --export-options ExportOptions.plist --overwrite --ipa-path ../.asc/artifacts/Talli.ipa --output json --xcodebuild-flag=-allowProvisioningUpdates" },
       { "name": "publish", "if": "SUBMIT", "run": "asc publish appstore --app $IOS_APP_ID --ipa .asc/artifacts/Talli.ipa --version $VERSION --wait --submit --confirm --output json" }
     ] },
@@ -13,7 +13,7 @@
       { "name": "bump_mac", "run": "cd macos && asc xcode version edit --version \"$VERSION\" --build-number \"$(date +%Y%m%d%H%M)\"" },
       { "name": "archive_mac", "run": "cd macos && asc xcode archive --project TalliMac.xcodeproj --scheme TalliMac --archive-path ../.asc/artifacts/TalliMac-mac.xcarchive --overwrite --output json" },
       { "name": "export_mac", "run": "rm -rf .asc/artifacts/mac-export && xcodebuild -exportArchive -archivePath .asc/artifacts/TalliMac-mac.xcarchive -exportOptionsPlist macos/ExportOptions.plist -exportPath .asc/artifacts/mac-export -allowProvisioningUpdates" },
-      { "name": "publish_mac", "if": "SUBMIT", "run": "asc builds upload --app $MAC_APP_ID --pkg .asc/artifacts/mac-export/Plouton.pkg --version $VERSION --build-number $(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' .asc/artifacts/TalliMac-mac.xcarchive/Products/Applications/Talli.app/Contents/Info.plist)" }
+      { "name": "publish_mac", "if": "SUBMIT", "run": "asc builds upload --app $MAC_APP_ID --pkg .asc/artifacts/mac-export/Talli.pkg --version $VERSION --build-number $(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' .asc/artifacts/TalliMac-mac.xcarchive/Products/Applications/Talli.app/Contents/Info.plist)" }
     ] }
   }
 }

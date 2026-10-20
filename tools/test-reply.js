@@ -19,7 +19,7 @@ test('a decision wins over a report mention in the same message', () => {
   assert.strictEqual(kind('Your cheque was cancelled because your monthly report was not received.'), 'decision');
 });
 
-test('every reply is signed, has placeholders, no em dashes, and says Plouton does not send it', () => {
+test('every reply is signed, has placeholders, no em dashes, and says Talli does not send it', () => {
   const samples = { decision: 'Your claim was denied', overpayment: 'You owe an overpayment', documents: 'Please provide proof', appointment: 'Your appointment is booked', report: 'Your monthly report', details: 'Confirm your address', general: 'Hello there' };
   assert.deepStrictEqual(Object.keys(samples).sort(), [...KINDS.map((k) => k.kind), 'general'].sort());
   for (const [k, text] of Object.entries(samples)) {

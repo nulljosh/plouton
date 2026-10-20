@@ -35,7 +35,7 @@ struct MenuBarView: View {
 
             Divider()
 
-            Button("Quit Plouton") {
+            Button("Quit Talli") {
                 NSApplication.shared.terminate(nil)
             }
             .keyboardShortcut("q")

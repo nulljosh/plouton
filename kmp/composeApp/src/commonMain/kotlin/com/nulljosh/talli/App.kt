@@ -153,7 +153,7 @@ private fun LoginScreen(busy: Boolean, error: String?, onSubmit: (String, String
 
     Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
         Column(Modifier.widthIn(max = 380.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Plouton", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            Text("Talli", fontSize = 30.sp, fontWeight = FontWeight.Bold)
             Text("Sign in with your BCeID.", modifier = Modifier.padding(top = 4.dp, bottom = 24.dp))
             OutlinedTextField(
                 value = user,
@@ -186,7 +186,7 @@ private fun LoginScreen(busy: Boolean, error: String?, onSubmit: (String, String
             // per platform (EncryptedSharedPreferences / DPAPI / libsecret). Add when the
             // sign-in-every-launch friction is actually a complaint.
             Text(
-                "Credentials go to plouton.jaybulb.com and are never stored on this device.",
+                "Credentials go to talli.jaybulb.com and are never stored on this device.",
                 fontSize = 12.sp,
                 modifier = Modifier.padding(top = 16.dp),
             )
@@ -299,8 +299,8 @@ private fun SettingsScreen(onSignOut: () -> Unit) {
     Column(Modifier.fillMaxSize().padding(24.dp)) {
         Text("Settings", fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(16.dp))
-        Text("Plouton 3.5.13")
-        Text("plouton.jaybulb.com", fontSize = 12.sp)
+        Text("Talli 3.5.13")
+        Text("talli.jaybulb.com", fontSize = 12.sp)
         Spacer(Modifier.height(24.dp))
         TextButton(onClick = onSignOut) { Text("Sign out") }
     }

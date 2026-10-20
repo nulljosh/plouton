@@ -1,6 +1,6 @@
-1/ Plouton is live. Disability tax credit, RDSP and CDB, sorted. https://plouton.jaybulb.com
+1/ Talli is live. Disability tax credit, RDSP and CDB, sorted. https://talli.jaybulb.com
 
-2/ Plouton walks Canadians through the Disability Tax Credit, the RDSP and the Canada Disability Benefit. What you qualify for, what to file, and what you leave on the table if you do not.
+2/ Talli walks Canadians through the Disability Tax Credit, the RDSP and the Canada Disability Benefit. What you qualify for, what to file, and what you leave on the table if you do not.
 
 3/ Native on Apple platforms, web build for everything else. On Product Hunt: producthunt.com/products/talli-2
 

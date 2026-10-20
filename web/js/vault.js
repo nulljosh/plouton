@@ -1,4 +1,4 @@
-// Plouton document vault crypto. Runs in the browser and in Node (tests).
+// Talli document vault crypto. Runs in the browser and in Node (tests).
 // Format v1: byte 1, then a 12 byte IV, then AES-256-GCM ciphertext+tag.
 // The key comes from PBKDF2-HMAC-SHA256 over the passphrase (NFC, UTF-8) and a
 // per-vault salt. The passphrase and key never leave the device; the server
@@ -36,7 +36,7 @@
 
   // Throws on a wrong key or any tampering: GCM authenticates the whole message.
   async function open(key, bytes) {
-    if (bytes.length < 29 || bytes[0] !== 1) throw new Error('Not a Plouton vault file');
+    if (bytes.length < 29 || bytes[0] !== 1) throw new Error('Not a Talli vault file');
     return new Uint8Array(await subtle().decrypt({ name: 'AES-GCM', iv: bytes.subarray(1, 13) }, key, bytes.subarray(13)));
   }
 

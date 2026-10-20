@@ -274,7 +274,7 @@
 				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_WKWatchOnly = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.watchos;
-				PRODUCT_NAME = Plouton;
+				PRODUCT_NAME = Talli;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -349,7 +349,7 @@
 				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_WKWatchOnly = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.heyitsmejosh.tally.watchos;
-				PRODUCT_NAME = Plouton;
+				PRODUCT_NAME = Talli;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;

@@ -1,7 +1,7 @@
 {
   "name": "talli",
   "version": "4.0.0",
-  "description": "Plouton - BC Self-Serve Portal Scraper - Automated scraping of notifications, messages, payment info, and service requests",
+  "description": "Talli - BC Self-Serve Portal Scraper - Automated scraping of notifications, messages, payment info, and service requests",
   "main": "src/scraper.js",
   "scripts": {
     "check": "node src/scraper.js",

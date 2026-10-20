@@ -339,7 +339,7 @@ async function fetchAllSectionsWithHybridAuth(username, password) {
 
 const allowedOrigins = parseAllowedOrigins(
   process.env.CORS_ORIGINS,
-  'http://localhost:3000,http://127.0.0.1:3000,https://plouton.jaybulb.com,https://talli.jaybulb.com'
+  'http://localhost:3000,http://127.0.0.1:3000,https://talli.jaybulb.com'
 );
 
 // Federal-only mode (src/programs/finder.js, scope federal): the federal half of the benefit
@@ -1719,7 +1719,7 @@ app.get('/api/blob/*splat', requireAuth, async (req, res) => {
 
 // Stripe Pro -- $1 one-time unlock for the full payment/report history view
 app.get('/api/stripe-status', requireAuth, async (req, res) => {
-  // Owner account (the BCeID this instance is configured for) is always Pro -- Plouton is a
+  // Owner account (the BCeID this instance is configured for) is always Pro -- Talli is a
   // personal tool, no reason to paywall its own operator out of their own payment history.
   const owner = process.env.BCEID_USERNAME;
   if (owner && req.session?.bceidUsername === owner) return res.json({ isPro: true });
@@ -1733,8 +1733,8 @@ app.post('/api/stripe-checkout', requireAuth, async (req, res) => {
     const session = await getStripe().checkout.sessions.create({
       mode: 'payment',
       line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
-      success_url: 'https://plouton.jaybulb.com/app?pro=1',
-      cancel_url: 'https://plouton.jaybulb.com/app',
+      success_url: 'https://talli.jaybulb.com/app?pro=1',
+      cancel_url: 'https://talli.jaybulb.com/app',
       client_reference_id: req.session.userId,
       customer_creation: 'always',
       allow_promotion_codes: true,
@@ -1956,7 +1956,7 @@ PROFILE_PROGRAMS.forEach(registerProfileRoutes);
 
 // Benefit finder. GET returns the questions, saved answers and results; POST
 // saves answers and returns the same shape. Saved answers win over what the
-// profiles imply, so a person can correct Plouton.
+// profiles imply, so a person can correct Talli.
 async function benefitFinderFor(userId, posted) {
   const [pwd, dtc, rdsp, cdb, saved] = await Promise.all([
     ...['pwd-profile', 'dtc-profile', 'rdsp-profile', 'cdb-profile'].map((r) => loadUserBlob(userId, r, {})),
@@ -2047,7 +2047,7 @@ app.get('/api/helper-view', helperLimiter, async (req, res) => {
   }
 });
 
-// Remembers the income Plouton last showed, so a helper sees the same number without a scrape.
+// Remembers the income Talli last showed, so a helper sees the same number without a scrape.
 async function rememberIncome(req, userId, income) {
   try {
     const snap = JSON.stringify({ pwdMonthly: income.pwdMonthly, cdbMonthly: income.cdbMonthly, totalMonthly: income.totalMonthly });
@@ -2064,7 +2064,7 @@ async function rememberIncome(req, userId, income) {
 app.get('/api/provinces', requireAuth, (req, res) => res.json({ provinces: listProvinces() }));
 
 // Budget against paydays (src/programs/budget.js). What lands per cheque is the PWD and
-// disability benefit amount Plouton last showed, plus supplements the person turned on.
+// disability benefit amount Talli last showed, plus supplements the person turned on.
 async function budgetFor(userId, saved) {
   const [pwd, cdb, last, supp] = await Promise.all([
     loadUserBlob(userId, 'pwd-profile', {}), loadUserBlob(userId, 'cdb-profile', {}),
@@ -2121,7 +2121,7 @@ app.post('/api/life', requireAuth, async (req, res) => {
 });
 
 // What-if job calculator (src/programs/whatif.js). Uses the household, the logged earnings and
-// the monthly assistance Plouton already knows, so the person only types a wage and hours.
+// the monthly assistance Talli already knows, so the person only types a wage and hours.
 app.post('/api/whatif', requireAuth, async (req, res) => {
   try {
     const userId = req.session?.userId;
@@ -2687,7 +2687,7 @@ app.use((req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>404 — Plouton</title>
+  <title>404 — Talli</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0c1220; color: #e8e4da; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }

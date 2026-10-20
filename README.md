@@ -1,11 +1,11 @@
 <img src="icon.svg" width="80" style="border-radius:18px">
 
-# Plouton
+# Talli
 
 ![version](https://img.shields.io/badge/version-v3.6.2-blue)
-![license](https://img.shields.io/badge/license-MIT-green) [![GitHub](https://img.shields.io/badge/GitHub-nulljosh%2Ftalli-black?logo=github)](https://github.com/nulljosh/plouton)
+![license](https://img.shields.io/badge/license-MIT-green) [![GitHub](https://img.shields.io/badge/GitHub-nulljosh%2Ftalli-black?logo=github)](https://github.com/nulljosh/talli)
 
-Live at [plouton.jaybulb.com](https://plouton.jaybulb.com) · [App Store](https://apps.apple.com/app/talli/id6782366555)
+Live at [talli.jaybulb.com](https://talli.jaybulb.com) · [App Store](https://apps.apple.com/app/talli/id6782366555)
 
 <p align="center">
   <img src="docs/screenshots/ios-home.png" width="220">
@@ -14,7 +14,7 @@ Live at [plouton.jaybulb.com](https://plouton.jaybulb.com) · [App Store](https:
 
 When does the money come? How much?
 
-Plouton answers that for people on BC income assistance. It reads BC Self-Serve for you and puts one number on the screen: your next payment.
+Talli answers that for people on BC income assistance. It reads BC Self-Serve for you and puts one number on the screen: your next payment.
 
 Free. Always.
 

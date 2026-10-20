@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 DD="${TMPDIR:-/tmp}"; DD="${DD%/}/talli-mac-dd"   # outside ~/Documents: iCloud xattrs break codesign
 xcodebuild build -project TalliMac.xcodeproj -scheme TalliMac -destination 'platform=macOS' \
   -derivedDataPath "$DD" -skipPackagePluginValidation -skipMacroValidation -quiet
-KEY='NSWindow Frame SwiftUI.WindowGroup<SwiftUI.ModifiedContent<SwiftUI.ModifiedContent<SwiftUI.ModifiedContent<Plouton.MacContentView, SwiftUI._EnvironmentKeyWritingModifier<Swift.Optional<Plouton.MacAppState>>>, SwiftUI._PreferenceWritingModifier<SwiftUI.PreferredColorSchemeKey>>, SwiftUI._TaskModifier2>>-1-AppWindow-1'
+KEY='NSWindow Frame SwiftUI.WindowGroup<SwiftUI.ModifiedContent<SwiftUI.ModifiedContent<SwiftUI.ModifiedContent<Talli.MacContentView, SwiftUI._EnvironmentKeyWritingModifier<Swift.Optional<Talli.MacAppState>>>, SwiftUI._PreferenceWritingModifier<SwiftUI.PreferredColorSchemeKey>>, SwiftUI._TaskModifier2>>-1-AppWindow-1'
 open -n -F --env UITEST_SNAPSHOT=1 "$DD/Build/Products/Debug/Talli.app" --args "-$KEY" "320 140 1280 800 0 0 1920 1080 "
 sleep 6
 PID=$(pgrep -f "$DD/Build/Products/Debug/Talli.app/Contents/MacOS/Talli" | head -1)

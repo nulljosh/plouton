@@ -42,7 +42,7 @@ const VECTOR_HEX = process.env.VAULT_VECTOR_PRINT ? null : require('./vault-vect
   });
 
   await test('not a vault file', async () => {
-    await assert.rejects(V.open(key, new Uint8Array(40)), /Not a Plouton vault file/);
+    await assert.rejects(V.open(key, new Uint8Array(40)), /Not a Talli vault file/);
   });
 
   await test('passphrase is NFC normalised, so accents match across platforms', async () => {

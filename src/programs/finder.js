@@ -567,7 +567,7 @@ function cleanAnswers(raw) {
 
 const hits = (answers, cond) => Object.entries(cond).every(([k, allowed]) => (answers[k] || []).some((a) => allowed.includes(a)));
 
-// What Plouton already knows from the person's own profiles, so they are not asked twice.
+// What Talli already knows from the person's own profiles, so they are not asked twice.
 function prefill({ pwd, dtc, rdsp, cdb } = {}) {
   const out = {};
   const good = (p, list) => list.includes(p?.status);

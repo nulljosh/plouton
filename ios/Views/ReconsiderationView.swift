@@ -68,7 +68,7 @@ struct ReconsiderationView: View {
         card {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Denied? You can ask again.").font(.headline)
-                Text("You have 20 business days from the day the letter arrived. Enter that day and Plouton counts it for you.")
+                Text("You have 20 business days from the day the letter arrived. Enter that day and Talli counts it for you.")
                     .font(.footnote).foregroundStyle(.secondary)
                 DatePicker("Day the letter arrived", selection: $date, in: ...Date(), displayedComponents: .date)
                 HStack {

@@ -77,7 +77,7 @@ private struct LoginScreen: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 72, height: 72)
-                Text("Plouton")
+                Text("Talli")
                     .font(.system(size: 42, weight: .bold))
                 Text("Your benefits. No bureaucracy.")
                     .font(.subheadline)

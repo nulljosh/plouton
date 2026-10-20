@@ -1,6 +1,6 @@
-# Plouton API
+# Talli API
 
-Base URL: `https://plouton.jaybulb.com`
+Base URL: `https://talli.jaybulb.com`
 
 An Express app (`src/api.js`) running on Cloudflare Workers. It scrapes the
 BC self-serve portal on the user's behalf and caches results per user. Responses
@@ -12,11 +12,11 @@ Server-side sessions (`express-session`) over a cookie. BCeID credentials are
 encrypted at rest and never returned by any endpoint.
 
 ```bash
-curl -c jar.txt -X POST https://plouton.jaybulb.com/api/login \
+curl -c jar.txt -X POST https://talli.jaybulb.com/api/login \
   -H 'Content-Type: application/json' \
   -d '{"username":"…","password":"…"}'
 
-curl -b jar.txt https://plouton.jaybulb.com/api/summary
+curl -b jar.txt https://talli.jaybulb.com/api/summary
 ```
 
 From the browser, `fetch(url, { credentials: 'same-origin' })` is enough. Routes

@@ -1,4 +1,4 @@
-// Open data: the pay-date and rate tables Plouton runs on, published as plain JSON that
+// Open data: the pay-date and rate tables Talli runs on, published as plain JSON that
 // any advocate, caseworker or developer can use. Built from the same modules the app
 // uses, so it can never disagree with the app. Every figure carries its source.
 const { CHEQUE_ISSUE_DATES } = require('../pay-dates');
@@ -31,7 +31,7 @@ const FEDERAL = {
 
 function buildOpenData() {
   return {
-    name: 'Plouton open data',
+    name: 'Talli open data',
     license: 'Free to use, no key needed. Always check the linked official source before you rely on a number.',
     updated: '2026-10-02',
     payDates: { province: 'bc', what: 'BC income and disability assistance cheque issue dates. Each date is the day the payment is issued.', source: SOURCES.bcPayDates, dates: CHEQUE_ISSUE_DATES },

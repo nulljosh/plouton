@@ -1,6 +1,6 @@
-/* Plouton landing, dressed after the Hermes landing: giant thin caps, tiny caps labels, small square buttons, a thin blue
+/* Talli landing, dressed after the Hermes landing: giant thin caps, tiny caps labels, small square buttons, a thin blue
    frame down the window, and full-bleed grainy blue bands where the glyphs sit in scanlines like an engraving.
-   Colours come from tokens.css (canonical plus Plouton's blue). Only the band colours below are landing-only. System font. */
+   Colours come from tokens.css (canonical plus Talli's blue). Only the band colours below are landing-only. System font. */
 :root {
   --band: #2F6FB0;                       /* full-bleed sections, white text on it is 5.2:1 */
   --band-sub: #dbe8f6;
@@ -37,6 +37,8 @@
   -webkit-mask: var(--img) center / var(--fit, 46%) no-repeat, var(--scan); -webkit-mask-composite: source-in;
   mask: var(--img) center / var(--fit, 46%) no-repeat, var(--scan); mask-composite: intersect;
 }
+/* Halftone paintings (art/*.png): the dot mask fills the box, no scanlines */
+.pic::before { -webkit-mask: var(--img) center / cover no-repeat; mask: var(--img) center / cover no-repeat; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: var(--font); font-size: 17px; line-height: 24px; color: var(--l-text); background: var(--l-bg); -webkit-font-smoothing: antialiased; }
@@ -47,7 +49,7 @@ code { font-size: .9em; padding: 2px 6px; border-radius: var(--r-sq); background
 
 h1, h2, h3, .label { font-family: var(--display); }
 h1, h2, h3 { text-wrap: balance; }
-.mark-i { display: block; width: 56px; height: 56px; margin: 0 auto var(--sp-4); background: var(--frame); -webkit-mask: url(art/tally.svg) center / contain no-repeat; mask: url(art/tally.svg) center / contain no-repeat; }
+.mark-i { display: block; width: 56px; height: 56px; margin: 0 auto var(--sp-4); background: var(--frame); -webkit-mask: url(mark.svg) center / contain no-repeat; mask: url(mark.svg) center / contain no-repeat; }
 h1 { font-size: clamp(104px, 17vw, 240px); line-height: .9; font-weight: 100; text-transform: uppercase; letter-spacing: -.01em; }
 h2 { font-size: clamp(48px, 7.4vw, 108px); line-height: .92; font-weight: 100; text-transform: uppercase; letter-spacing: -.005em; }
 h3 { font-size: 28px; line-height: 32px; font-weight: 300; }
@@ -104,7 +106,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .band { margin: 0 clamp(0px, 3vw, 44px); background: var(--grain), var(--band); color: #fff; overflow: hidden; }
 .band .label { color: var(--band-sub); }
 .band-head { text-align: center; }
-.band-art { aspect-ratio: 19 / 9; max-height: 80vh; width: 100%; background: none; --fit: 62%; }
+.band-art { aspect-ratio: 19 / 10; max-height: 86vh; width: 100%; background: none; }
 .band-copy { position: relative; margin-top: -8vw; padding: 0 var(--sp-5) var(--sp-9); }
 .band-copy h2 { font-size: clamp(56px, 10vw, 160px); line-height: .9; }
 .band-copy p:last-child { margin: var(--sp-6) auto 0; max-width: 480px; color: var(--band-sub); }
@@ -148,7 +150,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .plat-row b { font-family: var(--display); font-weight: 200; font-size: 40px; line-height: 44px; text-transform: uppercase; }
 .plat-row p { color: var(--l-sub); font-size: 15px; line-height: 22px; margin-bottom: var(--sp-3); }
 
-/* Footer: brand and link columns, the engraved band of Plouton's things, one fine line */
+/* Footer: brand and link columns, the engraved band of Talli's things, one fine line */
 .foot { text-align: center; padding: var(--sp-8) var(--sp-4) var(--sp-5); background: var(--l-bg); overflow: hidden; border-top: 1px solid var(--l-line); }
 .foot-top { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--sp-4); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-7); text-align: left; }
 .foot-brand { display: grid; gap: var(--sp-2); align-content: start; }
@@ -188,7 +190,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
   .wrap { padding: 0 var(--sp-4); }
   .hero { padding-top: var(--sp-8); }
   .cells { grid-template-columns: 1fr; }
-  .band-art { aspect-ratio: 4 / 3; --fit: 56%; }
+  .band-art { aspect-ratio: 4 / 3; }
   .band-copy { margin-top: 0; }
   .cell, .cell:nth-child(2n), .cell:nth-child(3n), .cell:nth-last-child(-n+2) { border-right: 0; border-bottom: 1px solid var(--band-line); padding: var(--sp-5); }
   .cell:last-child { border-bottom: 0; }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open data | Plouton</title>
+  <title>Open data | Talli</title>
   <meta name="description" content="Free JSON for BC pay dates, disability assistance rates, earnings limits and federal benefit amounts. No key needed.">
   <style>
     :root { color-scheme: light dark; --bg:#fff; --text:#111; --muted:#6b6b6b; --line:#e6e6e6; --card:#f5f5f5; --accent:#5B9BD5; }
@@ -26,7 +26,7 @@
 <body>
 <main>
   <h1>Open data</h1>
-  <p>The pay dates and rate tables Plouton runs on, as plain JSON. Free to use, no key, works from any website. Built for advocates, caseworkers and anyone making a tool for people on disability assistance.</p>
+  <p>The pay dates and rate tables Talli runs on, as plain JSON. Free to use, no key, works from any website. Built for advocates, caseworkers and anyone making a tool for people on disability assistance.</p>
   <p class="muted">Every figure links to its official source. Rates change, so check the source before you rely on a number. Updated 2026-10-02.</p>
 
   <h2>Endpoints</h2>
@@ -36,10 +36,10 @@
   <div class="ep"><div class="path"><code>GET /api/open/all</code></div><p class="muted">All of it in one file.</p><button data-url="/api/open/all">Try it</button></div>
 
   <h2>Use it</h2>
-  <div class="ep"><code>curl https://plouton.jaybulb.com/api/open/pay-dates</code></div>
-  <div class="ep"><code>fetch('https://plouton.jaybulb.com/api/open/rates').then(r =&gt; r.json())</code></div>
-  <p class="muted">Limit: 60 requests a minute per address. Responses are cached for an hour. Want another province added? It is one small data file in <a href="https://github.com/nulljosh/plouton/tree/main/data/provinces">data/provinces</a>. Send a pull request.</p>
-  <p class="muted">Plouton is not affiliated with the Government of British Columbia.</p>
+  <div class="ep"><code>curl https://talli.jaybulb.com/api/open/pay-dates</code></div>
+  <div class="ep"><code>fetch('https://talli.jaybulb.com/api/open/rates').then(r =&gt; r.json())</code></div>
+  <p class="muted">Limit: 60 requests a minute per address. Responses are cached for an hour. Want another province added? It is one small data file in <a href="https://github.com/nulljosh/talli/tree/main/data/provinces">data/provinces</a>. Send a pull request.</p>
+  <p class="muted">Talli is not affiliated with the Government of British Columbia.</p>
 </main>
 <script>
 document.querySelectorAll('button[data-url]').forEach(function (b) {

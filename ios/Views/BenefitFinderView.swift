@@ -88,7 +88,7 @@ struct BenefitFinderView: View {
     private var intro: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Find what you are missing").font(.headline)
-            Text("A few questions, about a minute. Plouton checks every BC and federal program and tells you how to get each one.")
+            Text("A few questions, about a minute. Talli checks every BC and federal program and tells you how to get each one.")
                 .font(.footnote).foregroundStyle(.secondary)
             Button("Start") { step = (asked.first { (answers[$0.id] ?? []).isEmpty } ?? asked.first)?.id }
                 .buttonStyle(.borderedProminent)
@@ -178,7 +178,7 @@ struct BenefitFinderView: View {
                     }
                 }
             }
-            Text("Rates checked \(d.verified). Plouton is a guide. Each program makes its own decision.")
+            Text("Rates checked \(d.verified). Talli is a guide. Each program makes its own decision.")
                 .font(.caption2).foregroundStyle(.secondary)
         }
     }

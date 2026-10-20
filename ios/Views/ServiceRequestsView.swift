@@ -24,7 +24,7 @@ struct ServiceRequestsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Pick what you need. Plouton gives you the words, the papers to have ready, and the way in.")
+            Text("Pick what you need. Talli gives you the words, the papers to have ready, and the way in.")
                 .font(.footnote).foregroundStyle(.secondary)
             ForEach(requests) { r in
                 VStack(alignment: .leading, spacing: 8) {

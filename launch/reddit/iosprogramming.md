@@ -3,7 +3,7 @@ Note: r/iOSProgramming. "Show and Tell" flair required. Weekly self-promo thread
 Title: Native iOS companion for a benefits tracker, with a Core Graphics avatar and WebMCP tools
 
 Body:
-Plouton is a payment and benefits tracker for people on BC income assistance. The core is a web app that scrapes BC's Self-Serve portal (no public API exists), but I built a native iOS companion so the payment countdown and government messages are one tap away instead of a browser bookmark.
+Talli is a payment and benefits tracker for people on BC income assistance. The core is a web app that scrapes BC's Self-Serve portal (no public API exists), but I built a native iOS companion so the payment countdown and government messages are one tap away instead of a browser bookmark.
 
 The iOS app mirrors the web's parchment palette and orange accent, with a pixel-art avatar drawn entirely in Core Graphics instead of a static asset. It also registers WebMCP tools on the web side so an agent can read benefit status and payments, and file the monthly report with the user's say-so. Credentials never pass through a tool, and no tool ever touches the PIN, that's enforced by a test that runs first in CI.
 

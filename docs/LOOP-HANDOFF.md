@@ -6,17 +6,16 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 
 ## Where things stand
 
-- iOS 4.0.0 is live. iOS 4.0.1 has build 202610201345, six iPhone screenshots and the header video placed; the search results video is processing, then it gets submitted.
+- iOS 4.0.0 is live. iOS 4.0.1 (header and search videos, six iPhone shots) is Waiting for Review. Apple allows 5 open review submissions per app; empty drafts count, so reuse one with `asc review items-add` and `submissions-submit`.
 - Mac 4.0.0 (build 202610201455, with the federal finder link) is Waiting for Review, with three desktop shots at 1280x800.
 - The header and search videos come from `launch/make_banner.sh`: Talli's six glyphs in scanlines on the landing blue. `asc asset-library videos upload` prints `videoId`, then `asc localizations placements create` puts it on the localization.
 - Sign-in on iPhone and Mac opens the federal-only finder with no account; a UI test taps through it.
 
 ## Next, in order
 
-1. Place the search video on iOS 4.0.1 and submit it.
-2. When Mac is approved, flip the GitHub 4.0.0 release to Latest (#62).
-3. 5.0: open data on iPhone and Mac, zh and pa strings (reviewed, not machine), real-device pass.
-4. Retake the Mac Settings shot (snapshot mode now signs in as your.username) and add it as the fourth desktop shot.
+1. When Mac is approved, flip the GitHub 4.0.0 release to Latest (#62).
+2. 5.0: open data on iPhone and Mac, zh and pa strings (reviewed, not machine), real-device pass.
+3. Retake the Mac Settings shot (snapshot mode now signs in as your.username) and add it as the fourth desktop shot.
 
 ## For Joshua
 

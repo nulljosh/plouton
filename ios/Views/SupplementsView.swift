@@ -102,7 +102,8 @@ struct SupplementsView: View {
                     Text("Tick the supplements you get and they land on your calendar with a reminder.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
-                ForEach(d.upcoming.prefix(3), id: \.key) { e in
+                // one row per supplement, its next date (the server lists every date in the cheque window)
+                ForEach(Self.nextOfEach(d.upcoming).prefix(3), id: \.key) { e in
                     HStack {
                         Circle().fill(Color.orange).frame(width: 6, height: 6)
                         Text(e.name).font(.footnote)
@@ -119,6 +120,12 @@ struct SupplementsView: View {
             }
         }
         .task { await send(nil) }
+    }
+
+    /// First event per supplement; `upcoming` is sorted by date, so that is the next one.
+    static func nextOfEach(_ events: [Supplements.Event]) -> [Supplements.Event] {
+        var seen = Set<String>()
+        return events.filter { seen.insert($0.id).inserted }
     }
 
     private func send(_ save: SupplementsRequest?) async {

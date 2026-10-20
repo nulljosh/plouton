@@ -28,6 +28,8 @@ struct BenefitFinder: Codable, Sendable {
         let have: Bool
     }
     let verified: String
+    /// "federal" from /api/federal-finder, absent or "all" from /api/benefit-finder.
+    let scope: String?
     let questions: [Question]
     let answers: [String: [String]]
     let complete: Bool
@@ -88,7 +90,7 @@ struct BenefitFinderView: View {
     private var intro: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Find what you are missing").font(.headline)
-            Text("A few questions, about a minute. Talli checks every BC and federal program and tells you how to get each one.")
+            Text(data?.scope == "federal" ? LocalizedStringKey("A few questions, about a minute. Talli checks every federal program and tells you how to get each one.") : LocalizedStringKey("A few questions, about a minute. Talli checks every BC and federal program and tells you how to get each one."))
                 .font(.footnote).foregroundStyle(.secondary)
             Button("Start") { step = (asked.first { (answers[$0.id] ?? []).isEmpty } ?? asked.first)?.id }
                 .buttonStyle(.borderedProminent)

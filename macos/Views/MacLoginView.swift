@@ -4,6 +4,7 @@ struct MacLoginView: View {
     @Environment(MacAppState.self) private var appState
     @State private var username = ""
     @State private var password = ""
+    @State private var showFederal = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -59,8 +60,20 @@ struct MacLoginView: View {
                     .frame(maxWidth: 300)
             }
 
+            Button("Federal benefits, no account needed") { showFederal = true }
+                .buttonStyle(.link)
+                .font(.footnote)
+
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .sheet(isPresented: $showFederal) {
+            NavigationStack {
+                ScrollView { BenefitFinderView { try await MacAPIClient.shared.federalFinder(answers: $0) }.frame(maxWidth: 680).padding(24) }
+                    .navigationTitle("Federal benefits")
+                    .toolbar { Button("Done") { showFederal = false } }
+            }
+            .frame(minWidth: 520, minHeight: 600)
+        }
     }
 }

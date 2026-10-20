@@ -10,7 +10,7 @@ Talli is a BC disability benefits tracker on web, iPhone and Mac at talli.jaybul
 - The site's CSP now allows the Cloudflare Web Analytics beacon, which was blocked on every page.
 - iOS: Settings and Sign Out are reachable again, since each tab owns its own NavigationStack. Liquid Glass and Jony Ive pass: no redundant tab titles, Home built around one number with a full-width 48 pt glass action, money tiles, calendar and Details; Status is one inset grouped list; one radius set. Mac has a native sidebar instead of a phone-style tab bar.
 - Landing page in the Hermes style (thin caps, grainy blue bands, public domain halftone art, engraved glyph footer). Brand kit at /brand. The tally icon was redone in Icon Composer and centred, and the iOS app target uses Talli.icon.
-- Versions: iOS 4.0.0 is Waiting for Review. Mac 4.0.0 (build 202610201044) is uploaded and attached but not submitted: Apple's five open review submissions limit is full until the iOS review clears.
+- Versions: iOS 4.0.0 is Waiting for Review. Mac 4.0.0 (build 202610201044) is uploaded and attached but not submitted: Apple's five open review submissions limit is full until the iOS review clears. Four empty iOS drafts hold slots, and Apple refuses to cancel or delete them (CLI guard, PATCH canceled says not cancellable, DELETE not allowed), so waiting is the only route.
 - QA 2026-10-20: npm test passes. The live API on talli.jaybulb.com returns 200 with a session and 401 without on every path the iOS app calls. Landing, privacy, manifest, robots and sitemap are 200.
 - Open in roadmap.md: verify the contribution figures against the real account; confirm the store build on the phone; flip the GitHub release when Apple approves the Mac build.
 

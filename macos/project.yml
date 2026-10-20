@@ -6,7 +6,7 @@ options:
 settings:
   DEVELOPMENT_TEAM: QMM486NPYC
   SWIFT_VERSION: "6.0"
-  MARKETING_VERSION: "10.0.0"
+  MARKETING_VERSION: "4.0.0"
   CURRENT_PROJECT_VERSION: "202610021704"
 targets:
   TalliMac:
@@ -44,6 +44,8 @@ targets:
           - screenshots
           - scripts
           - "*.zip"
+      # Icon Composer bundle; Xcode builds every icon size from it
+      - path: ../Talli.icon
     settings:
       base:
         INFOPLIST_FILE: ""
@@ -52,7 +54,7 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.finance
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
         PRODUCT_NAME: Talli
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_APPICON_NAME: Talli
         CODE_SIGN_ENTITLEMENTS: Talli.entitlements
         ENABLE_HARDENED_RUNTIME: YES
         CODE_SIGN_STYLE: Automatic

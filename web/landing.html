@@ -1,687 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="apple-itunes-app" content="app-id=6782366555">
-  <link rel="manifest" href="/manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d0c0b" media="(prefers-color-scheme: dark)">
-  <link rel="apple-touch-icon" href="/icon-192.svg">
-  <link rel="stylesheet" href="/tokens.css">
-  <title>Talli -- Benefits + grades, no bureaucracy</title>
-  <meta name="description" content="Talli gives BC residents instant access to their Self-Serve benefits data -- payments, messages, and notifications -- without the portal maze.">
-  <meta property="og:title" content="Talli -- Benefits + grades, no bureaucracy">
-  <meta property="og:description" content="Talli gives BC residents instant access to their Self-Serve benefits data -- payments, messages, and notifications -- without the portal maze.">
-  <meta property="og:url" content="https://talli.jaybulb.com">
-  <meta property="og:image" content="https://talli.jaybulb.com/og.png">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://talli.jaybulb.com/og.png">
-  <meta name="view-transition" content="same-origin">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-weight: 400;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100dvh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── Fade-up ───────────────────────────────────────── */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-    }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-      .fade-up { opacity: 1; transform: none; }
-    }
-
-    /* ── Nav ───────────────────────────────────────────── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      padding: 0 clamp(1.25rem, 5vw, 3rem);
-    }
-    nav .inner {
-      max-width: 1040px;
-      margin: 0 auto;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .wordmark {
-      font-size: 1.0625rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .wordmark span { color: var(--bulb-deep, var(--accent)); }
-
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      border-radius: 50%;
-      color: var(--text-secondary);
-      transition: color 0.3s, border-color 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
-    .theme-toggle:hover { color: var(--text); border-color: var(--text-tertiary); }
-    .theme-toggle svg { width: 14px; height: 14px; }
-
-    /* ── Page shell ────────────────────────────────────── */
-    .page {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 0 clamp(1.25rem, 5vw, 3rem);
-      padding-left: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-left));
-      padding-right: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-right));
-      padding-bottom: max(4rem, env(safe-area-inset-bottom));
-    }
-
-    /* ── Hero ──────────────────────────────────────────── */
-    /* a slow-drifting wall of the numbers the app actually shows */
-    .hero-band { position: relative; isolation: isolate; overflow: hidden; }
-    .hero-band > .hero-row { position: relative; z-index: 2; }
-    .hero-wall {
-      position: absolute; inset: -10%; z-index: 0;
-      display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px;
-      opacity: 0.3; pointer-events: none; user-select: none;
-    }
-    .wall-col { display: flex; min-width: 0; flex-direction: column; gap: 10px; }
-    .wall-col span {
-      display: block; padding: 0.5rem 0.7rem; background: var(--bg2, var(--bg));
-      border: 1px solid var(--border); border-radius: 10px;
-      font-size: 0.8rem; color: var(--text-secondary);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .wall-col.up   { animation: wall-up   var(--dur) linear infinite; }
-    .wall-col.down { animation: wall-down var(--dur) linear infinite; }
-    @keyframes wall-up   { from { transform: translateY(0); }    to { transform: translateY(-50%); } }
-    @keyframes wall-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
-    @media (prefers-reduced-motion: reduce) { .wall-col { animation: none; } }
-    @media (prefers-reduced-motion: no-preference) { .hero-wall { will-change: transform; } }
-    /* scrim: keeps the headline and the card readable in either theme */
-    .hero-band::after {
-      content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background:
-        radial-gradient(ellipse 65% 75% at 35% 45%, var(--bg) 45%, transparent 90%),
-        linear-gradient(var(--bg), transparent 25%, transparent 60%, var(--bg) 97%),
-        color-mix(in srgb, var(--bg) 55%, transparent);
-    }
-
-    .hero-row { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
-    @media (min-width: 900px) { .hero-row { grid-template-columns: 1fr 0.8fr; } .hero-row .hero { padding-bottom: clamp(4rem, 10vw, 7rem); } .hero-row .preview-wrap { margin-bottom: 0; } }
-    .hero {
-      padding: clamp(4rem, 10vw, 7rem) 0 clamp(3rem, 6vw, 5rem);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1.25rem;
-    }
-    .hero-heading {
-      font-size: clamp(2.25rem, 7vw, 3.25rem);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.1;
-      color: var(--text);
-    }
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.1875rem);
-      color: var(--text-secondary);
-      font-weight: 400;
-      line-height: 1.6;
-      max-width: 420px;
-      margin-top: -0.25rem;
-    }
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--accent-strong, var(--accent));
-      color: #fff;
-      font-family: inherit;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      text-decoration: none;
-      padding: 14px 32px;
-      border-radius: 100px;
-      border: none;
-      cursor: pointer;
-      margin-top: 0.25rem;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
-    }
-    .cta:hover { transform: translateY(-2px) scale(1.02); }
-    .cta:active { transform: translateY(0) scale(0.98); opacity: 0.9; }
-
-    /* ── App preview card ──────────────────────────────── */
-    .preview-wrap {
-      display: flex;
-      justify-content: center;
-      margin: 0 0 clamp(3.5rem, 7vw, 5rem);
-    }
-    .app-card {
-      width: 100%;
-      max-width: 380px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      background: var(--bg);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s;
-    }
-    .app-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--text-tertiary);
-    }
-
-    .card-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      margin-bottom: 6px;
-    }
-    .card-amount {
-      font-size: 44px;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .card-days {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--bulb-deep, var(--accent));
-      letter-spacing: -0.02em;
-      margin-bottom: 4px;
-    }
-    .card-date {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 14px;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      width: 90%;
-      background: var(--accent);
-      border-radius: 2px;
-    }
-
-    .streak-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--bulb-deep, var(--accent));
-      border: 1px solid var(--accent);
-      border-radius: 100px;
-      padding: 3px 10px;
-      letter-spacing: 0.01em;
-      margin-bottom: 18px;
-    }
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .stat-cell {
-      background: var(--bg);
-      padding: 14px 16px;
-    }
-    .stat-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      margin-bottom: 4px;
-    }
-    .stat-value {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: var(--text);
-    }
-
-    .chart-section { }
-    .chart-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .bar-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      flex: 1;
-    }
-    .bar {
-      width: 100%;
-      border-radius: 4px 4px 0 0;
-    }
-    .bar-label {
-      font-size: 10px;
-      color: var(--text-tertiary);
-      font-weight: 500;
-    }
-
-    /* ── Features ──────────────────────────────────────── */
-    .features {
-      margin-bottom: clamp(3.5rem, 7vw, 5rem);
-    }
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-    @media (min-width: 480px) {
-      .features-grid { grid-template-columns: repeat(3, 1fr); gap: 0; }
-    }
-    .feature {
-      padding: 1.25rem 0;
-      border-top: 1px solid var(--border);
-    }
-    @media (min-width: 480px) {
-      .feature { padding: 1.5rem 1.5rem 1.5rem 0; border-top: 1px solid var(--border); border-right: none; }
-      .feature + .feature { padding-left: 1.5rem; border-left: 1px solid var(--border); }
-    }
-    .feature-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      margin-bottom: 6px;
-    }
-    .feature-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-
-    /* ── Footer ────────────────────────────────────────── */
-    footer {
-      font-size: 0.8125rem;
-      color: var(--text-tertiary);
-      padding: 1.5rem 0 2rem;
-      border-top: 1px solid var(--border);
-    }
-    footer a {
-      color: var(--text-secondary);
-      text-decoration: underline;
-      text-decoration-color: var(--border);
-      text-underline-offset: 2px;
-      transition: opacity 0.3s;
-    }
-    footer a:hover { opacity: 0.5; }
-
-    .shot { width: 180px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-    .shot-mac { width: min(100%, 720px); border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-    .shot-dark { display: none; }
-    [data-theme="dark"] .shot-light { display: none; }
-    [data-theme="dark"] .shot-dark { display: block; }
-
-    .nav-actions { display: flex; align-items: center; gap: 12px; }
-
-    .wordmark { display: inline-flex; align-items: center; gap: 8px; }
-    .wordmark img { border-radius: 5px; display: block; }
-
-    :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
-  </style>
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Talli -- Benefits + grades, no bureaucracy">
-    <meta property="og:url" content="https://talli.jaybulb.com/">
-    <meta name="twitter:card" content="summary_large_image">
-  </head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Talli. Your BC benefits, counted.</title>
+<meta name="description" content="Talli tracks BC disability and income assistance: when the cheque lands, how much, your ministry messages, and what you can still earn. Free, on the web, iPhone, iPad, Mac and Apple Watch.">
+<meta name="apple-itunes-app" content="app-id=6782366555">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0c0b" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://talli.jaybulb.com/">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Talli">
+<meta property="og:title" content="Talli. Your BC benefits, counted.">
+<meta property="og:description" content="When the cheque lands, how much, and what you can still earn.">
+<meta property="og:url" content="https://talli.jaybulb.com/">
+<meta property="og:image" content="https://talli.jaybulb.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://talli.jaybulb.com/og.png">
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/landing.css">
+<script src="/landing.js" defer></script>
+</head>
 <body>
 
-  <!-- Nav -->
-  <nav>
-    <div class="inner">
-      <a href="/" class="wordmark"><img src="/icon.svg" alt="" width="22" height="22">talli<span>.</span></a>
-      <div class="nav-actions">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-        </button>
-      </div>
-    </div>
+<header class="nav" aria-label="Site">
+  <nav class="nav-links" aria-label="Main">
+    <a href="#features">Features</a>
+    <a href="#open">Open data</a>
   </nav>
+  <a class="nav-brand" href="#top" aria-label="Talli home"><img src="/icon.svg" alt="" width="28" height="28"><span>Talli</span></a>
+  <div class="nav-end">
+    <a class="nav-get" href="/login">Sign in</a>
+    <a class="btn btn-solid" href="https://apps.apple.com/app/id6782366555">Get the app</a>
+  </div>
+</header>
 
-  <div class="page">
+<main id="top">
+<section class="hero">
+  <div class="wrap center">
+    <p class="label">BC disability assistance, counted</p>
+    <h1>Talli</h1>
+    <p class="lead">When the cheque lands, how much, and what you can still earn. One number, one line, one action.</p>
+    <div class="cta">
+      <a class="btn btn-solid" href="/login">Sign in</a>
+      <a class="btn btn-ghost" href="https://apps.apple.com/app/id6782366555">App Store</a>
+    </div>
+    <p class="fine">Free. Web, iPhone, iPad, Mac and Apple Watch.</p>
+  </div>
 
-    <div class="hero-band">
-    <div class="hero-wall" id="heroWall" aria-hidden="true"></div>
-    <div class="hero-row">
-    <!-- Hero -->
-    <section class="hero fade-up">
-      <h1 class="hero-heading">Your BC benefits.<br>No portal maze.</h1>
-      <p class="hero-tagline">Payments, messages, and PWD status — pulled from BC Self-Serve and shown without the login hell.</p>
-      <a href="/login" class="cta">Sign in</a>
-    </section>
-
-    <!-- App preview -->
-    <div class="preview-wrap fade-up">
-      <div class="app-card">
-        <div class="card-label">Next Payment</div>
-        <div class="card-amount">$1,650</div>
-        <div class="card-days">in 23 days</div>
-        <div class="card-date">Wed, Sep 23</div>
-
-        <div class="progress-track"><div class="progress-fill"></div></div>
-        <div class="streak-badge">&#9733; 5 months on time</div>
-
-        <div class="stat-grid">
-          <div class="stat-cell">
-            <div class="stat-label">YTD Received</div>
-            <div class="stat-value">$4,950</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-label">Monthly Amount</div>
-            <div class="stat-value">$1,650</div>
-          </div>
+  <div class="demo-wrap reveal">
+    <div class="stage">
+      <div class="art stage-art" style="--img: url(art/tally.svg)" aria-hidden="true"></div>
+      <div class="app" role="application" aria-label="Talli, live. Switch tabs, tap the button.">
+        <div class="app-tabs" role="tablist">
+          <button class="app-tab" role="tab" aria-selected="true" aria-controls="p-home" id="t-home">Home</button>
+          <button class="app-tab" role="tab" aria-selected="false" aria-controls="p-status" id="t-status">Status</button>
+          <button class="app-tab" role="tab" aria-selected="false" aria-controls="p-msgs" id="t-msgs">Messages</button>
         </div>
-
-        <div class="chart-section">
-          <div class="card-label">Recent Payments</div>
-          <div class="chart-bars">
-            <div class="bar-col">
-              <div class="bar" style="height:40px;background:var(--accent);"></div>
-              <span class="bar-label">Mar</span>
-            </div>
-            <div class="bar-col">
-              <div class="bar" style="height:38px;background:var(--bg2);"></div>
-              <span class="bar-label">Feb</span>
-            </div>
-            <div class="bar-col">
-              <div class="bar" style="height:40px;background:var(--bg2);"></div>
-              <span class="bar-label">Jan</span>
-            </div>
-            <div class="bar-col">
-              <div class="bar" style="height:37px;background:var(--bg2);"></div>
-              <span class="bar-label">Dec</span>
-            </div>
-            <div class="bar-col">
-              <div class="bar" style="height:39px;background:var(--bg2);"></div>
-              <span class="bar-label">Nov</span>
-            </div>
-          </div>
+        <div class="app-pane" role="tabpanel" id="p-home" aria-labelledby="t-home">
+          <small>Next payment</small>
+          <p class="big">$1,735.50</p>
+          <p class="one" id="d-when">Wednesday, in 2 days</p>
+          <button class="act" id="d-paid" aria-pressed="false">It landed</button>
+          <div class="fold"><span>Disability assistance</span><span>$1,535.50</span></div>
+          <div class="fold"><span>Canada Disability Benefit</span><span>$200.00</span></div>
+        </div>
+        <div class="app-pane" role="tabpanel" id="p-status" aria-labelledby="t-status" hidden>
+          <small>Earnings this year</small>
+          <p class="big">$16,200</p>
+          <p class="one">left before it touches your cheque</p>
+          <div class="meter" aria-hidden="true"><b style="--w: 18%"></b></div>
+          <div class="fold"><span>Earned so far</span><span>$2,900</span></div>
+          <div class="fold"><span>Assets limit</span><span>$100,000</span></div>
+          <div class="fold"><span>Monthly report</span><span>Filed</span></div>
+        </div>
+        <div class="app-pane" role="tabpanel" id="p-msgs" aria-labelledby="t-msgs" hidden>
+          <small>Messages</small>
+          <div class="msg"><b>Your monthly report was received</b><span>Ministry &middot; Oct 6</span></div>
+          <div class="msg"><b>Payment schedule for November</b><span>Ministry &middot; Oct 1</span></div>
+          <div class="msg"><b>Bus pass renewal</b><span>Ministry &middot; Sep 24</span></div>
         </div>
       </div>
     </div>
-    </div>
-    </div>
+    <p class="demo-hint">The real Home, Status and Messages layout, with sample numbers.</p>
+  </div>
+</section>
 
-    <!-- Screenshots -->
-    <section class="screenshots fade-up" style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:48px 0;">
-      <img class="shot shot-light" src="/screenshots/01-home.png" alt="Talli Home tab">
-      <img class="shot shot-dark" src="/screenshots/01-home-dark.png" alt="Talli Home tab">
-      <img class="shot shot-light" src="/screenshots/02-reports.png" alt="Talli Reports tab">
-      <img class="shot shot-dark" src="/screenshots/02-reports-dark.png" alt="Talli Reports tab">
-      <img class="shot shot-light" src="/screenshots/03-benefits.png" alt="Talli Benefits tab">
-      <img class="shot shot-dark" src="/screenshots/03-benefits-dark.png" alt="Talli Benefits tab">
-    </section>
+<section class="band" id="features">
+  <div class="band-head">
+    <div class="art band-art" style="--img: url(art/tally.svg)" aria-hidden="true"></div>
+    <div class="band-copy reveal">
+      <p class="label">Keep the tally</p>
+      <h2>Every cheque, counted</h2>
+      <p>BC Self-Serve hides it behind a login maze. Talli reads it once and shows you what matters.</p>
+    </div>
+  </div>
+  <div class="frows">
+    <article class="frow reveal"><div class="art" style="--img: url(art/calendar.svg)" aria-hidden="true"></div><div><p class="label">Payday</p><h3>The next cheque</h3><p>The date and the amount, from your real account. A nudge if it does not land.</p></div></article>
+    <article class="frow reveal"><div class="art" style="--img: url(art/envelope.svg)" aria-hidden="true"></div><div><p class="label">Messages</p><h3>Every ministry letter</h3><p>One clean list. Read it, reply to it, never open the portal.</p></div></article>
+    <article class="frow reveal"><div class="art" style="--img: url(art/coins.svg)" aria-hidden="true"></div><div><p class="label">Earnings</p><h3>What you can still earn</h3><p>Your yearly exemption, what you have used, and what a new job would do to the cheque.</p></div></article>
+  </div>
+  <div class="cells">
+    <article class="cell reveal"><p class="label">Finder</p><h3>Benefits you are missing</h3><p>A few questions. BC and federal programs you qualify for.</p></article>
+    <article class="cell reveal"><p class="label">RDSP</p><h3>Grants and bonds</h3><p>What the government puts in, year by year, and what you leave on the table.</p></article>
+    <article class="cell reveal"><p class="label">Supplements</p><h3>When to ask</h3><p>Crisis, moving, diet and transport. What each one covers and how to ask.</p></article>
+    <article class="cell reveal"><p class="label">Reconsideration</p><h3>Denied? Push back</h3><p>The steps, the forms and the deadline, counted down.</p></article>
+    <article class="cell reveal"><p class="label">Vault</p><h3>Your papers, locked</h3><p>Documents encrypted on your device. Nobody else holds the key.</p></article>
+    <article class="cell reveal"><p class="label">Helper</p><h3>Bring someone in</h3><p>A read-only link for a caseworker or family. Turn it off any time.</p></article>
+  </div>
+</section>
 
-    <section class="screenshots fade-up" style="display:flex;justify-content:center;margin:48px 0;">
-      <img class="shot-mac shot-light" src="/screenshots/mac-dashboard-light.png" alt="Talli on macOS">
-      <img class="shot-mac shot-dark" src="/screenshots/mac-dashboard-dark.png" alt="Talli on macOS">
-    </section>
-
-    <!-- Features -->
-    <section class="features fade-up">
-      <div class="features-grid">
-        <div class="feature">
-          <div class="feature-label">Payments</div>
-          <p class="feature-desc">See your next payment date and amount instantly.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-label">Messages</div>
-          <p class="feature-desc">All BC Self-Serve messages in one clean list.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-label">Timeline</div>
-          <p class="feature-desc">Track your PWD and DTC applications step by step.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-label">Web, iPhone and Mac</div>
-          <p class="feature-desc">Native SwiftUI apps on iPhone, iPad and Mac, plus the browser. <a href="https://apps.apple.com/app/id6782366555">App Store</a>.</p>
-        </div>
-      </div>
-    </section>
-
-
-<style>
-#install-anywhere{padding:5rem 0;border-top:1px solid color-mix(in srgb, currentColor 14%, transparent);}
-#install-anywhere .xp-wrap{max-width:960px;margin:0 auto;padding:0 1.5rem;}
-#install-anywhere h2{font-size:clamp(1.6rem,3.4vw,2.4rem);margin:0 0 .6rem;letter-spacing:-.02em;}
-#install-anywhere .xp-lead{max-width:46ch;margin:0 0 2.5rem;opacity:.7;line-height:1.55;}
-#install-anywhere .xp-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
-#install-anywhere .xp-card{background:color-mix(in srgb, currentColor 4%, transparent);border:1px solid color-mix(in srgb, currentColor 14%, transparent);border-radius:12px;padding:1.25rem;display:flex;flex-direction:column;gap:.5rem;}
-#install-anywhere .xp-card h3{margin:0;font-size:1rem;letter-spacing:-.01em;}
-#install-anywhere .xp-card p{margin:0;font-size:.9rem;line-height:1.5;opacity:.7;flex:1;}
-#install-anywhere .xp-card a{margin-top:.5rem;font-size:.875rem;font-weight:500;color:var(--accent,currentColor);text-decoration:none;}
-#install-anywhere .xp-card a:hover{text-decoration:underline;}
-</style>
-
-<section id="install-anywhere">
-  <div class="xp-wrap">
-    <h2>Install it anywhere.</h2>
-    <p class="xp-lead">Talli runs on every platform, as a real app. iPhone, iPad and Mac ship through the App Store; Windows, Linux and Android get a downloadable installer built from the same codebase. There is still a web app if you would rather not install anything.</p>
-    <div class="xp-grid">
-    <div class="xp-card">
-      <h3>iPhone &amp; iPad</h3>
-      <p>A native app, not a wrapped web page.</p>
-      <a href="https://apps.apple.com/app/id6782366555">App Store &rarr;</a>
+<section class="sec" id="open">
+  <div class="wrap center">
+    <div class="reveal">
+      <i class="mark-i" aria-hidden="true"></i>
+      <p class="label">Free and open</p>
+      <h2>Open data</h2>
+      <p class="body">Pay dates, rate tables and earnings limits as plain JSON. No key, no sign-up.</p>
+      <div class="cta"><a class="btn btn-ghost" href="https://github.com/nulljosh/talli/blob/main/docs/API.md">Read the API</a></div>
     </div>
-    <div class="xp-card">
-      <h3>Mac</h3>
-      <p>Native, universal binary. Runs on Apple silicon and Intel.</p>
-      <a href="https://apps.apple.com/app/id6782366555">App Store &rarr;</a>
+    <div class="stage term-stage reveal">
+      <div class="art stage-art" style="--img: url(art/mountain.svg)" aria-hidden="true"></div>
+      <figure class="term" aria-label="The open data index">
+<pre><span class="dim">$</span> curl talli.jaybulb.com/api/open
+<span class="dim">name</span>        Talli open data
+<span class="dim">updated</span>     2026-10-02
+<span class="dim">pay-dates</span>   BC cheque issue dates
+<span class="dim">rates</span>       BC and federal rate tables and earnings limits
+<span class="dim">provinces</span>   Alberta, Ontario and BC programs
+<span class="dim">all</span>         Everything in one file</pre>
+        <figcaption>The real index, trimmed. Always check the linked official source.</figcaption>
+      </figure>
     </div>
-    <div class="xp-card">
-      <h3>Windows</h3>
-      <p>A desktop app with its own window and Start Menu entry. Download the installer &mdash; nothing else to set up, no runtime to install first.</p>
-      <a href="https://github.com/nulljosh/talli/releases/latest">Download the .msi &rarr;</a>
-    </div>
-    <div class="xp-card">
-      <h3>Android</h3>
-      <p>A real Android app, not a saved web page. Sideload the APK, or install the web app from Chrome if you would rather.</p>
-      <a href="https://github.com/nulljosh/talli/releases/latest">Download the .apk &rarr;</a>
-    </div>
-    <div class="xp-card">
-      <h3>Linux</h3>
-      <p>Debian and Ubuntu package. <code>sudo apt install ./talli.deb</code> and it shows up with the rest of your apps.</p>
-      <a href="https://github.com/nulljosh/talli/releases/latest">Download the .deb &rarr;</a>
-    </div>
-    <div class="xp-card">
-      <h3>Web</h3>
-      <p>Nothing to install. The same app, in any modern browser.</p>
-      <a href="https://talli.jaybulb.com/app">Open the web app &rarr;</a>
-    </div>
+    <div class="prods">
+      <article class="prod reveal">
+        <div class="art prod-art" style="--img: url(art/house.svg)" aria-hidden="true"></div>
+        <p class="label">Web</p><h3>Talli in the browser</h3><p>Nothing to install. Sign in with your BCeID.</p><a href="/login">Sign in &rarr;</a>
+      </article>
+      <article class="prod reveal">
+        <div class="art prod-art" style="--img: url(art/calendar.svg)" aria-hidden="true"></div>
+        <p class="label">Apple</p><h3>iPhone, Mac and Watch</h3><p>Native apps with widgets and a payday reminder.</p><a href="https://apps.apple.com/app/id6782366555">App Store &rarr;</a>
+      </article>
+      <article class="prod reveal">
+        <div class="art prod-art" style="--img: url(art/coins.svg)" aria-hidden="true"></div>
+        <p class="label">Federal</p><h3>Outside BC?</h3><p>The federal finder works anywhere in Canada.</p><a href="/federal">Open the finder &rarr;</a>
+      </article>
     </div>
   </div>
 </section>
 
-    <footer>
-      Built for BC residents. Not affiliated with the Government of British Columbia.<br>
-      &copy; 2026 Joshua Trommel &middot;
-      <a href="https://github.com/nulljosh/talli/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a> &middot;
-      <a href="https://github.com/nulljosh/talli" target="_blank" rel="noopener">GitHub</a> &middot;
-      <a href="https://github.com/nulljosh/talli/tree/main/ios" target="_blank" rel="noopener">iOS</a> &middot;
-      <a href="https://github.com/nulljosh/talli/tree/main/macos" target="_blank" rel="noopener">macOS</a> &middot;
-      <a href="https://apps.apple.com/app/id6782366555" target="_blank" rel="noopener">App Store</a> &middot;
-      <a href="https://github.com/nulljosh/talli/blob/main/docs/API.md" target="_blank" rel="noopener">API</a> &middot;
-      <a href="/lawyers.html">Legal Help</a>
-    </footer>
+<section class="sec plats" id="get">
+  <div class="wrap center">
+    <p class="label reveal">Get it</p>
+    <h2 class="reveal">On every screen</h2>
+    <p class="body reveal">Same account, same numbers, everywhere.</p>
+    <div class="plat-row">
+      <div class="reveal"><small>iOS 17 and up</small><b>iPhone</b><p>Home, Status and Messages, plus widgets and Apple Watch.</p><a class="btn btn-solid" href="https://apps.apple.com/app/id6782366555">App Store</a></div>
+      <div class="reveal"><small>macOS 14 and up</small><b>Mac</b><p>A native window and a menu bar glance.</p><a class="btn btn-solid" href="https://apps.apple.com/app/id6782366555">App Store</a></div>
+      <div class="reveal"><small>Any browser</small><b>Web</b><p>The full app. Nothing to install.</p><a class="btn btn-ghost" href="/login">Sign in</a></div>
+    </div>
   </div>
+</section>
+</main>
 
-  <script>
-    const themeToggle = document.getElementById('themeToggle');
-    const sunIcon = document.getElementById('sunIcon');
-    const moonIcon = document.getElementById('moonIcon');
+<footer class="foot">
+  <div class="foot-top">
+    <div class="foot-brand"><img src="/icon.svg" alt="" width="40" height="40"><b>Talli</b><p>Your BC benefits, counted.</p></div>
+    <nav class="foot-cols" aria-label="Footer">
+      <div><p class="label">Talli</p><a href="/login">Sign in</a><a href="#features">Features</a><a href="#open">Open data</a><a href="/brand">Brand kit</a><a href="/lawyers.html">Legal help</a></div>
+      <div><p class="label">Source</p><a href="https://github.com/nulljosh/talli">GitHub</a><a href="https://github.com/nulljosh/talli/releases">Releases</a><a href="https://github.com/nulljosh/talli/blob/main/docs/WHITEPAPER.md">Whitepaper</a><a href="https://github.com/nulljosh/talli/blob/main/docs/SECURITY.md">Security</a><a href="/privacy">Privacy</a></div>
+      <div><p class="label">More</p><a href="mailto:trommatic@icloud.com?subject=Talli">Feedback</a><a href="https://jaybulb.com">More apps</a><a href="#top">Back to top</a></div>
+    </nav>
+  </div>
+  <div class="word-band" aria-hidden="true"><canvas class="word-canvas"></canvas></div>
+  <p class="legal">&copy; 2026 Joshua Trommel &middot; <a href="https://github.com/nulljosh/talli/blob/main/LICENSE">MIT License</a> &middot; Not affiliated with the Government of British Columbia</p>
+</footer>
 
-    const getPreferredTheme = () => {
-      const saved = localStorage.getItem('theme');
-      if (saved) return saved;
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    };
-
-    const setTheme = (theme, animate, persist = true) => {
-      const apply = () => {
-        if (theme === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          sunIcon.style.display = 'none';
-          moonIcon.style.display = 'block';
-        } else {
-          document.documentElement.setAttribute('data-theme', 'light');
-          sunIcon.style.display = 'block';
-          moonIcon.style.display = 'none';
-        }
-        if (persist) localStorage.setItem('theme', theme);
-      };
-
-      if (animate && document.startViewTransition) {
-        document.startViewTransition(apply);
-      } else {
-        apply();
-      }
-    };
-
-    setTheme(getPreferredTheme(), false, false);
-
-    themeToggle.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-      setTheme(current === 'dark' ? 'light' : 'dark', true);
-    });
-
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light', true, false);
-      }
-    });
-
-    // Hero wallpaper: the kind of lines the dashboard shows, drifting slowly.
-    (function () {
-      const lines = [
-        'Payment posted  $1,650', 'Next payment  Sep 23', 'Reporting window  Sep 1-5',
-        'Monthly report  filed', 'PWD status  in review', 'Message from Ministry',
-        'YTD received  $4,950', 'Disability assistance  $1,483', 'Transportation  $52',
-        'Canada Disability Benefit', 'RDSP grant  matched', 'DTC certificate  approved',
-        'Aug 20  $1,650', 'Jul 17  $1,650', 'Jun 18  $1,650', 'May 21  $1,650',
-        'Streak  5 months on time', 'Shelter allowance  $500', 'Support allowance  $983',
-        'Earnings exemption  $1,200', 'Report due in 4 days', 'Bus pass  active',
-        'Medical coverage  active', 'Nutritional supplement', 'Crisis supplement  none',
-        'Balance owing  $0', 'T2201 submitted', 'Direct deposit  verified'
-      ];
-      for (let i = lines.length - 1; i > 0; i--) {  // shuffle so the wall differs each visit
-        const j = Math.floor(Math.random() * (i + 1));
-        [lines[i], lines[j]] = [lines[j], lines[i]];
-      }
-      const wall = document.getElementById('heroWall');
-      const cols = Math.max(3, Math.min(7, Math.ceil(window.innerWidth / 220)));
-      const per = Math.max(4, Math.floor(lines.length / cols));
-      for (let c = 0; c < cols; c++) {
-        const col = document.createElement('div');
-        col.className = 'wall-col ' + (c % 2 ? 'down' : 'up');
-        col.style.setProperty('--dur', (70 + c * 11) + 's');
-        const slice = lines.slice(c * per, (c + 1) * per);
-        slice.concat(slice).forEach(text => {  // doubled, so the loop is seamless
-          const el = document.createElement('span');
-          el.textContent = text;
-          col.appendChild(el);
-        });
-        wall.appendChild(col);
-      }
-    })();
-
-    // Subtle parallax on the hero number wall, rAF-throttled, off under reduced motion.
-    (function () {
-      const wall = document.getElementById('heroWall');
-      if (!wall || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      let ticking = false;
-      function apply() {
-        wall.style.transform = 'translateY(' + (window.scrollY * 0.08) + 'px)';
-        ticking = false;
-      }
-      window.addEventListener('scroll', () => {
-        if (!ticking) { requestAnimationFrame(apply); ticking = true; }
-      }, { passive: true });
-    })();
-
-    // FadeUp observer
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.fade-up').forEach((el, i) => {
-      el.style.transitionDelay = `${i * 0.08}s`;
-      observer.observe(el);
-    });
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', async () => {
-        try {
-          await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-        } catch (error) {
-          console.error('Service worker registration failed:', error);
-        }
-      });
-    }
-  </script>
+<script src="/footer-band.js" defer></script>
 </body>
 </html>

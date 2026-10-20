@@ -1,6 +1,6 @@
 # Talli brand kit and design system
 
-Talli keeps track of benefits. The mark is a tally.
+Talli keeps a tally of your benefits: what lands, when, and what you can still earn.
 
 ## The mark
 One bold flat white glyph on an accent gradient tile. No text, no outline, no emblem.
@@ -13,8 +13,8 @@ One bold flat white glyph on an accent gradient tile. No text, no outline, no em
 ## Colour
 | Role | Value |
 |---|---|
-| Accent | `#2150c8` |
-| Gradient top | `#5c9ef2` |
+| Accent | `#2F6FB0` |
+| Gradient top | `#5B9BD5` |
 | Text | `#1d1d1f` light, `#f5f5f7` dark |
 | Background | `#ffffff` light, `#000000` dark |
 | Surface | `#f5f5f7` light, `#1c1c1e` dark |

@@ -8,7 +8,7 @@ attributes:
 settings:
   DEVELOPMENT_TEAM: QMM486NPYC
   SWIFT_VERSION: "6.0"
-  MARKETING_VERSION: "10.0.0"
+  MARKETING_VERSION: "4.0.0"
   CURRENT_PROJECT_VERSION: "202610021704"
 targets:
   Talli:
@@ -41,6 +41,8 @@ targets:
           - ExportOptions.plist
           - ci_scripts
           - scripts
+      # Icon Composer bundle; Xcode builds every icon size from it
+      - path: ../Talli.icon
     settings:
       base:
         INFOPLIST_FILE: Info.plist
@@ -108,7 +110,7 @@ targets:
       INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.heyitsmejosh.tally
       INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: YES
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.watchkitapp
-      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      ASSETCATALOG_COMPILER_APPICON_NAME: Talli
       PRODUCT_NAME: TalliWatch
       CODE_SIGN_STYLE: Automatic
   TalliTests:

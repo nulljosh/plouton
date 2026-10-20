@@ -28,24 +28,18 @@
       z-index: 10;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
-      padding: 0 clamp(1.25rem, 5vw, 3rem);
+      padding: 0 clamp(1rem, 5vw, 3rem);
     }
     nav .inner {
       max-width: 640px;
       margin: 0 auto;
-      height: 52px;
+      height: 56px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .wordmark {
-      font-size: 1.0625rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .wordmark span { color: var(--bulb-deep, var(--accent)); }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 500; font-size: 18px; letter-spacing: .1em; text-transform: uppercase; color: var(--text); text-decoration: none; }
+    .wordmark img { width: 28px; height: 28px; border-radius: 22.5%; }
 
     .theme-toggle {
       background: none;
@@ -68,9 +62,9 @@
     .page {
       max-width: 640px;
       margin: 0 auto;
-      padding: 0 clamp(1.25rem, 5vw, 3rem);
-      padding-left: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-left));
-      padding-right: max(clamp(1.25rem, 5vw, 3rem), env(safe-area-inset-right));
+      padding: 0 clamp(1rem, 5vw, 3rem);
+      padding-left: max(clamp(1rem, 5vw, 3rem), env(safe-area-inset-left));
+      padding-right: max(clamp(1rem, 5vw, 3rem), env(safe-area-inset-right));
       padding-bottom: max(4rem, env(safe-area-inset-bottom));
     }
 
@@ -210,7 +204,7 @@
 
   <nav>
     <div class="inner">
-      <a href="/" class="wordmark">talli<span>.</span></a>
+      <a href="/" class="wordmark" aria-label="Talli home"><img src="/icon.svg" alt="" width="28" height="28"><span>Talli</span></a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"/>

@@ -1766,7 +1766,6 @@ function BenniesSection({dark, yearIncome}) {
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',background:t.bg2,borderRadius:10,border:`1px solid ${t.border}`}}>
           <span style={{fontSize:13,color:t.text,fontWeight:500}}>DTC</span>{badge(dtc?.status)}
         </div>
-        {dtc?.status!=='approved'&&<div style={{marginTop:12}}><ApproveButton route="dtc-profile" t={t} onDone={async()=>setDtc({...dtc,status:'approved'})}/></div>}
       </div>
 
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:1,marginBottom:28,border:`1px solid ${t.border}`,borderRadius:10,overflow:'hidden'}}>
@@ -1858,21 +1857,7 @@ function BenniesSection({dark, yearIncome}) {
 // ════════════════════════════════════════════════════
 // STATUS TAB
 // ════════════════════════════════════════════════════
-// The ministry and CRA decisions are not scraped; the person records them. One tap, one POST.
-function ApproveButton({route, t, onDone}) {
-  const [busy, setBusy] = useState(false);
-  const approve = async () => {
-    setBusy(true);
-    try {
-      const r = await fetch('/api/' + route, {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({status:'approved'})});
-      if (r.ok) await onDone();
-    } catch (e) { /* stays unapproved, tap again */ }
-    setBusy(false);
-  };
-  return <button onClick={approve} disabled={busy} style={{minHeight:48,padding:'0 24px',borderRadius:999,border:'none',background:t.accent,color:'#fff',fontSize:15,fontWeight:600,fontFamily:'inherit',cursor:busy?'default':'pointer',opacity:busy?0.6:1,marginBottom:16,WebkitTapHighlightColor:'transparent'}}>{busy ? 'Saving...' : 'Mark approved'}</button>;
-}
-
-function StatusTab({dark, onRefresh, yearIncome, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
+function StatusTab({dark, yearIncome, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, skn, onSubmitReport, onPwdResubmit, reportMonths, username, pinSet, onSetPin}) {
   const t = tk(dark);
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -1932,7 +1917,6 @@ function StatusTab({dark, onRefresh, yearIncome, pwdApproved, pwdMedicalDone, pw
       <Fold dark={dark} title="My applications" summary={'PWD '+(isDenied?'denied':pwdApproved?'approved':pwdMedicalDone?'with the ministry':'in review')+', RDSP, Canada Disability Benefit'} defaultOpen={isDenied}>
       <Fold dark={dark} title="PWD application" summary={isDenied?'Denied':pwdApproved?'Approved':pwdMedicalDone?'With the ministry':'Medical review in progress'} defaultOpen={isDenied}>
       <div style={{marginBottom:28}}>
-        {!pwdApproved&&!isDenied&&<ApproveButton route="pwd-profile" t={t} onDone={onRefresh}/>}
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>PWD Application</div>
         <div style={{borderLeft:`1.5px solid ${t.border}`,marginLeft:5,paddingLeft:18}}>
           {steps.map((s,i)=>(
@@ -1988,7 +1972,6 @@ function StatusTab({dark, onRefresh, yearIncome, pwdApproved, pwdMedicalDone, pw
 
       <Fold dark={dark} title="Canada Disability Benefit" summary={({pending:'Not applied',applied:'Applied',under_review:'Under review',approved:'Approved',rejected:'Not approved',funded:'Paying'})[cdbStatus]||'Not applied'}>
       <div style={{marginBottom:28}}>
-        {cdbStatus!=='approved'&&cdbStatus!=='funded'&&<ApproveButton route="cdb-profile" t={t} onDone={onRefresh}/>}
         <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:t.muted,marginBottom:16}}>Canada Disability Benefit</div>
         {cdbStatus!=='pending'&&(
           <div style={{background:t.accentBg,border:`1px solid ${t.accent}30`,borderRadius:12,padding:'12px 14px',marginBottom:16,display:'flex',alignItems:'center',gap:10}}>
@@ -2321,7 +2304,7 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
       </div>
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} onAddEarnings={onAddEarnings} assets={assets} onAddAssets={onAddAssets} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
-      {tab==='status'   &&<StatusTab   dark={dark} onRefresh={onRefresh} yearIncome={yearIncome} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
+      {tab==='status'   &&<StatusTab   dark={dark} yearIncome={yearIncome} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}
       {tab==='messages' &&<MessagesTab dark={dark} messages={messages} readIds={readIds} onRead={onRead} onRefresh={onRefresh}/>}
       {tab==='settings' &&<SettingsTab dark={dark} username={username} avatarUrl={avatarUrl} onAvatarBroken={onAvatarBroken} onAvatarRefresh={doRefresh} refreshing={refreshing} avatarError={avatarError} setAvatarError={setAvatarError} onLogout={onLogout}/>}
 
@@ -2351,12 +2334,12 @@ function App() {
   const [messages,    setMessages]    = useState([]);
   const [pwdApproved, setPwdApproved] = useState(false);
   const [pwdMedicalDone, setPwdMedicalDone] = useState(false);
-  const [pwdStatus, setPwdStatus] = useState('applied');
+  const [pwdStatus, setPwdStatus] = useState('approved');
   const [pwdDeniedDate, setPwdDeniedDate] = useState(null);
   const [rdspStatus, setRdspStatus] = useState('pending');
   const [rdspAccountOpenedDate, setRdspAccountOpenedDate] = useState(null);
   const [rdspAccountNumber, setRdspAccountNumber] = useState(null);
-  const [cdbStatus, setCdbStatus] = useState('pending');
+  const [cdbStatus, setCdbStatus] = useState('approved');
   const [cdbAppliedDate, setCdbAppliedDate] = useState(null);
   const [cdbApprovalDate, setCdbApprovalDate] = useState(null);
   const [cdbMonthlyAmount, setCdbMonthlyAmount] = useState(null);
@@ -2435,12 +2418,12 @@ function App() {
       }).catch(()=>{});
       setPwdApproved(json.uiConfig?.pwdApproved||false);
       setPwdMedicalDone(json.uiConfig?.pwdMedicalDone||false);
-      setPwdStatus(json.uiConfig?.pwdStatus||'applied');
+      setPwdStatus(json.uiConfig?.pwdStatus||'approved');
       setPwdDeniedDate(json.uiConfig?.pwdDeniedDate||null);
       setRdspStatus(json.uiConfig?.rdspStatus||'pending');
       setRdspAccountOpenedDate(json.uiConfig?.rdspAccountOpenedDate||null);
       setRdspAccountNumber(json.uiConfig?.rdspAccountNumber||null);
-      setCdbStatus(json.uiConfig?.cdbStatus||'pending');
+      setCdbStatus(json.uiConfig?.cdbStatus||'approved');
       setCdbAppliedDate(json.uiConfig?.cdbAppliedDate||null);
       setCdbApprovalDate(json.uiConfig?.cdbApprovalDate||null);
       setCdbMonthlyAmount(json.uiConfig?.cdbMonthlyAmount||null);

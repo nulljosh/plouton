@@ -12,6 +12,8 @@
   },
   "extra": "A $100 Work-Related Benefit is added in months you earn. Talli does not count it.",
   "paid": "Monthly, near the end of the month for the month ahead.",
+  "payDates": ["2025-12-22", "2026-01-30", "2026-02-27", "2026-03-31", "2026-04-30", "2026-05-29", "2026-06-30", "2026-07-31", "2026-08-31", "2026-09-29", "2026-10-30", "2026-11-30"],
+  "payments": "https://www.ontario.ca/page/ontario-disability-support-program",
   "apply": "https://www.ontario.ca/page/ontario-disability-support-program",
   "confidence": "official link, amounts from news and benefit guides: check the official page",
   "sources": [

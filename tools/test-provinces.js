@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { PROVINCES, getProvince, listProvinces, monthlyDeduction, describeRule } = require('../src/programs/provinces');
+const { PROVINCES, getProvince, listProvinces, nextPayDate, monthlyDeduction, describeRule } = require('../src/programs/provinces');
 const { deriveWhatIf } = require('../src/programs/whatif');
 
 let passed = 0, failed = 0;
@@ -20,6 +20,31 @@ test('every province file is complete and its tiers make sense', () => {
     assert.ok(!JSON.stringify(p).includes('—'), `${p.code} has an em dash`);
     for (const url of p.sources) assert.ok(url.startsWith('https://'));
   }
+});
+
+test('AB and ON pay dates are official issue dates: ISO, ascending, on weekdays', () => {
+  for (const code of ['ab', 'on']) {
+    const dates = PROVINCES[code].payDates;
+    assert.ok(dates.length >= 12, code);
+    dates.forEach((d, i) => {
+      assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(d), `${code} ${d}`);
+      if (i) assert.ok(dates[i - 1] < d, `${code} ascends at ${d}`);
+      const day = new Date(`${d}T12:00:00`).getDay();
+      assert.ok(day > 0 && day < 6, `${code} ${d} is a weekday`);
+    });
+  }
+});
+
+test('nextPayDate finds the next issue date per province, and null past the list', () => {
+  assert.strictEqual(nextPayDate('ab', now), '2026-10-27');
+  assert.strictEqual(nextPayDate('ON', now), '2026-10-30');
+  assert.strictEqual(nextPayDate('bc', now), '2026-10-21');
+  assert.strictEqual(nextPayDate('on', new Date(2026, 9, 30)), '2026-10-30', 'payday itself counts');
+  assert.strictEqual(nextPayDate('on', new Date(2026, 11, 1)), null, 'ODSP December 2026 is not published yet');
+  assert.strictEqual(nextPayDate('xx', now), null);
+  const listed = listProvinces(now).find((p) => p.code === 'ab');
+  assert.strictEqual(listed.nextPayDate, '2026-10-27');
+  assert.strictEqual(listed.payDates.length, PROVINCES.ab.payDates.length);
 });
 
 test('getProvince is forgiving about case and strict about unknowns', () => {

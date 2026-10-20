@@ -21,7 +21,7 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Google Play listing, free.
 
 ## 7.0 More provinces
-- [ ] Alberta AISH and Ontario ODSP as first-class programs: cheque dates, earnings exemptions, report windows.
+- [ ] Alberta AISH and Ontario ODSP as first-class programs: cheque dates, earnings exemptions, report windows. Cheque dates in: official 2026 schedules in `data/provinces`, `nextPayDate`, on `/api/provinces` and open data.
 - [ ] Province picked at sign-in, rules tested per province like BC.
 
 ## 8.0 Reminders that matter

@@ -209,4 +209,7 @@ function deriveAssets(assetsProfile) {
   return { counted, exempt, limit: ASSET_LIMIT, left, over: counted > ASSET_LIMIT };
 }
 
-module.exports = { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveYearReview, deriveEarnings, EARNINGS_EXEMPTION, ASSET_LIMIT, deriveAssets };
+// The cheque as people read it: "$1,260" for whole dollars, "$1,735.50" with cents (never "$1,735.5").
+const moneyText = (n) => '$' + n.toLocaleString('en-CA', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 });
+
+module.exports = { moneyText, PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveYearReview, deriveEarnings, EARNINGS_EXEMPTION, ASSET_LIMIT, deriveAssets };

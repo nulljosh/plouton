@@ -74,6 +74,12 @@ t('portal amount beats the default rate, not a recorded one', () => {
   assert.strictEqual(deriveIncome({}, {}, now, null, null).pwdMonthly, DEFAULT_MONTHLY_RATES.pwd);
 });
 
+t('the cheque reads with cents or none, never one decimal', () => {
+  const { moneyText } = require('../src/programs/profiles');
+  assert.strictEqual(moneyText(1735.5), '$1,735.50');
+  assert.strictEqual(moneyText(1260), '$1,260');
+});
+
 t('earnings exemption: this year only, flags going over', () => {
   const { deriveEarnings } = require('../src/programs/profiles');
   const e = deriveEarnings({ entries: [{ date: '2026-03-01', amount: 1000 }, { date: '2025-12-30', amount: 9999 }] }, new Date(2026, 9, 2));

@@ -36,8 +36,8 @@ right even offline, and the `talli` CLI can show it with no account at all.
   the public page. Polling goes through `visibilityInterval()`, which stops when the tab is hidden.
 - **Server**: an Express app (`src/api.js`) running on Cloudflare Workers (`worker/index.mjs`), with Workers KV
   for sessions, paid months and read state. Deploy is `npm run deploy`; a git push deploys nothing.
-- **Native**: SwiftUI on iOS 17 and macOS 14 and up, Liquid Glass on 26. Three tabs everywhere (a glass nav bar on
-  Mac). `HeroAmountView` draws the amount on both.
+- **Native**: SwiftUI on iOS 17 and macOS 14 and up, Liquid Glass on 26. Four tabs everywhere: Home, Status, Messages and
+  Settings (a glass nav bar on Mac). `HeroAmountView` draws the amount on both.
 - **Terminal**: `bin/talli.js`, no dependencies. It keeps only a read-only widget token, never the password.
 - **Languages**: one master string file builds the web bundle and the Xcode String Catalog in English, French,
   Chinese and Punjabi.

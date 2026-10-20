@@ -28,7 +28,7 @@ final class MacScreenshot: XCTestCase {
         sleep(2)
         let suffix = dark ? "-dark" : ""
         save(app, "1-main" + suffix)
-        for (i, page) in ["Status", "Messages"].enumerated() {
+        for (i, page) in ["Status", "Messages", "Settings"].enumerated() {
             let item = app.buttons[page].firstMatch
             guard item.waitForExistence(timeout: 5) else { continue }
             item.click()

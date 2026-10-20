@@ -18,7 +18,7 @@ Talli helps people in BC track and manage their disability benefits. It pulls a 
 |---|---|
 | `web/landing.html` | Public marketing page. Hero, feature list, app links. Theme toggle, View Transitions API. |
 | `web/login.html` | Sign-in form. Username/password OR OAuth redirect to BC. Theme toggle. Redirects to unified on success. |
-| `web/unified.html` | Main dashboard. Three tabs: Home (the next cheque, Mark as paid, a Paydays calendar with the next six cheque days from `PAY_SCHEDULE`, then Details), Status (approved summary, tools, timelines) and Messages. Settings is a sheet from the avatar. Handles offline state, notifications and theme. 2633 lines. |
+| `web/unified.html` | Main dashboard. Three tabs: Home (the next cheque, Mark as paid, a Paydays calendar with the next six cheque days from `PAY_SCHEDULE`, then Details), Status (approved summary, tools, timelines), Messages and Settings (the avatar, account, sign out). Handles offline state, notifications and theme. 2633 lines. |
 | `web/screen.html` | Benefits eligibility screener. Multi-step questionnaire that guides user through questions (income, household, disability type) and outputs matched benefits. Saves answers to localStorage. |
 | `web/dca.html` | Dollar-Cost Averaging calculator with Chart.js visualization. For RDSP investment planning. Standalone tool. |
 | `web/lawyers.html` | Directory of disability lawyers in Canada. Filter by province/category. Reads from inline data. |
@@ -67,7 +67,7 @@ Core business logic: scraper, auth, session management, program schemas, data pa
 | File | What it owns |
 |---|---|
 | `ios/TallyApp.swift` | Main app entry. Instantiates AppState, wraps in environment, sets theme preference. |
-| `ios/ContentView.swift` | Root UI shell. AuthenticatedTabShell vs LoginScreen. Splash screen, offline/stale banners. TabView with Home, Status and Messages, each tab owning its NavigationStack. Settings is a sheet from the avatar. |
+| `ios/ContentView.swift` | Root UI shell. AuthenticatedTabShell vs LoginScreen. Splash screen, offline/stale banners. TabView with Home, Status, Messages and Settings, each tab owning its NavigationStack. |
 
 ### State & API
 

@@ -310,6 +310,7 @@ const TABS = [
   {id:'home',     label:'Home',     icon:Icon.home},
   {id:'status',   label:'Status',   icon:Icon.status},
   {id:'messages', label:'Messages', icon:Icon.messages},
+  {id:'settings', label:'Settings', icon:Icon.settings},
 ];
 
 // Hold a tab for HOLD_MS to run its action: Messages marks everything read, Home refreshes. The click that follows the hold is swallowed.
@@ -2332,7 +2333,7 @@ function SettingsTab({dark, username, avatarUrl, onAvatarRefresh, refreshing, av
 // ════════════════════════════════════════════════════
 // SCREEN SHELL
 // ════════════════════════════════════════════════════
-const TAB_ORDER = ['home','status','messages'];
+const TAB_ORDER = ['home','status','messages','settings'];
 const urlParam = (k) => new URLSearchParams(window.location.search).get(k);
 
 function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, assets, onAddAssets, daysUntil, paymentDate, payDateObj, paid, onPaidChange, messages, readIds, onRead, onRefresh, pwdApproved, pwdMedicalDone, pwdStatus, pwdDeniedDate, rdspStatus, rdspAccountOpenedDate, rdspAccountNumber, cdbStatus, cdbAppliedDate, cdbApprovalDate, cdbMonthlyAmount, cdbRetroactiveEligible, cgeb, username, onLogout, avatarUrl, onAvatarClick, onAvatarBroken, avatarError, setAvatarError, skn, reportMonths, onMarkFiled, onPwdResubmitted, pinSet, setPinSet, showPinSheet, setShowPinSheet}) {
@@ -2370,21 +2371,10 @@ function Screen({dark, amount, yearIncome, yearReview, earnings, onAddEarnings, 
     return () => window.removeEventListener('keydown', onKey);
   }, [onRefresh]);
   const unread=tab==='messages' ? 0 : messages.filter(m=>m.unread && !readIds[m.id]).length;
-  const initial=(username||'J').slice(0,1).toUpperCase();
 
   return (
     <div style={{position:'relative',display:'flex',flexDirection:'column',height:'100%',width:'100%',background:t.bg,color:t.text}} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <div style={{height:'max(env(safe-area-inset-top,0px),16px)',flexShrink:0}}/>
-
-      {/* Header */}
-      <div style={{padding:'4px 20px 0',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-        <button onClick={()=>setTab('settings')} title="Settings" style={{width:32,height:32,borderRadius:'50%',background:avatarUrl?'transparent':t.accent,boxShadow:`0 0 0 1px ${t.border2}`,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',border:'none',cursor:'pointer',WebkitTapHighlightColor:'transparent',padding:0,animation:refreshing?'spin 0.8s linear infinite':'none'}}>
-          {avatarUrl
-            ? <img src={avatarUrl} width={32} height={32} style={{display:'block',borderRadius:'50%',objectFit:'cover'}} alt="avatar" onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex';onAvatarBroken&&onAvatarBroken();}} />
-            : null}
-          <span style={{fontSize:11,fontWeight:700,color:'#fff',letterSpacing:'0.02em',display:avatarUrl?'none':'flex',alignItems:'center',justifyContent:'center',width:'100%',height:'100%',background:t.accent,borderRadius:'50%'}}>{initial}</span>
-        </button>
-      </div>
 
       {tab==='home'     &&<HomeTab     dark={dark} amount={amount} yearIncome={yearIncome} yearReview={yearReview} earnings={earnings} onAddEarnings={onAddEarnings} assets={assets} onAddAssets={onAddAssets} daysUntil={daysUntil} paymentDate={paymentDate} paid={paid} onPaidChange={onPaidChange} reportMonths={reportMonths} onSubmitReport={()=>setShowSubmit(true)} onMarkFiled={onMarkFiled} pwdApproved={pwdApproved}/>}
       {tab==='status'   &&<StatusTab   dark={dark} yearIncome={yearIncome} pwdApproved={pwdApproved} pwdMedicalDone={pwdMedicalDone} pwdStatus={pwdStatus} pwdDeniedDate={pwdDeniedDate} rdspStatus={rdspStatus} rdspAccountOpenedDate={rdspAccountOpenedDate} rdspAccountNumber={rdspAccountNumber} cdbStatus={cdbStatus} cdbAppliedDate={cdbAppliedDate} cdbApprovalDate={cdbApprovalDate} cdbMonthlyAmount={cdbMonthlyAmount} cdbRetroactiveEligible={cdbRetroactiveEligible} cgeb={cgeb} skn={skn} onSubmitReport={()=>setShowSubmit(true)} onPwdResubmit={()=>setShowPwdResubmit(true)} reportMonths={reportMonths} username={username} pinSet={pinSet} onSetPin={()=>setShowPinSheet(true)}/>}

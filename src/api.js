@@ -31,7 +31,7 @@ const { deriveMissedPayment } = require('./programs/missed');
 const { deriveSupplements, cleanSupplements } = require('./programs/supplements');
 const { deriveRdsp, cleanRdsp } = require('./programs/rdsp');
 const { findBenefits, prefill: prefillFinder } = require('./programs/finder');
-const { PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
+const { moneyText, PROFILE_PROGRAMS, DEFAULT_MONTHLY_RATES, deriveIncome, deriveEarnings, deriveAssets, deriveYearReview } = require('./programs/profiles');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -2620,7 +2620,7 @@ function extractMobileData(scraperResult, income = null, earnings = null, assets
   // Without this the native dashboards showed $1060 while their own Benefits tab
   // said $1,650, off by exactly the CDB.
   const derivedAmount = income
-    ? `$${income.totalMonthly.toLocaleString('en-CA')}`
+    ? moneyText(income.totalMonthly)
     : null;
 
   const nextDate = nextPaymentDate(new Date(), () => log('[PAYDATE] Cheque issue schedule exhausted -- add the next year from gov.bc.ca'));

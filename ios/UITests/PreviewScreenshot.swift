@@ -21,21 +21,14 @@ final class PreviewScreenshot: XCTestCase {
         }
         shoot("01-Home")
 
-        // The three tabs, then Settings, which is a sheet from the avatar on Home.
-        for (index, name) in ["Status", "Messages"].enumerated() {
+        // The other three tabs: Status, Messages, Settings.
+        for (index, name) in ["Status", "Messages", "Settings"].enumerated() {
             let button = app.tabBars.buttons[name]
             if button.waitForExistence(timeout: 5) {
                 button.tap()
                 sleep(2)
                 shoot("0\(index + 2)-\(name)")
             }
-        }
-        app.tabBars.buttons["Home"].tap()
-        let avatar = app.buttons["Settings"]
-        if avatar.waitForExistence(timeout: 5) {
-            avatar.tap()
-            sleep(2)
-            shoot("04-Settings")
         }
     }
 

@@ -16,28 +16,17 @@ struct MacContentView: View {
 
 private struct AuthenticatedShell: View {
     @Environment(MacAppState.self) private var appState
-    @State private var showSettings = false
 
     var body: some View {
         @Bindable var state = appState
 
-        // A floating glass nav bar, the same three tabs as the web and iPhone. Cmd-1/2/3 switch.
+        // A floating glass nav bar, the same four tabs as the web and iPhone. Cmd-1 to 4 switch.
         NavigationStack {
             detailView
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .safeAreaInset(edge: .bottom) { navBar }
         }
-        .sheet(isPresented: $showSettings) {
-            MacSettingsView()
-                .frame(minWidth: 420, minHeight: 360)
-        }
         .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button { showSettings = true } label: {
-                    Image(systemName: "gearshape")
-                }
-                .help("Settings")
-            }
             ToolbarItem(placement: .automatic) {
                 Button {
                     Task { await appState.refresh() }
@@ -90,6 +79,8 @@ private struct AuthenticatedShell: View {
             MacBenefitsView()
         case .messages:
             MacMessagesView()
+        case .settings:
+            MacSettingsView()
         }
     }
 }

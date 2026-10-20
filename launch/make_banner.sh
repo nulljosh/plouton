@@ -11,7 +11,8 @@ BAND='#2F6FB0' INK='#a9cdef'
 
 # One row of six glyph silhouettes, twice over, so a pan of one row loops.
 for n in tally coins calendar envelope house mountain; do
-  magick -background none -density 1200 web/art/$n.svg -resize ${G}x${G} -gravity center -extent ${CELL}x${H} $TMP/$n.png
+  # rsvg, not ImageMagick's own SVG reader: that one drops <mask>, which blanks the tally and the envelope
+  rsvg-convert -w $G -h $G web/art/$n.svg | magick - -background none -gravity center -extent ${CELL}x${H} $TMP/$n.png
 done
 magick $TMP/tally.png $TMP/coins.png $TMP/calendar.png $TMP/envelope.png $TMP/house.png $TMP/mountain.png +append $TMP/row.png
 magick $TMP/row.png $TMP/row.png +append -alpha extract $TMP/mask.png
@@ -22,7 +23,8 @@ magick -size 1x$PITCH xc:none -fill "$INK" -draw "rectangle 0,0 0,$((LINE - 1))"
   -size ${SW}x$H tile:mpr:t $TMP/thick.png
 magick -size 1x$PITCH xc:none -fill "$INK" -draw "rectangle 0,0 0,1" -write mpr:f +delete \
   -size ${SW}x$H tile:mpr:f -channel A -evaluate multiply 0.22 +channel $TMP/faint.png
-magick $TMP/thick.png $TMP/mask.png -compose CopyOpacity -composite $TMP/glyphs.png
+# DstIn keeps the rules' own alpha; CopyOpacity would make the gaps between rules opaque black
+magick $TMP/thick.png \( $TMP/mask.png -alpha copy \) -compose DstIn -composite $TMP/glyphs.png
 magick -size ${SW}x$H xc:"$BAND" $TMP/faint.png -composite $TMP/glyphs.png -composite $TMP/strip.png
 
 ffmpeg -y -loglevel error -loop 1 -framerate 30 -i $TMP/strip.png -t $SECS \

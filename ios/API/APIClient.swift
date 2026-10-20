@@ -169,13 +169,9 @@ final class APIClient: @unchecked Sendable {
         try await send(path: "api/profile", responseType: ProfileResponse.self)
     }
 
-    func uploadAvatar(svgBase64: String) async throws {
-        try await send(
-            path: "api/avatar",
-            method: "POST",
-            body: AvatarUploadRequest(svgBase64: svgBase64),
-            responseType: AvatarUploadResponse.self
-        )
+    /// The server picks the next portrait for this user and returns where it lives.
+    func regenerateAvatar() async throws -> String? {
+        try await send(path: "api/avatar", method: "POST", responseType: AvatarResponse.self).avatarUrl
     }
 
     func benefitFinder(answers: [String: [String]]?) async throws -> BenefitFinder {
@@ -395,11 +391,7 @@ struct ProfileResponse: Decodable {
     let pinSet: Bool?
 }
 
-private struct AvatarUploadRequest: Encodable {
-    let svgBase64: String
-}
-
-private struct AvatarUploadResponse: Decodable {
+private struct AvatarResponse: Decodable {
     let ok: Bool?
     let avatarUrl: String?
 }

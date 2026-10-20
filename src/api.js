@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const crypto = require('crypto');
+const { avatarFor } = require('./avatar');
 const rateLimit = require('express-rate-limit');
 const blob = require('./_blob');
 // src/scraper.js is Puppeteer, and it reads __dirname at import time -- neither
@@ -1888,10 +1889,11 @@ app.get('/api/profile', requireAuth, async (req, res) => {
   try {
     const userId = req.session?.userId;
     const profile = await loadUserBlob(userId, 'profile', {});
+    const avatarUrl = await ensureAvatar(userId, profile).catch(() => profile.avatarUrl || null);
     res.json({
       username: req.session.bceidUsername,
       skn: profile.skn || null,
-      avatarUrl: profile.avatarUrl || null,
+      avatarUrl,
       pinSet: !!(profile.encryptedPin),
     });
   } catch (err) {
@@ -2394,47 +2396,41 @@ app.post('/api/benefit-finder', requireAuth, async (req, res) => {
   }
 });
 
-// Avatar -- pixel art SVG stored in Vercel Blob
+// Avatar -- a Greek-god portrait from web/avatars, picked per user (src/avatar.js).
+// Avatars saved before this were random node graphs in the blob store; they get replaced once.
+async function ensureAvatar(userId, profile) {
+  if (profile.avatarUrl && profile.avatarStyle === 'portrait') return profile.avatarUrl;
+  const stale = profile.avatarUrl && profile.avatarUrl.startsWith('/api/blob/') ? profile.avatarUrl : null;
+  profile.avatarUrl = avatarFor(userId, profile.avatarSeed || 0);
+  profile.avatarStyle = 'portrait';
+  profile.avatarUpdatedAt = new Date().toISOString();
+  await saveUserBlob(userId, 'profile', profile);
+  // Delete the old blob only after the new URL is durably saved.
+  if (stale) blob.del(stale).catch(() => {});
+  return profile.avatarUrl;
+}
+
 app.get('/api/avatar', requireAuth, async (req, res) => {
   try {
     const userId = req.session?.userId;
     const profile = await loadUserBlob(userId, 'profile', {});
-    res.json({ avatarUrl: profile.avatarUrl || null });
+    res.json({ avatarUrl: await ensureAvatar(userId, profile) });
   } catch (err) {
     log('[AVATAR] GET error:', err.message);
     res.json({ avatarUrl: null });
   }
 });
 
+// Next portrait for this user. Shipped apps still POST an svgBase64 they drew themselves;
+// that body is ignored, so they step to a portrait too.
 app.post('/api/avatar', requireAuth, async (req, res) => {
   try {
-    const { svgBase64 } = req.body || {};
-    if (!svgBase64) return res.status(400).json({ error: 'svgBase64 required' });
     const userId = req.session?.userId;
     if (!userId) return res.status(401).json({ error: 'No user ID' });
-
-    const svgBuffer = Buffer.from(svgBase64, 'base64');
-    if (svgBuffer.length > 100 * 1024) return res.status(400).json({ error: 'SVG too large' });
-
     const profile = await loadUserBlob(userId, 'profile', {});
-    let staleUrl = null;
-    if (IS_PRODUCTION && blob.available()) {
-      const pathname = `${blobPrefix(userId)}/avatar-${Date.now()}.svg`;
-      const url = await blob.putBytes(pathname, svgBuffer, 'image/svg+xml');
-      // Only our own KV-backed URLs are deletable; a leftover
-      // blob.vercel-storage.com URL is not ours to delete post-migration.
-      if (profile.avatarUrl && profile.avatarUrl.startsWith('/api/blob/')) staleUrl = profile.avatarUrl;
-      profile.avatarUrl = url;
-    } else {
-      // Dev: return data URL so the UI still works locally
-      profile.avatarUrl = `data:image/svg+xml;base64,${svgBase64}`;
-    }
-    profile.avatarUpdatedAt = new Date().toISOString();
-    await saveUserBlob(userId, 'profile', profile);
-    // Delete the old blob only after the new URL is durably saved -- deleting first
-    // leaves profile.avatarUrl pointing at a 404 if the save throws (letter-icon bug).
-    if (staleUrl) blob.del(staleUrl).catch(() => {});
-    res.json({ ok: true, avatarUrl: profile.avatarUrl });
+    profile.avatarSeed = (profile.avatarSeed || 0) + 1;
+    profile.avatarUrl = null; // force a fresh pick
+    res.json({ ok: true, avatarUrl: await ensureAvatar(userId, profile) });
   } catch (err) {
     log('[AVATAR] POST error:', err.message);
     res.status(500).json({ error: 'Failed to save avatar' });

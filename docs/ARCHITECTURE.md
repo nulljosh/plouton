@@ -171,7 +171,7 @@ Test suite covering scraper, parsing, date logic, payment dates, message parsing
 
 ## Storage & Sync
 
-- **KV (Cloudflare Workers)**: Dashboard cache (per user), report-status (filed months), paid-months (history), avatars (generated node graphs), messages read-state
+- **KV (Cloudflare Workers)**: Dashboard cache (per user), report-status (filed months), paid-months (history), avatars (generated Greek-god busts), messages read-state
 - **Keychain**: Credentials (username, password), report secrets (SIN, PIN, phone)
 - **UserDefaults (iOS/macOS)**: Theme preference, last sync date, paid status (pre-migration data), app-group shared defaults for widget access
 - **Widget App Group**: Shared UserDefaults (group.com.heyitsmejosh.talli) for widget↔app data sync

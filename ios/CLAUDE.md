@@ -9,7 +9,7 @@ v2.4.4
 - Solid cards: `Color(.secondarySystemGroupedBackground)` -- no ultraThinMaterial
 - `Color.talliBlue` for all accent uses (calendar, paid toggle, tab tint, avatar fallback)
 - Shared `AvatarView(size:)` for all avatar rendering (ContentView toolbar + SettingsView)
-- Avatar: node-graph SVG style (Anthropic dots/lines), generated via `AppState.generateNodeGraphAvatar()`, cached to Documents dir as PNG. Tap in SettingsView to regenerate.
+- Avatar: random Greek-god marble bust (flat SVG shared with web), generated via `AppState.generateGodSVG()` and drawn by `SVGParser`, cached to Documents dir as PNG. Tap in SettingsView to regenerate.
 - SF Pro typography
 - No emojis
 - Session cookies via HTTPCookieStorage.shared; on 401, prompt re-auth

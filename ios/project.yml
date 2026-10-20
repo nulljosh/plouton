@@ -47,6 +47,7 @@ targets:
       base:
         INFOPLIST_FILE: Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally
+        ASSETCATALOG_COMPILER_APPICON_NAME: Talli
         # iPhone-only: was universal with no iPad-specific design, which blocks
         # App Store submission on missing required iPad Pro screenshots.
         TARGETED_DEVICE_FAMILY: "1"
@@ -110,7 +111,7 @@ targets:
       INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.heyitsmejosh.tally
       INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: YES
       PRODUCT_BUNDLE_IDENTIFIER: com.heyitsmejosh.tally.watchkitapp
-      ASSETCATALOG_COMPILER_APPICON_NAME: Talli
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
       PRODUCT_NAME: TalliWatch
       CODE_SIGN_STYLE: Automatic
   TalliTests:

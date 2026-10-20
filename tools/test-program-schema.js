@@ -44,7 +44,7 @@ function run() {
   test('pwd validStatuses match pre-refactor set', () => {
     const pwd = PROFILE_PROGRAMS.find((p) => p.id === 'pwd');
     assert.deepStrictEqual(pwd.validStatuses, ['applied', 'in_review', 'medical_done', 'denied', 'resubmitted', 'approved']);
-    assert.deepStrictEqual(pwd.defaults, { status: 'applied', submittedDate: null, deniedDate: null, monthlyAmount: null, notes: '' });
+    assert.deepStrictEqual(pwd.defaults, { status: 'approved', submittedDate: null, deniedDate: null, monthlyAmount: null, notes: '' });
   });
 
   test('rdsp validStatuses match pre-refactor set', () => {
@@ -56,7 +56,7 @@ function run() {
   test('cdb validStatuses match pre-refactor set', () => {
     const cdb = PROFILE_PROGRAMS.find((p) => p.id === 'cdb');
     assert.deepStrictEqual(cdb.validStatuses, ['pending', 'applied', 'under_review', 'approved', 'rejected', 'funded']);
-    assert.deepStrictEqual(cdb.defaults, { status: 'pending', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' });
+    assert.deepStrictEqual(cdb.defaults, { status: 'approved', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' });
   });
 
   test('generic merge preserves untouched fields (pwd)', () => {

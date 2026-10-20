@@ -4,6 +4,8 @@ const { CHEQUE_ISSUE_DATES } = require('../pay-dates');
 // statuses, default shape) so new programs can be added as data only --
 // see registerProfileRoutes() in src/api.js for the route factory.
 
+// PWD, CDB and DTC default to approved: Talli's people are already being paid, and the CDB
+// requires an approved DTC. A status someone saved still wins.
 const PROFILE_PROGRAMS = [
   {
     id: 'pwd',
@@ -12,7 +14,7 @@ const PROFILE_PROGRAMS = [
     name: 'BC Disability Assistance (PWD)',
     jurisdiction: 'BC',
     validStatuses: ['applied', 'in_review', 'medical_done', 'denied', 'resubmitted', 'approved'],
-    defaults: { status: 'applied', submittedDate: null, deniedDate: null, monthlyAmount: null, notes: '' },
+    defaults: { status: 'approved', submittedDate: null, deniedDate: null, monthlyAmount: null, notes: '' },
   },
   {
     id: 'rdsp',
@@ -30,7 +32,7 @@ const PROFILE_PROGRAMS = [
     name: 'Canada Disability Benefit (CDB)',
     jurisdiction: 'CA-federal',
     validStatuses: ['pending', 'applied', 'under_review', 'approved', 'rejected', 'funded'],
-    defaults: { status: 'pending', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' },
+    defaults: { status: 'approved', appliedDate: null, approvalDate: null, monthlyAmount: null, retroactiveEligible: false, notes: '' },
   },
   {
     id: 'dtc',
@@ -39,7 +41,7 @@ const PROFILE_PROGRAMS = [
     name: 'Disability Tax Credit (DTC)',
     jurisdiction: 'CA-federal',
     validStatuses: ['not_applied', 'applied', 'in_review', 'approved', 'denied'],
-    defaults: { status: 'not_applied', approvedDate: null, retroactiveYearsFiled: [], notes: '' },
+    defaults: { status: 'approved', approvedDate: null, retroactiveYearsFiled: [], notes: '' },
   },
   {
     id: 'debt_payoff',

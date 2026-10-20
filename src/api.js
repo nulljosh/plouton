@@ -1301,9 +1301,9 @@ app.get('/api/latest', requireAuth, async (req, res) => {
   try {
     log('[API] /api/latest called');
     const userId = req.session?.userId;
-    const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' }).catch(() => ({ status: 'applied' }));
+    const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'approved' }).catch(() => ({ status: 'approved' }));
     const rdspProfile = await loadUserBlob(userId, 'rdsp-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
-    const cdbProfile = await loadUserBlob(userId, 'cdb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
+    const cdbProfile = await loadUserBlob(userId, 'cdb-profile', { status: 'approved' }).catch(() => ({ status: 'approved' }));
     const cgebProfile = await loadUserBlob(userId, 'cgeb-profile', { status: 'pending' }).catch(() => ({ status: 'pending' }));
     const earningsProfile = await loadUserBlob(userId, 'earnings-profile', null).catch(() => null);
     const uiConfig = {
@@ -1806,7 +1806,7 @@ app.post('/api/paid-status', requireAuth, async (req, res) => {
 app.get('/api/report-status', requireAuth, async (req, res) => {
   try {
     const userId = req.session?.userId;
-    const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'applied' }).catch(() => ({ status: 'applied' }));
+    const pwdProfile = await loadUserBlob(userId, 'pwd-profile', { status: 'approved' }).catch(() => ({ status: 'approved' }));
     const pwdApproved = pwdProfile.status === 'approved' || PWD_APPROVED;
     const cached = req.session.reportStatus;
     if (cached && cached.reportMonths) {

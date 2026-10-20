@@ -11,19 +11,19 @@
       "ar",
       "fa"
     ],
-    "note": "Master string source for Talli (web + native). Keys ARE the literal English UI text -- SwiftUI's Text()/Button()/Label() resolve LocalizedStringKey by matching the literal string against a catalog key, so no Swift call-site changes are needed once a key here matches the code's literal exactly. Web uses the same keys via data-i18n. `review:true` marks finance/benefit strings that must be human-authored or DeepL-reviewed, never blind MT. Empty non-en values fall back to en on web and show as missing in the Xcode catalog. Rewritten 2026-08-02 to match the actual 4-tab UI (Home/Reports/Benefits/Messages/Settings) -- prior keys (pwd.*/rdsp.*/cdb.*/account.*) referenced a removed feature set and were dropped. Dynamic/interpolated strings (payment countdown, dates, version numbers) are intentionally left English-only -- see roadmap for stringsdict follow-up.",
+    "note": "Master string source for Plouton (web + native). Keys ARE the literal English UI text -- SwiftUI's Text()/Button()/Label() resolve LocalizedStringKey by matching the literal string against a catalog key, so no Swift call-site changes are needed once a key here matches the code's literal exactly. Web uses the same keys via data-i18n. `review:true` marks finance/benefit strings that must be human-authored or DeepL-reviewed, never blind MT. Empty non-en values fall back to en on web and show as missing in the Xcode catalog. Rewritten 2026-08-02 to match the actual 4-tab UI (Home/Reports/Benefits/Messages/Settings) -- prior keys (pwd.*/rdsp.*/cdb.*/account.*) referenced a removed feature set and were dropped. Dynamic/interpolated strings (payment countdown, dates, version numbers) are intentionally left English-only -- see roadmap for stringsdict follow-up.",
     "rtl": [
       "ar",
       "fa"
     ]
   },
-  "Talli": {
-    "en": "Talli",
-    "fr": "Talli",
-    "zh": "Talli",
-    "pa": "Talli",
-    "es": "Talli",
-    "fil": "Talli",
+  "Plouton": {
+    "en": "Plouton",
+    "fr": "Plouton",
+    "zh": "Plouton",
+    "pa": "Plouton",
+    "es": "Plouton",
+    "fil": "Plouton",
     "ar": "تالي",
     "fa": "تالی"
   },

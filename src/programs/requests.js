@@ -1,5 +1,5 @@
 // Service requests. The common things people ask the ministry for, each with the
-// exact words to say, what to have ready, and where to go. Talli cannot file
+// exact words to say, what to have ready, and where to go. Plouton cannot file
 // these inside My Self Serve, so it gets the person to the right page prepared.
 
 const PHONE = '1-866-866-0800';
@@ -39,14 +39,14 @@ const REQUESTS = [
     id: 'cheque', name: 'My cheque did not come', when: 'Payment day passed and nothing arrived',
     ready: ['The date it was due', 'Whether you filed your monthly report', 'Your bank balance'],
     say: 'My payment was due on [date] and it has not arrived. Can you tell me the status, whether there is a hold on my file, and whether it was sent to the right account? If it cannot be fixed today I need a crisis supplement.',
-    note: 'Talli also shows this on your home screen after a missed cheque. It names the usual cause and gives the five steps.',
+    note: 'Plouton also shows this on your home screen after a missed cheque. It names the usual cause and gives the five steps.',
     phone: PHONE, link: MYSS,
   },
   {
     id: 'ids', name: 'Update my documents', when: 'New ID, new letter, or they asked for papers',
     ready: ['The paper or ID they asked for', 'The date they gave you'],
     say: 'I am sending the documents you asked for: [list]. Please confirm you received them and that my file is up to date.',
-    note: 'Keep a copy and proof you sent it. Papers in your Talli vault are ready to attach.',
+    note: 'Keep a copy and proof you sent it. Papers in your Plouton vault are ready to attach.',
     phone: PHONE, link: MYSS,
   },
 ];

@@ -101,7 +101,7 @@ struct RdspTrackerView: View {
         card {
             VStack(alignment: .leading, spacing: 10) {
                 Text("See what your RDSP is owed").font(.headline)
-                Text("Three details. Talli works out what the government has matched, what is left this year and what carries forward.")
+                Text("Three details. Plouton works out what the government has matched, what is left this year and what carries forward.")
                     .font(.footnote).foregroundStyle(.secondary)
                 HStack {
                     numberField("Year you were born", $birth)

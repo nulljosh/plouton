@@ -22,7 +22,7 @@ function run() {
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://talli-production.vercel.app',
-    'https://talli.jaybulb.com',
+    'https://plouton.jaybulb.com',
     'https://tally.jaybulb.com'
   ];
   const ALLOWED_ORIGINS = new Set(allowedOrigins);
@@ -56,7 +56,7 @@ function run() {
   });
 
   test('POST from production origin passes', () => {
-    assert.strictEqual(checkOrigin('POST', 'https://talli.jaybulb.com'), 'pass');
+    assert.strictEqual(checkOrigin('POST', 'https://plouton.jaybulb.com'), 'pass');
   });
 
   test('POST from old tally domain still passes (not yet decommissioned)', () => {

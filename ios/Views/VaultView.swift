@@ -89,7 +89,7 @@ struct VaultView: View {
         card {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Keep your papers safe").font(.headline)
-                Text("Your PWD letter, medical report, ID and lease. Files are locked on this device with a passphrase before they are saved. Talli only holds the locked copy and cannot read it.")
+                Text("Your PWD letter, medical report, ID and lease. Files are locked on this device with a passphrase before they are saved. Plouton only holds the locked copy and cannot read it.")
                     .font(.footnote).foregroundStyle(.secondary)
                 SecureField("Choose a passphrase", text: $pass).textFieldStyle(.roundedBorder)
                 SecureField("Type it again", text: $pass2).textFieldStyle(.roundedBorder)

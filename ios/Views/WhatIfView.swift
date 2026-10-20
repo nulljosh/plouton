@@ -84,7 +84,7 @@ struct WhatIfView: View {
         VStack(alignment: .leading, spacing: 12) {
             card {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Type a wage and weekly hours. Talli shows how much of your yearly earnings limit it uses, when your assistance starts to drop, and what you end up with each month.")
+                    Text("Type a wage and weekly hours. Plouton shows how much of your yearly earnings limit it uses, when your assistance starts to drop, and what you end up with each month.")
                         .font(.footnote).foregroundStyle(.secondary)
                     HStack {
                         numberField("Hourly wage ($)", $wage)
@@ -118,7 +118,7 @@ struct WhatIfView: View {
     @ViewBuilder
     private func results(_ r: WhatIf) -> some View {
         if r.unknown == true {
-            card { Text("Talli does not have the yearly earnings limit for your household. Ask the ministry what it is, then you can work this out.").font(.footnote) }
+            card { Text("Plouton does not have the yearly earnings limit for your household. Ask the ministry what it is, then you can work this out.").font(.footnote) }
         } else if let keep = r.keep, let earned = r.totalEarnings, let rows = r.rows {
             card {
                 VStack(alignment: .leading, spacing: 6) {
@@ -144,7 +144,7 @@ struct WhatIfView: View {
                         Text("Room left under the limit this year: \(room.formatted(money))." + (r.safeHours.map { " That is about \($0.formatted(.number.precision(.fractionLength(0...1)))) hours a week from your start month to December." } ?? ""))
                             .font(.caption).foregroundStyle(.secondary)
                     }
-                    if r.assumed == true { Text("BC has not posted next year limit yet. Talli assumes it stays the same.").font(.caption2).foregroundStyle(.secondary) }
+                    if r.assumed == true { Text("BC has not posted next year limit yet. Plouton assumes it stays the same.").font(.caption2).foregroundStyle(.secondary) }
                 }
             }
             DisclosureGroup("Month by month") {

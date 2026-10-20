@@ -1,6 +1,6 @@
 <img src="icon.svg" width="80">
 
-# Talli iOS
+# Plouton iOS
 ![version](https://img.shields.io/badge/version-v2.4.4-blue)
 
 <p align="center">
@@ -11,7 +11,7 @@
   <img src="screenshots/appstore/05-settings.png" width="200">
 </p>
 
-iOS companion for [Talli](https://talli.jaybulb.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Cloudflare Worker + KV at talli.jaybulb.com.
+iOS companion for [Plouton](https://plouton.jaybulb.com), the BC benefits tracker. SwiftUI (iOS 17+, Swift 6), `@Observable` state, URLSession cookie jar auth, xcodegen. Backend: Cloudflare Worker + KV at plouton.jaybulb.com.
 
 [Architecture](architecture.svg)
 
@@ -30,7 +30,7 @@ iOS companion for [Talli](https://talli.jaybulb.com), the BC benefits tracker. S
 
 ```bash
 xcodegen generate
-open Talli.xcodeproj
+open Plouton.xcodeproj
 ```
 
 Requires Xcode 26.2 beta, iOS 17+ simulator.

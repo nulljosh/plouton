@@ -1,21 +1,21 @@
-# Talli Technical Whitepaper
+# Plouton Technical Whitepaper
 
 **v3.6** | October 2026
 
 When does the money come, and how much?
 
 BC Self-Serve buries that answer behind a slow portal built for caseworkers,
-not the people waiting on the payment. Talli answers it directly for people
+not the people waiting on the payment. Plouton answers it directly for people
 on BC disability assistance. It reads BC Self-Serve, tracks income and
 payment dates, follows PWD and DTC applications, and shows government
 messages. Everything the Ministry makes you dig for, in one glance. Live at
-[talli.jaybulb.com](https://talli.jaybulb.com), with an iOS companion
+[plouton.jaybulb.com](https://plouton.jaybulb.com), with an iOS companion
 app and a watchOS complication.
 
 ## Core Mechanic: The Scraper
 
 BC Self-Serve has no public API, so reading it at all means acting like a
-browser. Talli's core is an HTTP scraper (`src/http-scraper.js`) that logs in
+browser. Plouton's core is an HTTP scraper (`src/http-scraper.js`) that logs in
 with the user's BCeID, navigates the portal, and extracts payments, messages,
 account info, and application status into structured JSON. Credentials are
 session-encrypted and never stored in plaintext, because a scraper that holds
@@ -79,5 +79,5 @@ should feel calm rather than urgent, and ships via
 - SIN masked in all UI surfaces.
 - No ads, no analytics, no third-party trackers, the only external calls are
   to BC Self-Serve itself, because the people using this app are already
-  dealing with the Ministry watching their finances; Talli doesn't add
+  dealing with the Ministry watching their finances; Plouton doesn't add
   another party to that list.

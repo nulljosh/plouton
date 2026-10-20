@@ -1,6 +1,6 @@
 # Architecture
 
-Talli helps people in BC track and manage their disability benefits. It pulls a user's data from the government's BC Self-Serve portal, explains which benefits they qualify for, and lets them file their monthly income report right from the app instead of the portal. It has a web dashboard, native iOS and macOS apps, a watchOS companion, and an early Android version. A Cloudflare Workers backend does the actual portal scraping, and all versions of the app stay in sync through shared API endpoints backed by Cloudflare's key-value store and Supabase.
+Plouton helps people in BC track and manage their disability benefits. It pulls a user's data from the government's BC Self-Serve portal, explains which benefits they qualify for, and lets them file their monthly income report right from the app instead of the portal. It has a web dashboard, native iOS and macOS apps, a watchOS companion, and an early Android version. A Cloudflare Workers backend does the actual portal scraping, and all versions of the app stay in sync through shared API endpoints backed by Cloudflare's key-value store and Supabase.
 
 ## How it runs
 
@@ -29,7 +29,7 @@ Talli helps people in BC track and manage their disability benefits. It pulls a 
 
 | File | What it owns |
 |---|---|
-| `web/tokens.css` | Jaybulb design system alias layer. Imports canonical jaybulb.com/tokens.css, adds Talli-specific overrides (accent is blue #5B9BD5, not yellow). Theme toggle: light/dark via CSS variables and `[data-theme="dark"]`. |
+| `web/tokens.css` | Jaybulb design system alias layer. Imports canonical jaybulb.com/tokens.css, adds Plouton-specific overrides (accent is blue #5B9BD5, not yellow). Theme toggle: light/dark via CSS variables and `[data-theme="dark"]`. |
 
 ### JavaScript & Utilities
 
@@ -184,7 +184,7 @@ Test suite covering scraper, parsing, date logic, session store, payment dates, 
 - **App Group sharing**: iOS app + widgets share data via UserDefaults(suiteName: "group.com.heyitsmejosh.talli"). macOS uses the same pattern. watchOS reads from API only (no local sync).
 - **Date parsing**: Portal returns inconsistent date formats. DateParsing.swift/MacDateParsing.swift handle multiple patterns with fallbacks.
 - **Reporting window**: Days 1-5 every month. Banner auto-shows, auto-scrapes (6h gate via localStorage), fields auto-populate. Deadline is hardcoded (not computed) due to ministry extension.
-- **Design system sync**: web/tokens.css imports canonical jaybulb.com/tokens.css live (no copy-paste drift). Talli adds only the blue accent override.
+- **Design system sync**: web/tokens.css imports canonical jaybulb.com/tokens.css live (no copy-paste drift). Plouton adds only the blue accent override.
 - **Widgets on iOS/macOS**: Share the same TimelineProvider pattern but fetch independently (no shared state, each polls the same API endpoint).
 - **KMP Android**: Stub. Shared code is in place (Models, API client); UI (Compose) not yet feature-complete.
 

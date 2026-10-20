@@ -2,7 +2,7 @@ import Foundation
 import CryptoKit
 import CommonCrypto
 
-// Talli document vault crypto. Same format as web/js/vault.js:
+// Plouton document vault crypto. Same format as web/js/vault.js:
 // byte 1, a 12 byte nonce, then AES-256-GCM ciphertext and tag. The key is
 // PBKDF2-HMAC-SHA256 over the passphrase (NFC, UTF-8) and the vault's salt.
 // tools/test-vault.js pins a vector that this code opens byte for byte.

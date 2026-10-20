@@ -10,7 +10,7 @@ const source = html.slice(start, end) + 'return { unlockPro }; }';
 const tick = () => new Promise(resolve => setImmediate(resolve));
 function harness(fetch, returning = false) {
   const state = [], effects = [], timers = [];
-  const location = { href: 'https://talli.jaybulb.com/app' + (returning ? '?pro=1' : ''), search: returning ? '?pro=1' : '' };
+  const location = { href: 'https://plouton.jaybulb.com/app' + (returning ? '?pro=1' : ''), search: returning ? '?pro=1' : '' };
   const sandbox = {
     fetch, URL, URLSearchParams, tk: () => ({}),
     useState(initial) { const i = state.length; state.push(typeof initial === 'function' ? initial() : initial); return [state[i], value => { state[i] = value; }]; },
@@ -30,7 +30,7 @@ function harness(fetch, returning = false) {
   h = harness(async () => ({ ok: false, json: async () => ({ error: 'failure' }) }));
   await h.api.unlockPro();
   assert.match(h.state[4], /unavailable/);
-  assert.equal(h.location.href, 'https://talli.jaybulb.com/app');
+  assert.equal(h.location.href, 'https://plouton.jaybulb.com/app');
   let calls = 0;
   h = harness(async () => ({ ok: true, json: async () => ({ isPro: ++calls > 1 }) }), true);
   h.effects[1](); await tick();
@@ -39,7 +39,7 @@ function harness(fetch, returning = false) {
   await h.timers.shift()();
   assert.equal(h.state[2], true);
   assert.equal(h.state[5], false);
-  assert.equal(h.location.href, 'https://talli.jaybulb.com/app');
+  assert.equal(h.location.href, 'https://plouton.jaybulb.com/app');
   h = harness(async () => ({ ok: true, json: async () => ({ isPro: false }) }), true);
   h.effects[1](); await tick();
   while (h.timers.length) await h.timers.shift()();

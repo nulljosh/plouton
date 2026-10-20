@@ -1,4 +1,4 @@
-# Talli iOS
+# Plouton iOS
 
 v2.4.4
 
@@ -32,8 +32,8 @@ v2.4.4
 ## Run
 
 ```bash
-xcodegen generate && open Talli.xcodeproj
-xcodebuild -scheme Talli -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -skipPackagePluginValidation build
+xcodegen generate && open Plouton.xcodeproj
+xcodebuild -scheme Plouton -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -skipPackagePluginValidation build
 ```
 
 `-skipPackagePluginValidation` is required on every CLI/CI build now — SwiftLint runs as an SPM build-tool plugin (2026-07-18), and `xcodebuild` can't grant its interactive trust prompt headlessly without that flag.

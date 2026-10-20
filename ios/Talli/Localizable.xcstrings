@@ -1,43 +1,43 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "Talli": {
+    "Plouton": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "Plouton"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "Plouton"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "Plouton"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "Plouton"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "Plouton"
           }
         },
         "fil": {
           "stringUnit": {
             "state": "translated",
-            "value": "Talli"
+            "value": "Plouton"
           }
         },
         "ar": {

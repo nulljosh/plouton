@@ -115,7 +115,7 @@ function deriveReconsideration(raw, now = new Date()) {
       'Free help: Disability Alliance BC, 1-800-663-1278. Many people win on the second try.',
     ],
     draft: draftLetter(received),
-    note: 'Talli counts weekends and BC holidays. If your deadline is close to a holiday, hand it in earlier.',
+    note: 'Plouton counts weekends and BC holidays. If your deadline is close to a holiday, hand it in earlier.',
     links: [
       { label: 'Ministry guide to reconsideration and appeals', url: 'https://www2.gov.bc.ca/assets/gov/british-columbians-our-governments/organizational-structure/ministries-organizations/social-development-poverty-reduction/appeals.pdf' },
       { label: 'Appeals policy', url: 'https://www2.gov.bc.ca/gov/content/governments/policies-for-government/bcea-policy-and-procedure-manual/decisions-reconsideration-and-appeal/appeal' },

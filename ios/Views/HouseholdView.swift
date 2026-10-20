@@ -159,7 +159,7 @@ struct HouseholdView: View {
                         Text("You can earn \(ex.formatted(money)) this year before your payment drops." + (d.shared ? " The limit is shared by the two of you, so log both of your earnings." : ""))
                             .font(.footnote)
                     } else {
-                        Text("Ask the ministry what your yearly earnings limit is. Talli does not have it for single parents.").font(.footnote)
+                        Text("Ask the ministry what your yearly earnings limit is. Plouton does not have it for single parents.").font(.footnote)
                     }
                 }
             }

@@ -82,7 +82,7 @@ struct BudgetView: View {
         VStack(alignment: .leading, spacing: 10) {
             card {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Add your bills and the day each is due. Talli lines them up against the cheques that pay for them and warns you when one lands before the money does.")
+                    Text("Add your bills and the day each is due. Plouton lines them up against the cheques that pay for them and warns you when one lands before the money does.")
                         .font(.footnote).foregroundStyle(.secondary)
                     ForEach(d.bills) { b in
                         HStack {

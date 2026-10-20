@@ -1,7 +1,7 @@
 {
   "appId": "6782366555",
   "bundleId": "com.heyitsmejosh.tally",
-  "scheme": "Talli",
+  "scheme": "Plouton",
   "platforms": ["ios"],
   "simulator": "iPhone 11 Pro Max",
   "iosDir": "ios",

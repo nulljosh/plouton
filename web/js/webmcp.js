@@ -1,4 +1,4 @@
-// WebMCP tool registration for Talli. Exposes benefit status, payments and
+// WebMCP tool registration for Plouton. Exposes benefit status, payments and
 // messages to in-browser agents via document.modelContext.
 //
 // ponytail: every tool calls the existing Express API in src/api.js. The app is

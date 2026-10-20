@@ -19,7 +19,7 @@ struct TalliMacApp: App {
         .windowToolbarStyle(.unified)
         .defaultSize(width: 900, height: 640)
 
-        MenuBarExtra("Talli", systemImage: "chart.bar.doc.horizontal") {
+        MenuBarExtra("Plouton", systemImage: "chart.bar.doc.horizontal") {
             MenuBarView()
                 .environment(appState)
         }

@@ -34,7 +34,7 @@ final class APIClient: @unchecked Sendable {
     static let shared = APIClient()
 
     // swiftlint:disable:next force_unwrapping
-    private let baseURL = URL(string: "https://talli.jaybulb.com")!
+    private let baseURL = URL(string: "https://plouton.jaybulb.com")!
     private let session: URLSession
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()

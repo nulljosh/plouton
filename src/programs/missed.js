@@ -1,6 +1,6 @@
 // Missed-payment alert. A cheque is "missed" when its issue date has passed,
 // the person has not marked it received, and it is still recent enough to chase.
-// Talli cannot see the bank account, so the alert asks and gives the script.
+// Plouton cannot see the bank account, so the alert asks and gives the script.
 const { CHEQUE_ISSUE_DATES } = require('../pay-dates');
 
 const MINISTRY_PHONE = '1-866-866-0800';
@@ -33,7 +33,7 @@ function deriveMissedPayment({ paidMonths = {}, reportMonths = {}, onAssistance 
     watch,
     missed: {
       due, month: due.slice(0, 7), daysLate: daysBetween(due, today),
-      cause: reportFiled ? null : `Talli has not seen your ${month} report filed. BC holds the cheque when the monthly report is missed, and that is the most common reason a payment does not show.`,
+      cause: reportFiled ? null : `Plouton has not seen your ${month} report filed. BC holds the cheque when the monthly report is missed, and that is the most common reason a payment does not show.`,
       steps: [
         'Check your bank account again. Deposits can post late in the day.',
         'Open My Self Serve and look for a message about a hold or a missing document.',

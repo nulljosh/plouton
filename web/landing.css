@@ -1,6 +1,6 @@
-/* Talli landing, dressed after the Hermes landing: giant thin caps, tiny caps labels, small square buttons, a thin blue
+/* Plouton landing, dressed after the Hermes landing: giant thin caps, tiny caps labels, small square buttons, a thin blue
    frame down the window, and full-bleed grainy blue bands where the glyphs sit in scanlines like an engraving.
-   Colours come from tokens.css (canonical plus Talli's blue). Only the band colours below are landing-only. System font. */
+   Colours come from tokens.css (canonical plus Plouton's blue). Only the band colours below are landing-only. System font. */
 :root {
   --band: #2F6FB0;                       /* full-bleed sections, white text on it is 5.2:1 */
   --band-sub: #dbe8f6;
@@ -148,7 +148,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--ring); outline-
 .plat-row b { font-family: var(--display); font-weight: 200; font-size: 40px; line-height: 44px; text-transform: uppercase; }
 .plat-row p { color: var(--l-sub); font-size: 15px; line-height: 22px; margin-bottom: var(--sp-3); }
 
-/* Footer: brand and link columns, the engraved band of Talli's things, one fine line */
+/* Footer: brand and link columns, the engraved band of Plouton's things, one fine line */
 .foot { text-align: center; padding: var(--sp-8) var(--sp-4) var(--sp-5); background: var(--l-bg); overflow: hidden; border-top: 1px solid var(--l-line); }
 .foot-top { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--sp-4); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-7); text-align: left; }
 .foot-brand { display: grid; gap: var(--sp-2); align-content: start; }

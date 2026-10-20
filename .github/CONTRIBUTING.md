@@ -3,7 +3,7 @@
 ## Setup
 
 ```
-git clone https://github.com/nulljosh/talli.git
+git clone https://github.com/nulljosh/plouton.git
 cd talli
 npm install
 ```

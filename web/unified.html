@@ -130,6 +130,65 @@ function nextScheduledPayDate(from) {
   return new Date(from.getFullYear(), from.getMonth() + 1, from.getDate());
 }
 
+// The next n cheque days on or after today, straight from PAY_SCHEDULE.
+function upcomingPaydays(n, today = new Date()) {
+  const from = new Date(today); from.setHours(0,0,0,0);
+  const out = [];
+  for (const y of Object.keys(PAY_SCHEDULE).map(Number).sort((a,b)=>a-b))
+    for (let m = 0; m < 12; m++) {
+      const day = PAY_SCHEDULE[y][m];
+      if (day != null && out.length < n && new Date(y, m, day) >= from) out.push(new Date(y, m, day));
+    }
+  return out;
+}
+
+function whenText(d, today) {
+  const n = Math.round((d - today) / 86400000);
+  return n === 0 ? 'today' : n === 1 ? 'tomorrow' : `in ${n} days`;
+}
+
+// Paydays on Home: a month with the cheque day filled, then the next six dates.
+function PaydayCalendar({dark}) {
+  const t = tk(dark);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const next = upcomingPaydays(6, today);
+  const first = next[0] || today;
+  const [view, setView] = useState(new Date(first.getFullYear(), first.getMonth(), 1));
+  const y = view.getFullYear(), m = view.getMonth();
+  const payDay = PAY_SCHEDULE[y]?.[m];
+  const cells = [...Array(new Date(y, m, 1).getDay()).fill(null), ...Array.from({length: new Date(y, m + 1, 0).getDate()}, (_, i) => i + 1)];
+  const arrow = {width:48,height:48,border:'none',background:'none',cursor:'pointer',color:t.muted,fontSize:24,lineHeight:1,fontFamily:'inherit',WebkitTapHighlightColor:'transparent'};
+  return (
+    <div style={{marginTop:48}}>
+      <div style={{fontSize:13,fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:t.muted,textAlign:'center'}}>Paydays</div>
+      <div style={{display:'flex',alignItems:'center',marginTop:8}}>
+        <button aria-label="Previous month" onClick={()=>setView(new Date(y, m - 1, 1))} style={arrow}>‹</button>
+        <div style={{flex:1,textAlign:'center',fontSize:17,fontWeight:600,color:t.text}}>{view.toLocaleString('en-CA',{month:'long',year:'numeric'})}</div>
+        <button aria-label="Next month" onClick={()=>setView(new Date(y, m + 1, 1))} style={arrow}>›</button>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',textAlign:'center',marginTop:8}}>
+        {['S','M','T','W','T','F','S'].map((d,i)=><div key={'h'+i} style={{fontSize:13,color:t.muted,paddingBottom:8}}>{d}</div>)}
+        {cells.map((d,i)=>{
+          const pay = d === payDay, date = d && new Date(y, m, d), tod = d && date.getTime() === today.getTime();
+          return (
+            <div key={i} style={{height:44,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              {d && <div aria-label={pay ? 'Payday' : undefined} style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,fontWeight:pay?600:400,background:pay?t.accent:'transparent',color:pay?'#fff':t.text,boxShadow:tod&&!pay?`inset 0 0 0 1px ${t.muted}`:'none',opacity:date<today&&!pay?.35:1}}>{d}</div>}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{marginTop:16}}>
+        {next.map((d,i)=>(
+          <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',minHeight:48,borderTop:i?`1px solid ${t.border}`:'none',fontSize:15}}>
+            <span style={{color:t.text}}>{d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})}</span>
+            <span style={{color:i===0?t.accent:t.muted}}>{whenText(d, today)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function parseMsgDate(str) {
   const m = str.match(/(\d{4})\s*\/\s*([A-Z]{3})\s*\/\s*(\d{2})/);
   if (!m) return '';
@@ -513,7 +572,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         </div>
 
         <div style={{marginTop:24,fontSize:28,fontWeight:600,letterSpacing:'-0.02em',lineHeight:1,color:isToday?t.success:t.accent,transition:'color 0.3s',animation:'fadeUp 0.45s 0.1s ease both'}}>
-          {isToday?'today':`in ${daysUntil} day${daysUntil!==1?'s':''}`}
+          {isToday?'today':daysUntil===1?'tomorrow':`in ${daysUntil} days`}
         </div>
 
         <div style={{marginTop:8,fontSize:17,color:t.mutedMid,fontWeight:400,letterSpacing:'-0.3px',animation:'fadeUp 0.45s 0.18s ease both'}}>
@@ -543,6 +602,7 @@ function HomeTab({dark, amount, yearIncome, yearReview, earnings, onAddEarnings,
         </button>
       </div>
 
+      <PaydayCalendar dark={dark}/>
       </div>
       </div>
       <details className="home-details" style={{marginTop:0}}>

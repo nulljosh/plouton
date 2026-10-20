@@ -18,7 +18,7 @@ Talli helps people in BC track and manage their disability benefits. It pulls a 
 |---|---|
 | `web/landing.html` | Public marketing page. Hero, feature list, app links. Theme toggle, View Transitions API. |
 | `web/login.html` | Sign-in form. Username/password OR OAuth redirect to BC. Theme toggle. Redirects to unified on success. |
-| `web/unified.html` | Main dashboard. Tabbed shell: Home (payment info, messages, banners), Dashboard (benefits cards), Status (PWD/RDSP/CDB timelines, filed months, messages), Settings. Handles offline state, notification scheduling, theme. Lazy-loads tab content on tab switch. 1633 lines. |
+| `web/unified.html` | Main dashboard. Three tabs: Home (the next cheque, Mark as paid, a Paydays calendar with the next six cheque days from `PAY_SCHEDULE`, then Details), Status (approved summary, tools, timelines) and Messages. Settings is a sheet from the avatar. Handles offline state, notifications and theme. 2633 lines. |
 | `web/screen.html` | Benefits eligibility screener. Multi-step questionnaire that guides user through questions (income, household, disability type) and outputs matched benefits. Saves answers to localStorage. |
 | `web/dca.html` | Dollar-Cost Averaging calculator with Chart.js visualization. For RDSP investment planning. Standalone tool. |
 | `web/lawyers.html` | Directory of disability lawyers in Canada. Filter by province/category. Reads from inline data. |
@@ -155,7 +155,7 @@ Test suite covering scraper, parsing, date logic, payment dates, message parsing
 | File | What it owns |
 |---|---|
 | `tools/test.js` | Main test runner. Checks scraper sections, portal data freshness, parsing correctness. |
-| `tools/test-*.js` | Individual test files: http-scraper (portal parse), messages (extraction), pay-dates (schedule verification), program-schema (routes), paid-status (monthly paid months format), pay-schedule-sync (every cheque table matches gov.bc.ca), i18n (string validity), stripe-webhook (Stripe event handling), webmcp (tool registration), response-split (Content-Length bug), school-grades (file loading), scrape-lock (concurrency guard), read-messages (read-state persistence). |
+| `tools/test-*.js` | Individual test files: http-scraper (portal parse), messages (extraction), pay-dates (schedule verification), program-schema (routes), paid-status (monthly paid months format), pay-schedule-sync (every cheque table matches gov.bc.ca, and the Home payday list reads it), i18n (string validity), stripe-webhook (Stripe event handling), webmcp (tool registration), response-split (Content-Length bug), school-grades (file loading), scrape-lock (concurrency guard), read-messages (read-state persistence). |
 | `tools/native-decode-check/` | Swift cross-check: both native clients shipped shape-mismatch bugs (Workers truncated by 1 byte, macOS had wrong field names). This standalone check decodes the payload natively to catch future drift. |
 | `tools/school/fill_pdf.py` | Biology 12 fill-in-the-blank PDF filler. Finds blanks, matches them to answer key using Claude. |
 | `tools/dtc_apply.py` | T2201/DTC application helper (file -> CSV). |

@@ -69,6 +69,18 @@
             "value": "Vos prestations. Sans bureaucratie."
           }
         },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "您的福利。没有繁文缛节。"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ ਲਾਭ। ਕੋਈ ਦਫ਼ਤਰਸ਼ਾਹੀ ਨਹੀਂ।"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
@@ -498,6 +510,18 @@
             "value": "NOM D'UTILISATEUR BCEID"
           }
         },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BCEID 用户名"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BCEID ਯੂਜ਼ਰਨੇਮ"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
@@ -537,6 +561,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "MOT DE PASSE"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪਾਸਵਰਡ"
           }
         },
         "es": {
@@ -633,6 +669,18 @@
             "value": "PROCHAIN PAIEMENT"
           }
         },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下次付款"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅਗਲਾ ਭੁਗਤਾਨ"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
@@ -672,6 +720,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "PRESTATIONS ARC"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CRA 福利"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CRA ਲਾਭ"
           }
         },
         "es": {
@@ -783,6 +843,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Affichage des dernières données enregistrées"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示上次保存的数据"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਖਰੀ ਵਾਰ ਸੰਭਾਲਿਆ ਡਾਟਾ ਦਿਖਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
           }
         },
         "es": {
@@ -1032,6 +1104,18 @@
             "value": "Envoi en cours..."
           }
         },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在提交..."
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਜਮ੍ਹਾਂ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ..."
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
@@ -1071,6 +1155,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Prestations actives"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有效福利"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸਰਗਰਮ ਲਾਭ"
           }
         },
         "es": {
@@ -1250,6 +1346,18 @@
             "value": "Automatique"
           }
         },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自动"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਟੋਮੈਟਿਕ"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
@@ -1291,6 +1399,18 @@
             "value": "Réclamer sur la déclaration"
           }
         },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在报税表上申领"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਟੈਕਸ ਰਿਟਰਨ 'ਤੇ ਦਾਅਵਾ ਕਰੋ"
+          }
+        },
         "es": {
           "stringUnit": {
             "state": "translated",
@@ -1330,6 +1450,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Demande requise"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要申请"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅਰਜ਼ੀ ਲੋੜੀਂਦੀ ਹੈ"
           }
         },
         "es": {
@@ -1474,6 +1606,18 @@
           }
         },
         "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC Self-Serve"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BC Self-Serve"
+          }
+        },
+        "pa": {
           "stringUnit": {
             "state": "translated",
             "value": "BC Self-Serve"
@@ -1624,6 +1768,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Touchez pour régénérer"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "轻点以重新生成"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਦੁਬਾਰਾ ਬਣਾਉਣ ਲਈ ਟੈਪ ਕਰੋ"
           }
         },
         "es": {

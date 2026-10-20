@@ -6,13 +6,11 @@ struct ContentView: View {
     @State private var showSplash = true
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if appState.isAuthenticated {
-                    AuthenticatedTabShell()
-                } else {
-                    LoginScreen()
-                }
+        Group {
+            if appState.isAuthenticated {
+                AuthenticatedTabShell()
+            } else {
+                NavigationStack { LoginScreen() }
             }
         }
         .overlay {
@@ -39,13 +37,15 @@ private struct AuthenticatedTabShell: View {
     var body: some View {
         @Bindable var appState = appState
         TabView(selection: $appState.selectedTabIndex) {
-            DashboardScreen()
+            // Each tab owns its NavigationStack: one stack around the TabView hides every toolbar item inside it,
+            // which is how the Settings avatar went missing.
+            NavigationStack { DashboardScreen() }
                 .tabItem { Label("Home", systemImage: "house.fill") }
                 .tag(0)
-            StatusView()
+            NavigationStack { StatusView() }
                 .tabItem { Label("Status", systemImage: "list.bullet.clipboard.fill") }
                 .tag(1)
-            MessagesView()
+            NavigationStack { MessagesView() }
                 .tabItem { Label("Messages", systemImage: "message.fill") }
                 .tag(2)
                 .badge(appState.unreadMessageCount)
@@ -91,16 +91,18 @@ private struct LoginScreen: View {
                     TextField("your.username", text: $username)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
-                        .padding()
-                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .padding(.horizontal, 20)
+                        .frame(height: 48)
+                        .background(Color(.secondarySystemGroupedBackground), in: Capsule())
                 }
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("PASSWORD")
                         .sectionLabel()
                     SecureField("••••••••", text: $password)
-                        .padding()
-                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .padding(.horizontal, 20)
+                        .frame(height: 48)
+                        .background(Color(.secondarySystemGroupedBackground), in: Capsule())
                 }
             }
 
@@ -108,16 +110,14 @@ private struct LoginScreen: View {
                 Task { await appState.login(username: username, password: password) }
             } label: {
                 HStack {
-                    if appState.isLoading { ProgressView().tint(.white) }
+                    if appState.isLoading { ProgressView() }
                     Text("Sign In").fontWeight(.semibold)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(Color.talliBlue, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, minHeight: 48)
             }
+            .capsuleAction()
+            .tint(Color.talliBlue)
             .disabled(username.isEmpty || password.isEmpty || appState.isLoading)
-            .opacity((username.isEmpty || password.isEmpty || appState.isLoading) ? 0.6 : 1)
 
             if let error = appState.errorMessage {
                 Text(error)
@@ -164,7 +164,7 @@ private struct TimelineCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
+        .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
     }
 }
 
@@ -175,7 +175,7 @@ private struct DashboardScreen: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 18) {
+            VStack(spacing: 24) {
                 if appState.isOffline {
                     OfflineBanner()
                 } else if appState.isSyncStale {
@@ -195,35 +195,34 @@ private struct DashboardScreen: View {
                     arrived: { await appState.markPaid(month: $0) }
                 )
 
-                VStack(spacing: 32) {
+                // One number, one line, one action, then what is worth a glance. No forced empty band.
+                VStack(alignment: .leading, spacing: 24) {
                     paymentCard
                     if appState.daysUntilPayment != nil {
                         paymentProgress
                     }
                     paidToggle
-                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(maxHeight: .infinity, alignment: .center)
-                .containerRelativeFrame(.vertical) { length, _ in length * 0.78 }
+                .padding(.top, 8)
 
-                DisclosureGroup("Details") {
-                    VStack(spacing: 18) {
-                        incomeBreakdown
-                        dateCard
-                    }
-                    .padding(.top, 12)
-                }
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                incomeTiles
+
+                dateCard
+
+                incomeBreakdown
             }
             .padding(.horizontal, 20)
+            .padding(.bottom, 24)
         }
+        // grouped background so the white cards read as cards in light mode
+        .background(Color(.systemGroupedBackground))
         .refreshable { await appState.refreshDashboard() }
         .task {
             now = Date()
             await appState.loadDashboardIfNeeded()
         }
-        .navigationTitle("Home")
+        // no title: the tab bar already says Home, and the number is the headline
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showSettings) {
             NavigationStack { SettingsView() }
         }
@@ -233,6 +232,7 @@ private struct DashboardScreen: View {
                     AvatarView(size: 32)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Settings")
             }
         }
     }
@@ -260,9 +260,15 @@ private struct DashboardScreen: View {
                 .contentTransition(.numericText())
 
             if let days = appState.daysUntilPayment {
-                Text("in \(days) days")
-                    .font(.system(size: 34, weight: .semibold))
-                    .foregroundStyle(Color.talliBlue)
+                Group {
+                    switch days {
+                    case 0: Text("Today")
+                    case 1: Text("Tomorrow")
+                    default: Text("in \(days) days")
+                    }
+                }
+                .font(.system(size: 34, weight: .semibold))
+                .foregroundStyle(Color.talliBlue)
             }
 
             Text(appState.nextPaymentDateText)
@@ -274,22 +280,26 @@ private struct DashboardScreen: View {
 
     /// PWD + CDB breakdown, mirroring the web dashboard's Bennies income block so
     /// the platforms agree. Hidden entirely when the server sends no income block.
+    /// PWD, CDB and total at a glance, right under the hero.
+    @ViewBuilder
+    private var incomeTiles: some View {
+        if let income = appState.income {
+            HStack(spacing: 12) {
+                incomeCell(label: "PWD", value: appState.moneyText(income.pwdMonthly))
+                incomeCell(label: "CDB", value: appState.moneyText(income.cdbMonthly))
+                incomeCell(label: "TOTAL", value: appState.moneyText(income.totalMonthly))
+            }
+            .padding(16)
+            .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
+        }
+    }
+
     @ViewBuilder
     private var incomeBreakdown: some View {
-        if let income = appState.income {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("MONTHLY INCOME")
-                    .font(.system(size: 11, weight: .semibold))
-                    .ltrTracking(1.5)
-                    .foregroundStyle(.secondary)
-
-                HStack(spacing: 12) {
-                    incomeCell(label: "PWD", value: appState.moneyText(income.pwdMonthly))
-                    incomeCell(label: "CDB", value: appState.moneyText(income.cdbMonthly))
-                    incomeCell(label: "TOTAL", value: appState.moneyText(income.totalMonthly))
-                }
-
-                if let year = income.yearTotal, let left = income.yearRemaining, let n = income.paymentsLeft, year > 0 {
+        if appState.income != nil {
+            DisclosureGroup("Details") {
+            VStack(alignment: .leading, spacing: 12) {
+                if let income = appState.income, let year = income.yearTotal, let left = income.yearRemaining, let n = income.paymentsLeft, year > 0 {
                     HStack {
                         Text("This year").foregroundStyle(.secondary)
                         Spacer()
@@ -351,9 +361,13 @@ private struct DashboardScreen: View {
                         .padding(.top, 4)
                 }
             }
+            .padding(.top, 12)
+            }
+            .font(.subheadline.weight(.medium))
+            .tint(.primary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
-            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
+            .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color(.secondarySystemGroupedBackground)))
         }
     }
 
@@ -389,35 +403,27 @@ private struct DashboardScreen: View {
     }
 
     private var paidToggle: some View {
-        HStack(spacing: 12) {
-            Button {
-                Task { await appState.togglePaid() }
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: appState.isPaid ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(appState.isPaid ? Color.talliBlue : .secondary)
-                    Text(LocalizedStringKey(appState.isPaid ? "Paid" : "Paid yet?"))
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(appState.isPaid ? Color.talliBlue : .primary)
-                }
-                .padding(.horizontal, 24)
-                .frame(minHeight: 48)
-                .background(Capsule().strokeBorder(appState.isPaid ? Color.talliBlue.opacity(0.5) : Color.secondary.opacity(0.3), lineWidth: 1))
-            }
-            .buttonStyle(.plain)
+        Button {
+            Task { await appState.togglePaid() }
+        } label: {
+            Label(LocalizedStringKey(appState.isPaid ? "Paid" : "Paid yet?"),
+                  systemImage: appState.isPaid ? "checkmark.circle.fill" : "circle")
+                .font(.body.weight(.semibold))
+                .frame(maxWidth: .infinity)
         }
+        // prominent until it lands, then it steps back
+        .capsuleAction(prominent: !appState.isPaid)
+        .tint(Color.talliBlue)
     }
 
     private var dateCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 16) {
             PaymentCalendarView(paymentDate: appState.parsedNextPaymentDate, today: now)
             Divider()
             SupplementsView { try await APIClient.shared.supplements(save: $0) }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 14)
-        .padding(.bottom, 12)
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 20, style: .continuous)
             .fill(Color(.secondarySystemGroupedBackground)))
     }
 
@@ -431,7 +437,7 @@ private struct OfflineBanner: View {
             Text("Showing last saved data").font(.caption).foregroundStyle(.secondary)
         }
         .padding(12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 }
 
@@ -450,7 +456,7 @@ private struct StaleSyncBanner: View {
             Text(detail).font(.caption).foregroundStyle(.secondary)
         }
         .padding(12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 }
@@ -479,8 +485,8 @@ private struct ReportingWindowBanner: View {
             .controlSize(.mini)
         }
         .padding(12)
-        .background(Color.talliBlue.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.talliBlue.opacity(0.3), lineWidth: 1))
+        .background(Color.talliBlue.opacity(0.1), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(Color.talliBlue.opacity(0.3), lineWidth: 1))
     }
 }
 
@@ -495,8 +501,8 @@ private struct ReportFiledBanner: View {
             Spacer()
         }
         .padding(12)
-        .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.green.opacity(0.3), lineWidth: 1))
+        .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(Color.green.opacity(0.3), lineWidth: 1))
     }
 }
 

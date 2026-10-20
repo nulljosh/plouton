@@ -4,88 +4,45 @@ struct BenefitsView: View {
     @Environment(AppState.self) private var appState
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                Text("Active Benefits")
-                    .font(.headline)
-
-                Text("Income Assistance")
-                    .font(.title2.weight(.semibold))
-                    .foregroundStyle(.primary)
-
+        // One inset grouped list: what you get, then every tool one row deep. No nested folds.
+        List {
+            Section("Active benefits") {
+                if let income = appState.income {
+                    benefitRow("Disability assistance", appState.moneyText(income.pwdMonthly), "Monthly")
+                    if income.cdbMonthly > 0 {
+                        benefitRow("Canada Disability Benefit", appState.moneyText(income.cdbMonthly), "Monthly")
+                    }
+                }
                 benefitRow("GST/HST Credit", "\(CRADates.lastKnownGSTQuarterlyText) next \(CRADates.nextGSTPaymentText)", "Automatic")
-
-                DisclosureGroup("Money tools") {
-                    DisclosureGroup("Budget against paydays") {
-                        BudgetView { try await APIClient.shared.budget(save: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Benefit finder") {
-                        BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("RDSP grants and bonds") {
-                        RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-                    .padding(.top, 8)
-
-                    DisclosureGroup("What if I take a job") {
-                        WhatIfView { try await APIClient.shared.whatIf($0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("My household and rent") {
-                        HouseholdView { try await APIClient.shared.household(save: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-                }
-                .font(.headline)
-
-                DisclosureGroup("Help and papers") {
-                    DisclosureGroup("Turning 65 or moving out of BC") {
-                        LifeChangeView { try await APIClient.shared.lifeChange(save: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Reconsideration helper") {
-                        ReconsiderationView { try await APIClient.shared.reconsideration(received: $0) }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Service requests") {
-                        ServiceRequestsView { try await APIClient.shared.serviceRequests() }
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Document vault") {
-                        VaultView(api: APIClient.shared.vault)
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-
-                    DisclosureGroup("Trusted helper") {
-                        TrustedHelperView(api: APIClient.shared.trustedHelpers)
-                            .padding(.top, 8)
-                    }
-                    .font(.headline)
-                }
-                .font(.headline)
             }
-            .padding()
+
+            Section("Money tools") {
+                tool("Budget against paydays") { BudgetView { try await APIClient.shared.budget(save: $0) } }
+                tool("Benefit finder") { BenefitFinderView { try await APIClient.shared.benefitFinder(answers: $0) } }
+                tool("RDSP grants and bonds") { RdspTrackerView { try await APIClient.shared.rdspTracker(patch: $0) } }
+                tool("What if I take a job") { WhatIfView { try await APIClient.shared.whatIf($0) } }
+                tool("My household and rent") { HouseholdView { try await APIClient.shared.household(save: $0) } }
+            }
+
+            Section("Help and papers") {
+                tool("Turning 65 or moving out of BC") { LifeChangeView { try await APIClient.shared.lifeChange(save: $0) } }
+                tool("Reconsideration helper") { ReconsiderationView { try await APIClient.shared.reconsideration(received: $0) } }
+                tool("Service requests") { ServiceRequestsView { try await APIClient.shared.serviceRequests() } }
+                tool("Document vault") { VaultView(api: APIClient.shared.vault) }
+                tool("Trusted helper") { TrustedHelperView(api: APIClient.shared.trustedHelpers) }
+            }
         }
-        .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 90) }
-        .navigationTitle("Status")
+        .listStyle(.insetGrouped)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    /// A tool opens on its own page, padded on the 8 point grid.
+    private func tool(_ title: String, @ViewBuilder content: @escaping () -> some View) -> some View {
+        NavigationLink(LocalizedStringKey(title)) {
+            ScrollView { content().padding(20) }
+                .navigationTitle(LocalizedStringKey(title))
+                .navigationBarTitleDisplayMode(.inline)
+        }
     }
 
     private func benefitRow(_ title: String, _ amount: String, _ how: String) -> some View {
@@ -97,7 +54,5 @@ struct BenefitsView: View {
             Spacer()
             Text(LocalizedStringKey(amount)).font(.subheadline.weight(.semibold))
         }
-        .padding(12)
-        .background(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Color.secondary.opacity(0.2), lineWidth: 1))
     }
 }

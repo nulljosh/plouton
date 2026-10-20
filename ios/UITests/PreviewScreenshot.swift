@@ -19,16 +19,32 @@ final class PreviewScreenshot: XCTestCase {
             gotIt.tap()
             sleep(1)
         }
-        snapshot("01-Home")
+        shoot("01-Home")
 
-        let tabs = ["Reports", "Benefits", "Messages", "Settings"]
-        for (index, name) in tabs.enumerated() {
-            let button = app.buttons[name]
+        // The three tabs, then Settings, which is a sheet from the avatar on Home.
+        for (index, name) in ["Status", "Messages"].enumerated() {
+            let button = app.tabBars.buttons[name]
             if button.waitForExistence(timeout: 5) {
                 button.tap()
                 sleep(2)
-                snapshot("0\(index + 2)-\(name)")
+                shoot("0\(index + 2)-\(name)")
             }
         }
+        app.tabBars.buttons["Home"].tap()
+        let avatar = app.buttons["Settings"]
+        if avatar.waitForExistence(timeout: 5) {
+            avatar.tap()
+            sleep(2)
+            shoot("04-Settings")
+        }
+    }
+
+    /// fastlane's snapshot for the App Store run, plus a kept attachment so a plain xcodebuild run has the images too.
+    private func shoot(_ name: String) {
+        snapshot(name)
+        let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        shot.name = name
+        shot.lifetime = .keepAlways
+        add(shot)
     }
 }

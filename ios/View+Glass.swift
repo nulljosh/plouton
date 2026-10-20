@@ -15,3 +15,16 @@ extension View {
         }
     }
 }
+
+extension View {
+    /// The one action style: a 48 point capsule. Liquid Glass on 26+, the bordered styles before.
+    @ViewBuilder
+    func capsuleAction(prominent: Bool = true) -> some View {
+        let base = self.buttonBorderShape(.capsule).controlSize(.large)
+        if #available(iOS 26, macOS 26, *) {
+            if prominent { base.buttonStyle(.glassProminent) } else { base.buttonStyle(.glass) }
+        } else {
+            if prominent { base.buttonStyle(.borderedProminent) } else { base.buttonStyle(.bordered) }
+        }
+    }
+}

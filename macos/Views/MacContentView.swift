@@ -21,29 +21,19 @@ private struct AuthenticatedShell: View {
     var body: some View {
         @Bindable var state = appState
 
-        VStack(spacing: 0) {
+        // A Mac app gets a sidebar, not a phone tab bar. On macOS 26 the sidebar is Liquid Glass for free.
+        NavigationSplitView {
+            List(MacAppState.AppSection.allCases, selection: Binding(
+                get: { appState.selectedSection },
+                set: { if let section = $0 { appState.selectedSection = section } }
+            )) { section in
+                Label(LocalizedStringKey(section.rawValue), systemImage: section.icon)
+                    .tag(section)
+            }
+            .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 240)
+        } detail: {
             detailView
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            Divider()
-            HStack(spacing: 0) {
-                ForEach(MacAppState.AppSection.allCases) { section in
-                    let selected = appState.selectedSection == section
-                    Button {
-                        appState.selectedSection = section
-                    } label: {
-                        VStack(spacing: 4) {
-                            Image(systemName: section.icon)
-                                .font(.system(size: 18))
-                            Text(section.rawValue)
-                                .font(.footnote)
-                        }
-                        .foregroundStyle(selected ? Color.accentColor : Color.secondary)
-                        .frame(maxWidth: .infinity, minHeight: 56)
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
         }
         .navigationTitle(appState.selectedSection.rawValue)
         .sheet(isPresented: $showSettings) {

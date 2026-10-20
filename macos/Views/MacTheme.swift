@@ -16,7 +16,7 @@ extension Color {
 
 // MARK: - Shared Card Modifiers
 
-private let macCardShape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+private let macCardShape = RoundedRectangle(cornerRadius: 20, style: .continuous)
 
 struct MacGlassCard: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme

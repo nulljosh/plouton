@@ -91,9 +91,9 @@ private struct AppearancePicker: View {
                     VStack(spacing: 8) {
                         themePreview(id)
                             .frame(height: 56)
-                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                             .overlay(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                RoundedRectangle(cornerRadius: 20, style: .continuous)
                                     .stroke(rawTheme == id ? Color.accentColor : Color.primary.opacity(0.12), lineWidth: 2)
                             )
                         Text(label)
@@ -111,9 +111,9 @@ private struct AppearancePicker: View {
     private func themePreview(_ id: String) -> some View {
         switch id {
         case "light":
-            RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color(white: 0.92))
+            RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color(white: 0.92))
         case "dark":
-            RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color(white: 0.12))
+            RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color(white: 0.12))
         default:
             GeometryReader { geo in
                 ZStack {

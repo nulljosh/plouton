@@ -8,6 +8,7 @@ import UserNotifications
 enum PaydayNotificationScheduler {
     static let paydayId = "talli.payday"
     static let reportingWindowId = "talli.reporting-window"
+    static let reportNudgeId = "talli.report-nudge"
 
     /// The next day-1-of-month at 9am. Only fires for *this* month if today is day 1
     /// (window just opened); any other day of the month means the next occurrence is
@@ -21,6 +22,18 @@ enum PaydayNotificationScheduler {
         components.hour = 9
         components.minute = 0
         return calendar.date(from: components)
+    }
+
+    /// 9am on the 4th, the nudge for a report not yet marked filed: this month's 4th if it
+    /// is still ahead and this month is open, otherwise next month's (refreshed on each sync).
+    static func reportNudgeFireDate(from now: Date, currentMonthFiled: Bool, calendar: Calendar = .current) -> Date? {
+        var components = calendar.dateComponents([.year, .month], from: now)
+        components.day = 4
+        components.hour = 9
+        components.minute = 0
+        guard let thisMonth = calendar.date(from: components) else { return nil }
+        if !currentMonthFiled && thisMonth > now { return thisMonth }
+        return calendar.date(byAdding: .month, value: 1, to: thisMonth)
     }
 
     /// 9am the day before `paymentDate`, or 9am today if that has already passed.
@@ -47,9 +60,9 @@ enum PaydayNotificationScheduler {
         center.setNotificationCategories([reportCategory])
     }
 
-    /// Reschedules both reminders. Safe to call after every dashboard refresh -- replacing
+    /// Reschedules the reminders. Safe to call after every dashboard refresh -- replacing
     /// a pending request with the same identifier is a no-op if the date hasn't moved.
-    static func reschedule(nextPaymentDate: Date?, now: Date = Date()) async {
+    static func reschedule(nextPaymentDate: Date?, currentMonthFiled: Bool = false, now: Date = Date()) async {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized else { return }
@@ -59,13 +72,24 @@ enum PaydayNotificationScheduler {
         let paydayEnabled = defaults.object(forKey: "notifications_payday_enabled") as? Bool ?? true
         let reportingWindowEnabled = defaults.object(forKey: "notifications_reporting_window_enabled") as? Bool ?? true
 
-        center.removePendingNotificationRequests(withIdentifiers: [paydayId, reportingWindowId])
+        center.removePendingNotificationRequests(withIdentifiers: [paydayId, reportingWindowId, reportNudgeId])
 
         if reportingWindowEnabled, let fireDate = nextReportingWindowFireDate(from: now) {
             schedule(
                 id: reportingWindowId,
                 title: "Reporting window is open",
                 body: "You can file your monthly report now through the 5th.",
+                fireDate: fireDate,
+                category: "REPORT_WINDOW",
+                center: center
+            )
+        }
+
+        if reportingWindowEnabled, let fireDate = reportNudgeFireDate(from: now, currentMonthFiled: currentMonthFiled) {
+            schedule(
+                id: reportNudgeId,
+                title: "Monthly report not filed yet",
+                body: "The reporting window closes on the 5th.",
                 fireDate: fireDate,
                 category: "REPORT_WINDOW",
                 center: center

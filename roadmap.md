@@ -25,7 +25,7 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [ ] Province picked at sign-in, rules tested per province like BC. In: "Alberta or Ontario? See your rules" on the iPhone and Mac sign-in screens (next cheque, earnings, reporting, no account). Left: a per-province Home once an AB or ON account source exists.
 
 ## 8.0 Reminders that matter
-- [ ] Monthly report reminder on day 1, nudge on day 4 if not done.
+- [x] Monthly report reminder on day 1, nudge on day 4 if not marked filed (iPhone and Mac, under the reporting reminder toggle).
 - [ ] Earnings tracker warns before the annual exemption runs out.
 - [ ] Cheque-landed notification when Self-Serve shows the payment.
 

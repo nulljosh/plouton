@@ -70,6 +70,7 @@ private struct LoginScreen: View {
     @State private var username = ""
     @State private var password = ""
     @State private var showFederal = false
+    @State private var showProvince = false
 
     var body: some View {
         VStack(spacing: 20) {
@@ -132,6 +133,9 @@ private struct LoginScreen: View {
             Button("Federal benefits, no account needed") { showFederal = true }
                 .font(.footnote)
                 .tint(Color.talliBlue)
+            Button("Alberta or Ontario? See your rules") { showProvince = true }
+                .font(.footnote)
+                .tint(Color.talliBlue)
 
             Spacer()
         }
@@ -144,6 +148,14 @@ private struct LoginScreen: View {
                     .navigationTitle("Federal benefits")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar { Button("Done") { showFederal = false } }
+            }
+        }
+        .sheet(isPresented: $showProvince) {
+            NavigationStack {
+                ScrollView { ProvinceView { try await APIClient.shared.provinces() }.padding(20) }
+                    .navigationTitle("Outside BC")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar { Button("Done") { showProvince = false } }
             }
         }
     }

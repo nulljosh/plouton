@@ -237,7 +237,7 @@ final class MacAppState {
         let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
         try? await MacAPIClient.shared.setReportStatus(month: key, filed: true)
         await refreshReportStatus()
-        await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning)
+        await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning, lastIssued: dashboard?.lastIssued)
     }
 
     func updateWidgetToken() async {
@@ -259,7 +259,7 @@ final class MacAppState {
         syncToWidgets(data)
         if ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil {
             await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
-            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning)
+            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning, lastIssued: dashboard?.lastIssued)
         }
     }
 
@@ -281,7 +281,7 @@ final class MacAppState {
             await updateWidgetToken()
             if ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil {
                 await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
-                await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning)
+                await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning, lastIssued: dashboard?.lastIssued)
             }
         } catch {
             if dashboard != nil {

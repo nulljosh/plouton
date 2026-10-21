@@ -70,6 +70,8 @@ struct MacDashboardData: Codable, Sendable {
 
     let paymentAmount: String?
     let nextPaymentDate: String?
+    /// The last cheque BC issued (YYYY-MM-DD), off Payment Info. Moves when a cheque lands.
+    let lastIssued: String?
     let statusMessages: [StatusMessage]
     let income: Income?
     let earnings: Earnings?
@@ -79,6 +81,7 @@ struct MacDashboardData: Codable, Sendable {
     enum CodingKeys: String, CodingKey {
         case paymentAmount = "payment_amount"
         case nextPaymentDate = "next_date"
+        case lastIssued = "last_issued"
         case statusMessages = "messages"
         case income
         case earnings
@@ -86,9 +89,10 @@ struct MacDashboardData: Codable, Sendable {
         case yearReview = "year_review"
     }
 
-    init(paymentAmount: String?, nextPaymentDate: String?, statusMessages: [StatusMessage], income: Income? = nil, earnings: Earnings? = nil, assets: Assets? = nil, yearReview: YearReview? = nil) {
+    init(paymentAmount: String?, nextPaymentDate: String?, lastIssued: String? = nil, statusMessages: [StatusMessage], income: Income? = nil, earnings: Earnings? = nil, assets: Assets? = nil, yearReview: YearReview? = nil) {
         self.paymentAmount = paymentAmount
         self.nextPaymentDate = nextPaymentDate
+        self.lastIssued = lastIssued
         self.statusMessages = statusMessages
         self.income = income
         self.earnings = earnings
@@ -100,6 +104,7 @@ struct MacDashboardData: Codable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         paymentAmount = try container.decodeIfPresent(String.self, forKey: .paymentAmount)
         nextPaymentDate = try container.decodeIfPresent(String.self, forKey: .nextPaymentDate)
+        lastIssued = try? container.decodeIfPresent(String.self, forKey: .lastIssued)
         // try?: one malformed block must not blank the whole dashboard (earnings.over once came as a Bool).
         income = try? container.decodeIfPresent(Income.self, forKey: .income)
         earnings = try? container.decodeIfPresent(Earnings.self, forKey: .earnings)

@@ -10,6 +10,7 @@ enum PaydayNotificationScheduler {
     static let reportingWindowId = "talli.reporting-window"
     static let reportNudgeId = "talli.report-nudge"
     static let earningsId = "talli.earnings-limit"
+    static let chequeLandedId = "talli.cheque-landed"
 
     /// The next day-1-of-month at 9am. Only fires for *this* month if today is day 1
     /// (window just opened); any other day of the month means the next occurrence is
@@ -51,6 +52,13 @@ enum PaydayNotificationScheduler {
         return nil
     }
 
+    /// True when Payment Info shows a newer issued cheque than the last sync saw. The first
+    /// sync only records the date, so signing in never announces an old cheque.
+    static func chequeLanded(lastIssued: String?, seen: String?) -> Bool {
+        guard let lastIssued, let seen else { return false }
+        return lastIssued > seen
+    }
+
     /// 9am the day before `paymentDate`, or 9am today if that has already passed.
     static func paydayReminderFireDate(paymentDate: Date, from now: Date, calendar: Calendar = .current) -> Date? {
         guard let dayBefore = calendar.date(byAdding: .day, value: -1, to: paymentDate) else { return nil }
@@ -69,7 +77,7 @@ enum PaydayNotificationScheduler {
 
     /// Reschedules both reminders. Safe to call after every dashboard refresh -- replacing
     /// a pending request with the same identifier is a no-op if the date hasn't moved.
-    static func reschedule(nextPaymentDate: Date?, currentMonthFiled: Bool = false, earnings: (year: Int, earned: Double, exemption: Double)? = nil, now: Date = Date()) async {
+    static func reschedule(nextPaymentDate: Date?, currentMonthFiled: Bool = false, earnings: (year: Int, earned: Double, exemption: Double)? = nil, lastIssued: String? = nil, now: Date = Date()) async {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized else { return }
@@ -109,6 +117,15 @@ enum PaydayNotificationScheduler {
                 defaults.set(true, forKey: key)
                 schedule(id: earningsId, title: w.title, body: w.body, fireDate: now.addingTimeInterval(60), center: center)
             }
+        }
+
+        // Cheque landed: rides the payday toggle, fires a minute after the sync that sees it.
+        if let issued = lastIssued {
+            let seenKey = "talli.last-issued-seen"
+            if paydayEnabled, chequeLanded(lastIssued: issued, seen: defaults.string(forKey: seenKey)) {
+                schedule(id: chequeLandedId, title: "Your cheque was issued", body: "BC issued your assistance. It should be in your account today.", fireDate: now.addingTimeInterval(60), center: center)
+            }
+            defaults.set(issued, forKey: seenKey)
         }
 
         if paydayEnabled, let paymentDate = nextPaymentDate, let fireDate = paydayReminderFireDate(paymentDate: paymentDate, from: now) {

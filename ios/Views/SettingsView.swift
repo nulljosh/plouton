@@ -6,6 +6,7 @@ struct SettingsView: View {
     @AppStorage("app_theme") private var rawTheme = "system"
     @AppStorage("notifications_payday_enabled") private var paydayNotificationsEnabled = true
     @AppStorage("notifications_reporting_window_enabled") private var reportingWindowNotificationsEnabled = true
+    @AppStorage("notifications_earnings_enabled") private var earningsNotificationsEnabled = true
     @State private var isGeneratingAvatar = false
 
     // Turning one off takes effect now; turning it back on waits for the next
@@ -55,6 +56,10 @@ struct SettingsView: View {
                 Toggle("Reporting Window Reminder", isOn: $reportingWindowNotificationsEnabled)
                     .onChange(of: reportingWindowNotificationsEnabled) { _, on in
                         if !on { cancelReminder(PaydayNotificationScheduler.reportingWindowId); cancelReminder(PaydayNotificationScheduler.reportNudgeId) }
+                    }
+                Toggle("Earnings Limit Warning", isOn: $earningsNotificationsEnabled)
+                    .onChange(of: earningsNotificationsEnabled) { _, on in
+                        if !on { cancelReminder(PaydayNotificationScheduler.earningsId) }
                     }
             }
 

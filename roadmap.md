@@ -26,7 +26,7 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 
 ## 8.0 Reminders that matter
 - [x] Monthly report reminder on day 1, nudge on day 4 if not marked filed (iPhone and Mac, under the reporting reminder toggle).
-- [ ] Earnings tracker warns before the annual exemption runs out.
+- [x] Earnings tracker warns before the annual exemption runs out: once at 80 percent, once if over, each a year (iPhone and Mac, own toggle).
 - [ ] Cheque-landed notification when Self-Serve shows the payment.
 
 ## 9.0 Helpers

@@ -9,6 +9,7 @@ enum PaydayNotificationScheduler {
     static let paydayId = "talli.payday"
     static let reportingWindowId = "talli.reporting-window"
     static let reportNudgeId = "talli.report-nudge"
+    static let earningsId = "talli.earnings-limit"
 
     /// The next day-1-of-month at 9am. Only fires for *this* month if today is day 1
     /// (window just opened); any other day of the month means the next occurrence is
@@ -34,6 +35,20 @@ enum PaydayNotificationScheduler {
         guard let thisMonth = calendar.date(from: components) else { return nil }
         if !currentMonthFiled && thisMonth > now { return thisMonth }
         return calendar.date(byAdding: .month, value: 1, to: thisMonth)
+    }
+
+    /// The warning for this year's work earnings, or nil: "near" once 80 percent of the
+    /// exemption is used, "over" past it. Each level fires once a year.
+    static func earningsWarning(earned: Double, exemption: Double) -> (level: String, title: String, body: String)? {
+        guard exemption > 0 else { return nil }
+        let money = { (n: Double) in n.formatted(.currency(code: "CAD").precision(.fractionLength(0))) }
+        if earned > exemption {
+            return ("over", "Over your earnings limit", "You are \(money(earned - exemption)) over this year's \(money(exemption)) exemption. Assistance drops by the amount over.")
+        }
+        if earned >= exemption * 0.8 {
+            return ("near", "Close to your earnings limit", "\(money(exemption - earned)) left of this year's \(money(exemption)) exemption.")
+        }
+        return nil
     }
 
     /// 9am the day before `paymentDate`, or 9am today if that has already passed.
@@ -62,7 +77,7 @@ enum PaydayNotificationScheduler {
 
     /// Reschedules the reminders. Safe to call after every dashboard refresh -- replacing
     /// a pending request with the same identifier is a no-op if the date hasn't moved.
-    static func reschedule(nextPaymentDate: Date?, currentMonthFiled: Bool = false, now: Date = Date()) async {
+    static func reschedule(nextPaymentDate: Date?, currentMonthFiled: Bool = false, earnings: (year: Int, earned: Double, exemption: Double)? = nil, now: Date = Date()) async {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
         guard settings.authorizationStatus == .authorized else { return }
@@ -94,6 +109,16 @@ enum PaydayNotificationScheduler {
                 category: "REPORT_WINDOW",
                 center: center
             )
+        }
+
+        // Fires a minute after the sync that crosses a level; the flag keeps it to once a year.
+        let earningsEnabled = defaults.object(forKey: "notifications_earnings_enabled") as? Bool ?? true
+        if earningsEnabled, let e = earnings, let w = earningsWarning(earned: e.earned, exemption: e.exemption) {
+            let key = "talli.earnings-warned.\(e.year).\(w.level)"
+            if !defaults.bool(forKey: key) {
+                defaults.set(true, forKey: key)
+                schedule(id: earningsId, title: w.title, body: w.body, fireDate: now.addingTimeInterval(60), center: center)
+            }
         }
 
         if paydayEnabled, let paymentDate = nextPaymentDate, let fireDate = paydayReminderFireDate(paymentDate: paymentDate, from: now) {

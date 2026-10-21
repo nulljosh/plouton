@@ -61,6 +61,7 @@ private struct AccountCard: View {
 private struct NotificationsCard: View {
     @Binding var paydayEnabled: Bool
     @Binding var reportingWindowEnabled: Bool
+    @AppStorage("notifications_earnings_enabled") private var earningsEnabled = true
 
     // Off takes effect now; back on waits for the next refresh's reschedule.
     private func cancel(_ id: String) {
@@ -76,6 +77,10 @@ private struct NotificationsCard: View {
             Toggle("Reporting Window Reminder", isOn: $reportingWindowEnabled)
                 .onChange(of: reportingWindowEnabled) { _, on in
                     if !on { cancel(PaydayNotificationScheduler.reportingWindowId); cancel(PaydayNotificationScheduler.reportNudgeId) }
+                }
+            Toggle("Earnings Limit Warning", isOn: $earningsEnabled)
+                .onChange(of: earningsEnabled) { _, on in
+                    if !on { cancel(PaydayNotificationScheduler.earningsId) }
                 }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

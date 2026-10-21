@@ -43,6 +43,12 @@ final class MacAppState {
         return Date().timeIntervalSince(lastSyncDate) > Self.staleSyncHours * 3600
     }
 
+    /// This year's earnings in the shape the limit warning needs, or nil when the server has not sent them.
+    var earningsForWarning: (year: Int, earned: Double, exemption: Double)? {
+        guard let e = earnings, let y = e.year, let earned = e.earned, let ex = e.exemption else { return nil }
+        return (y, earned, ex)
+    }
+
     var isCurrentMonthFiled: Bool {
         let c = Calendar.current
         let now = Date()
@@ -231,7 +237,7 @@ final class MacAppState {
         let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
         try? await MacAPIClient.shared.setReportStatus(month: key, filed: true)
         await refreshReportStatus()
-        await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled)
+        await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning)
     }
 
     func updateWidgetToken() async {
@@ -253,7 +259,7 @@ final class MacAppState {
         syncToWidgets(data)
         if ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil {
             await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
-            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled)
+            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning)
         }
     }
 
@@ -275,7 +281,7 @@ final class MacAppState {
             await updateWidgetToken()
             if ProcessInfo.processInfo.environment["UITEST_SNAPSHOT"] == nil {
                 await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
-                await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled)
+                await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled, earnings: earningsForWarning)
             }
         } catch {
             if dashboard != nil {

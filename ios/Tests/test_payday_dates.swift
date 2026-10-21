@@ -25,6 +25,18 @@ enum Scheduler {
         return calendar.date(byAdding: .month, value: 1, to: thisMonth)
     }
 
+    static func earningsWarning(earned: Double, exemption: Double) -> (level: String, title: String, body: String)? {
+        guard exemption > 0 else { return nil }
+        let money = { (n: Double) in n.formatted(.currency(code: "CAD").precision(.fractionLength(0))) }
+        if earned > exemption {
+            return ("over", "Over your earnings limit", "You are \(money(earned - exemption)) over this year's \(money(exemption)) exemption. Assistance drops by the amount over.")
+        }
+        if earned >= exemption * 0.8 {
+            return ("near", "Close to your earnings limit", "\(money(exemption - earned)) left of this year's \(money(exemption)) exemption.")
+        }
+        return nil
+    }
+
     static func paydayReminderFireDate(paymentDate: Date, from now: Date, calendar: Calendar = .current) -> Date? {
         guard let dayBefore = calendar.date(byAdding: .day, value: -1, to: paymentDate) else { return nil }
         var components = calendar.dateComponents([.year, .month, .day], from: max(dayBefore, now))
@@ -77,5 +89,12 @@ assertDay(Scheduler.reportNudgeFireDate(from: date(2026, 9, 4, 14), currentMonth
 
 // December -> January rollover.
 assertDay(Scheduler.reportNudgeFireDate(from: date(2026, 12, 20), currentMonthFiled: false, calendar: cal), 2027, 1, 4, 9, "nudge december -> january")
+
+// Earnings limit: quiet under 80 percent, "near" from 80, "over" past the limit, nothing with no exemption.
+precondition(Scheduler.earningsWarning(earned: 10_000, exemption: 18_000) == nil, "FAIL earnings under 80%")
+precondition(Scheduler.earningsWarning(earned: 14_400, exemption: 18_000)?.level == "near", "FAIL earnings at 80%")
+precondition(Scheduler.earningsWarning(earned: 18_500, exemption: 18_000)?.level == "over", "FAIL earnings over")
+precondition(Scheduler.earningsWarning(earned: 500, exemption: 0) == nil, "FAIL no exemption")
+print("ok  earnings warning levels")
 
 print("all payday scheduler checks passed")

@@ -271,6 +271,7 @@ final class AppState {
         let key = String(format: "%04d-%02d", c.component(.year, from: now), c.component(.month, from: now))
         try? await APIClient.shared.setReportStatus(month: key, filed: true)
         await refreshReportStatus()
+        await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled)
     }
 
     func loadPaidStatus() async {
@@ -524,7 +525,7 @@ final class AppState {
             }
             await updateWidgetToken()
             await PaydayNotificationScheduler.requestAuthorizationIfNeeded()
-            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate)
+            await PaydayNotificationScheduler.reschedule(nextPaymentDate: parsedNextPaymentDate, currentMonthFiled: isCurrentMonthFiled)
         } catch APIClientError.unauthorized {
             isAuthenticated = false
             errorMessage = "Session expired. Please sign in again."

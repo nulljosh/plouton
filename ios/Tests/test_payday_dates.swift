@@ -15,6 +15,16 @@ enum Scheduler {
         return calendar.date(from: components)
     }
 
+    static func reportNudgeFireDate(from now: Date, currentMonthFiled: Bool, calendar: Calendar = .current) -> Date? {
+        var components = calendar.dateComponents([.year, .month], from: now)
+        components.day = 4
+        components.hour = 9
+        components.minute = 0
+        guard let thisMonth = calendar.date(from: components) else { return nil }
+        if !currentMonthFiled && thisMonth > now { return thisMonth }
+        return calendar.date(byAdding: .month, value: 1, to: thisMonth)
+    }
+
     static func paydayReminderFireDate(paymentDate: Date, from now: Date, calendar: Calendar = .current) -> Date? {
         guard let dayBefore = calendar.date(byAdding: .day, value: -1, to: paymentDate) else { return nil }
         var components = calendar.dateComponents([.year, .month, .day], from: max(dayBefore, now))
@@ -55,5 +65,17 @@ assertDay(Scheduler.paydayReminderFireDate(paymentDate: date(2026, 9, 23), from:
 
 // Payday is tomorrow -> "day before" is today, still fires today at 9am (not in the past if run before 9am).
 assertDay(Scheduler.paydayReminderFireDate(paymentDate: date(2026, 9, 19), from: date(2026, 9, 18, 14), calendar: cal), 2026, 9, 18, 9, "payday reminder clamps to today")
+
+// Day 2, not filed -> nudge on the 4th of this month.
+assertDay(Scheduler.reportNudgeFireDate(from: date(2026, 9, 2), currentMonthFiled: false, calendar: cal), 2026, 9, 4, 9, "nudge this month when not filed")
+
+// Day 2, already filed -> skip to next month's 4th.
+assertDay(Scheduler.reportNudgeFireDate(from: date(2026, 9, 2), currentMonthFiled: true, calendar: cal), 2026, 10, 4, 9, "filed -> next month")
+
+// Day 4 after 9am -> next month's 4th, never a nudge in the past.
+assertDay(Scheduler.reportNudgeFireDate(from: date(2026, 9, 4, 14), currentMonthFiled: false, calendar: cal), 2026, 10, 4, 9, "past the nudge -> next month")
+
+// December -> January rollover.
+assertDay(Scheduler.reportNudgeFireDate(from: date(2026, 12, 20), currentMonthFiled: false, calendar: cal), 2027, 1, 4, 9, "nudge december -> january")
 
 print("all payday scheduler checks passed")

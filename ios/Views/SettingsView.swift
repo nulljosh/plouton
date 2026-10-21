@@ -54,7 +54,7 @@ struct SettingsView: View {
                     }
                 Toggle("Reporting Window Reminder", isOn: $reportingWindowNotificationsEnabled)
                     .onChange(of: reportingWindowNotificationsEnabled) { _, on in
-                        if !on { cancelReminder(PaydayNotificationScheduler.reportingWindowId) }
+                        if !on { cancelReminder(PaydayNotificationScheduler.reportingWindowId); cancelReminder(PaydayNotificationScheduler.reportNudgeId) }
                     }
             }
 

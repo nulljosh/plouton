@@ -44,3 +44,6 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - Open data on cheque dates and rates for any app to use.
 - Partnerships with advocacy groups, still free, still no ads.
 - Each major is one theme, shipped on every platform, tested, and documented.
+
+## Ingested 2026-10-21
+- [ ] Why isn't this 1750? It should include CDB. Deposit from PROVINCE OF B.C, $1,535.50 CAD, direct deposit, Oct 20 2026, account balance $1,827.80. Check the expected-amount math includes CDB. (screenshot: notes/attachments/2026-10-21/why-isnt-this-1750-1.png) (Q: is 1750 the expected monthly total in the app?)

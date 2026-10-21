@@ -39,6 +39,7 @@
 		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
 		68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47FDBC6806E5A115D749928 /* RTLTracking.swift */; };
 		68757DD630674D89FA11A436 /* LifeChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */; };
+		933437B7B8DE30A8BB87566E /* ProvinceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444811D43CD139384A826977 /* ProvinceView.swift */; };
 		968B1E3C1D50FB8FCEB0F738 /* MacWidgetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */; };
 		986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */; };
 		9BAFF0507C634EDA6EF0F6E2 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3951E529B6F7FA9B74ABE9C /* ExportOptions.plist */; };
@@ -103,6 +104,7 @@
 		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
 		2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCrypto.swift; sourceTree = "<group>"; };
 		3957E7C2F9B33E31A48633BD /* HouseholdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseholdView.swift; sourceTree = "<group>"; };
+		444811D43CD139384A826977 /* ProvinceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvinceView.swift; sourceTree = "<group>"; };
 		4BA58147703D20028DCD974A /* TalliMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalliMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWidgetAPI.swift; sourceTree = "<group>"; };
 		4F7775930C1F9FD312750701 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				3957E7C2F9B33E31A48633BD /* HouseholdView.swift */,
 				C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */,
 				0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */,
+				444811D43CD139384A826977 /* ProvinceView.swift */,
 				AB7688A8B26D97A128C95FA2 /* RdspTrackerView.swift */,
 				54336877769FA2F896CFAEAA /* ReconsiderationView.swift */,
 				143469F2CCBEE5C354DFA76E /* ReplyDraftView.swift */,
@@ -507,6 +510,7 @@
 				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
 				986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */,
 				13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */,
+				933437B7B8DE30A8BB87566E /* ProvinceView.swift in Sources */,
 				68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */,
 				2B571A9A6058202934D64E5A /* RdspTrackerView.swift in Sources */,
 				F8E7098F7259513AA5938E0D /* ReconsiderationView.swift in Sources */,
@@ -619,7 +623,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 202610201455;
+				CURRENT_PROJECT_VERSION = 202610021704;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -694,7 +698,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 202610201455;
+				CURRENT_PROJECT_VERSION = 202610021704;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = QMM486NPYC;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

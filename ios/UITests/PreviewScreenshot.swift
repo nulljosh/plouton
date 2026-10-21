@@ -46,6 +46,19 @@ final class PreviewScreenshot: XCTestCase {
         attach("11-Federal-question")
     }
 
+    func testProvinceRulesWithoutAccount() throws {
+        let app = XCUIApplication()
+        app.launch()
+        let link = app.buttons["Alberta or Ontario? See your rules"]
+        XCTAssertTrue(link.waitForExistence(timeout: 10))
+        link.tap()
+        XCTAssertTrue(app.staticTexts["NEXT CHEQUE"].waitForExistence(timeout: 15))
+        attach("12-Province-alberta")
+        app.buttons["Ontario"].tap()
+        XCTAssertTrue(app.staticTexts["REPORTING"].waitForExistence(timeout: 5))
+        attach("13-Province-ontario")
+    }
+
     /// fastlane's snapshot for the App Store run, plus a kept attachment so a plain xcodebuild run has the images too.
     private func shoot(_ name: String) {
         snapshot(name)

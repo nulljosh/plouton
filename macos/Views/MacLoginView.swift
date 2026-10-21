@@ -5,6 +5,7 @@ struct MacLoginView: View {
     @State private var username = ""
     @State private var password = ""
     @State private var showFederal = false
+    @State private var showProvince = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -63,6 +64,9 @@ struct MacLoginView: View {
             Button("Federal benefits, no account needed") { showFederal = true }
                 .buttonStyle(.link)
                 .font(.footnote)
+            Button("Alberta or Ontario? See your rules") { showProvince = true }
+                .buttonStyle(.link)
+                .font(.footnote)
 
             Spacer()
         }
@@ -72,6 +76,14 @@ struct MacLoginView: View {
                 ScrollView { BenefitFinderView { try await MacAPIClient.shared.federalFinder(answers: $0) }.frame(maxWidth: 680).padding(24) }
                     .navigationTitle("Federal benefits")
                     .toolbar { Button("Done") { showFederal = false } }
+            }
+            .frame(minWidth: 520, minHeight: 600)
+        }
+        .sheet(isPresented: $showProvince) {
+            NavigationStack {
+                ScrollView { ProvinceView { try await MacAPIClient.shared.provinces() }.frame(maxWidth: 680).padding(24) }
+                    .navigationTitle("Outside BC")
+                    .toolbar { Button("Done") { showProvince = false } }
             }
             .frame(minWidth: 520, minHeight: 600)
         }

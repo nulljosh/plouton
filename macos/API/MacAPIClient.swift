@@ -127,6 +127,11 @@ final class MacAPIClient: @unchecked Sendable {
         return try await send(path: "api/federal-finder", responseType: BenefitFinder.self)
     }
 
+    /// Alberta and Ontario rules, dates and report windows (public /api/open/provinces), for people outside BC.
+    func provinces() async throws -> ProvinceList {
+        try await send(path: "api/open/provinces", responseType: ProvinceList.self)
+    }
+
     /// Raw requests for the document vault: ciphertext in and out, so no JSON decoding.
     var vault: VaultAPI {
         VaultAPI { path, method, body, contentType in

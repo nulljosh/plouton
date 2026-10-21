@@ -217,6 +217,7 @@ final class MacAppState {
         username = ""
         MacKeychainHelper.clearCredentials()
         clearCookies()
+        OfflineCache.clear()
         let shared = UserDefaults(suiteName: Constants.appGroup)
         shared?.removeObject(forKey: "api_token")
     }

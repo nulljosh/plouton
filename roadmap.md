@@ -34,7 +34,7 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 - [x] Printable one-page summary for appointments: /helper#print from the Trusted helper tool, web.
 
 ## 10.0 Offline first
-- [ ] Every screen works from the last sync with no network; sync state shown in one line.
+- [x] Every screen works from the last sync with no network; sync state shown in one line. Every API read keeps its last good copy (`ios/API/OfflineCache.swift`, iPhone and Mac), wiped on sign-out; the Offline and Not up to date banners are the one line.
 
 ## 11 to 20: depth
 - Benefits checker for every federal and BC program a person might be missing.

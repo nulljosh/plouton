@@ -266,6 +266,10 @@ final class MacAPIClient: @unchecked Sendable {
         do {
             (data, urlResponse) = try await session.data(for: request)
         } catch {
+            // No network: the last good copy of this screen beats an error.
+            if let cached = OfflineCache.load(for: request), let value = try? decoder.decode(Response.self, from: cached) {
+                return value
+            }
             throw MacAPIError.networkError(error)
         }
 
@@ -280,7 +284,9 @@ final class MacAPIClient: @unchecked Sendable {
         }
 
         do {
-            return try decoder.decode(Response.self, from: data)
+            let value = try decoder.decode(Response.self, from: data)
+            OfflineCache.save(data, for: request)
+            return value
         } catch {
             throw MacAPIError.decodingError(error)
         }

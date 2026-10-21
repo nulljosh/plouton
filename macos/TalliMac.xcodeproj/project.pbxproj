@@ -39,6 +39,7 @@
 		648A1E6A1C557E43E91DD2AB /* MacKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D46509CD0CB994360A6EE /* MacKeychainHelper.swift */; };
 		68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47FDBC6806E5A115D749928 /* RTLTracking.swift */; };
 		68757DD630674D89FA11A436 /* LifeChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12445E704AC6AE4D68DAA67 /* LifeChangeView.swift */; };
+		7977CE05321CF640542D27E8 /* OfflineCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217AF15EBB15DD448AF76CAA /* OfflineCache.swift */; };
 		933437B7B8DE30A8BB87566E /* ProvinceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444811D43CD139384A826977 /* ProvinceView.swift */; };
 		968B1E3C1D50FB8FCEB0F738 /* MacWidgetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED469812914B2A45C10F666 /* MacWidgetAPI.swift */; };
 		986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0046C4CA8530BB849F37AAA5 /* MissedPaymentView.swift */; };
@@ -100,6 +101,7 @@
 		15C04BA39F17A61EF58E09E9 /* HeroAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroAmountView.swift; sourceTree = "<group>"; };
 		1777E1F0FD107545870F598B /* MacScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScreenshot.swift; sourceTree = "<group>"; };
 		209EE4F5C455FD9A9AD18F94 /* TalliDisplay-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TalliDisplay-Semibold.ttf"; sourceTree = "<group>"; };
+		217AF15EBB15DD448AF76CAA /* OfflineCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineCache.swift; sourceTree = "<group>"; };
 		251C0D379D90012F2C004BED /* Talli.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = Talli.icon; sourceTree = "<group>"; };
 		253DEBB17503562A3842CF40 /* MacDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDashboardView.swift; sourceTree = "<group>"; };
 		2C99C8A261E7DB1D39095B44 /* VaultCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCrypto.swift; sourceTree = "<group>"; };
@@ -150,6 +152,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		02A74C1E70FBE792CCFFBB3D /* API */ = {
+			isa = PBXGroup;
+			children = (
+				217AF15EBB15DD448AF76CAA /* OfflineCache.swift */,
+			);
+			name = API;
+			path = ../ios/API;
+			sourceTree = "<group>";
+		};
 		11835D1381E8F6883C028F7F /* Talli */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				D2F09362310FBA9BC12F44AF /* API */,
+				02A74C1E70FBE792CCFFBB3D /* API */,
 				2BF87326ABCB45BC0E0A128F /* fonts */,
 				BA3254AC0D366A2B19C3603F /* Helpers */,
 				B95C375D38861B1A1EDE2090 /* macos */,
@@ -509,6 +521,7 @@
 				B2B60C9015E6163943DC89CF /* MacTheme.swift in Sources */,
 				37291C624EBCC18BA59688CA /* MenuBarView.swift in Sources */,
 				986E03B04A8F7FCBE7E15610 /* MissedPaymentView.swift in Sources */,
+				7977CE05321CF640542D27E8 /* OfflineCache.swift in Sources */,
 				13B60F9180A94A04BA24C25E /* PaydayNotificationScheduler.swift in Sources */,
 				933437B7B8DE30A8BB87566E /* ProvinceView.swift in Sources */,
 				68003AB732B158D919F3BE14 /* RTLTracking.swift in Sources */,

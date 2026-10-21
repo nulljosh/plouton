@@ -20,12 +20,19 @@
     .row span:last-child { font-weight:600; text-align:end; }
     .note { font-size:12px; color:var(--muted); line-height:1.5; margin-top:8px; }
     .ok { color:#2e9e5b; font-weight:600; } .warn { color:#d98a1c; font-weight:600; }
+    .print { display:none; height:48px; padding:0 24px; border:0; border-radius:24px; background:var(--accent); color:#fff; font:inherit; font-weight:600; cursor:pointer; margin-top:16px; }
+    @media print {
+      :root { --bg:#fff; --text:#000; --muted:#555; --line:#ccc; --card:#fff; }
+      main { max-width:none; padding:0; }
+      .print { display:none !important; }
+    }
   </style>
 </head>
 <body>
 <main>
-  <h1>Shared with you</h1>
+  <h1 id="title">Shared with you</h1>
   <div id="out"><div class="note">Loading...</div></div>
+  <button class="print" id="print" type="button">Print</button>
 </main>
 <script>
 (function () {
@@ -34,9 +41,13 @@
   var usd = function (n) { return '$' + Number(n).toLocaleString('en-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); };
   var day = function (s) { return new Date(s + 'T12:00:00').toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' }); };
   var el = function (tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-  var fail = function () { out.replaceChildren(el('div', 'card', 'This link no longer works. Ask the person who shared it for a new one.')); };
-  if (!m) return fail();
-  fetch('/api/helper-view', { headers: { 'X-Helper-Token': m[1] }, cache: 'no-store', referrerPolicy: 'no-referrer' })
+  // #print: the signed-in person's own copy, for an appointment. Otherwise a helper's link.
+  var mine = location.hash === '#print';
+  var fail = function () { out.replaceChildren(el('div', 'card', mine ? 'Sign in to Talli, then open this page again.' : 'This link no longer works. Ask the person who shared it for a new one.')); };
+  if (!mine && !m) return fail();
+  if (mine) { document.title = 'Summary | Talli'; document.getElementById('title').textContent = 'Talli summary'; }
+  (mine ? fetch('/api/print-summary', { credentials: 'same-origin', cache: 'no-store' })
+        : fetch('/api/helper-view', { headers: { 'X-Helper-Token': m[1] }, cache: 'no-store', referrerPolicy: 'no-referrer' }))
     .then(function (r) { if (!r.ok) throw new Error('gone'); return r.json(); })
     .then(function (v) {
       var frag = document.createDocumentFragment();
@@ -52,8 +63,9 @@
       rep.append(el('div', 'label', 'Monthly report'));
       rep.append(el('div', v.report.filed ? 'ok' : 'warn', v.report.filed ? 'Filed this month' : 'Not filed yet this month'));
       frag.append(rep);
-      frag.append(el('div', 'note', 'Read only. This link works until ' + day(v.expiresAt) + ', or until the person removes it. It shows payment timing and application status only.'));
+      frag.append(el('div', 'note', mine ? 'From Talli on ' + day(v.asOf) + '. Payment timing and application status only.' : 'Read only. This link works until ' + day(v.expiresAt) + ', or until the person removes it. It shows payment timing and application status only.'));
       out.replaceChildren(frag);
+      if (mine) { var b = document.getElementById('print'); b.style.display = 'block'; b.onclick = function () { window.print(); }; }
     })
     .catch(fail);
 })();

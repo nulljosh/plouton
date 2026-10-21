@@ -2039,17 +2039,32 @@ app.get('/api/helper-view', helperLimiter, async (req, res) => {
     if (!helper.validToken(token) || !helperReady()) return gone();
     const rec = await blob.getJSON(helperKey(helper.hashToken(token)));
     if (!rec || helper.isExpired(rec.expiresAt)) return gone();
-    const [pwd, rdsp, cdb, report, income] = await Promise.all([
-      loadUserBlob(rec.userId, 'pwd-profile', {}), loadUserBlob(rec.userId, 'rdsp-profile', {}),
-      loadUserBlob(rec.userId, 'cdb-profile', {}), loadUserBlob(rec.userId, 'report-status', { reportMonths: {} }),
-      loadUserBlob(rec.userId, 'last-income', null),
-    ]);
-    res.json(helper.buildHelperView({ pwd, rdsp, cdb, income, reportMonths: report?.reportMonths || {}, expiresAt: rec.expiresAt }));
+    res.json(await helperViewFor(rec.userId, rec.expiresAt));
   } catch (err) {
     log('[HELPER] view error:', err.message);
     gone();
   }
 });
+
+// The same one page for the person themselves, to print for an appointment (web/helper.html#print).
+app.get('/api/print-summary', requireAuth, async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  try {
+    res.json(await helperViewFor(req.session.userId, null));
+  } catch (err) {
+    log('[HELPER] print error:', err.message);
+    res.status(500).json({ error: 'Could not build the summary' });
+  }
+});
+
+async function helperViewFor(userId, expiresAt) {
+  const [pwd, rdsp, cdb, report, income] = await Promise.all([
+    loadUserBlob(userId, 'pwd-profile', {}), loadUserBlob(userId, 'rdsp-profile', {}),
+    loadUserBlob(userId, 'cdb-profile', {}), loadUserBlob(userId, 'report-status', { reportMonths: {} }),
+    loadUserBlob(userId, 'last-income', null),
+  ]);
+  return helper.buildHelperView({ pwd, rdsp, cdb, income, reportMonths: report?.reportMonths || {}, expiresAt });
+}
 
 // Remembers the income Talli last showed, so a helper sees the same number without a scrape.
 async function rememberIncome(req, userId, income) {

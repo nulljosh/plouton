@@ -27,7 +27,7 @@ Talli is free and stays free. The job is accuracy: what lands, when, and what yo
 ## 8.0 Reminders that matter
 - [x] Monthly report reminder on day 1, nudge on day 4 if not marked filed (iPhone and Mac, under the reporting reminder toggle).
 - [x] Earnings tracker warns before the annual exemption runs out: once at 80 percent, once if over, each a year (iPhone and Mac, own toggle).
-- [ ] Cheque-landed notification when Self-Serve shows the payment. Needs a before and after look at Payment Info around a cheque day (next BC issue 2026-10-21) to see what changes.
+- [x] Cheque-landed notification when Self-Serve shows the payment: the server reads "Previous assistance issued on" (`last_issued`), the apps alert when it moves (payday toggle).
 
 ## 9.0 Helpers
 - [x] Shared read-only view for a support worker or family member, revocable (Trusted helper, web and apps).

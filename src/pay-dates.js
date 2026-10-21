@@ -28,4 +28,18 @@ function nextPaymentDate(today = new Date(), onExhausted) {
   return next || null;
 }
 
-module.exports = { CHEQUE_ISSUE_DATES, nextPaymentDate };
+// The last cheque BC actually issued, read off My Self Serve's Payment Info line
+// "Previous assistance issued on October 21, 2026". ISO date or null. When it moves,
+// the apps say the cheque landed.
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+function lastIssuedDate(scraperResult) {
+  const lines = scraperResult?.sections?.['Payment Info']?.allText || [];
+  for (const line of lines) {
+    const m = /previous assistance issued on ([a-z]+) (\d{1,2}), (\d{4})/i.exec(String(line));
+    const month = m && MONTHS.indexOf(m[1].toLowerCase());
+    if (m && month >= 0) return `${m[3]}-${String(month + 1).padStart(2, '0')}-${m[2].padStart(2, '0')}`;
+  }
+  return null;
+}
+
+module.exports = { CHEQUE_ISSUE_DATES, nextPaymentDate, lastIssuedDate };

@@ -115,4 +115,13 @@ t('year review mid-year only counts what already landed', () => {
   assert.strictEqual(r.items.every((i) => i.what === 'PWD assistance'), true); // $0 CDB lines dropped
 });
 
+t('lastIssuedDate reads the previous cheque off Payment Info, or null', () => {
+  const { lastIssuedDate } = require('../src/pay-dates');
+  const page = (lines) => ({ sections: { 'Payment Info': { allText: lines } } });
+  assert.strictEqual(lastIssuedDate(page(['On October 21, 2026 you are estimated to receive $1535.50', 'Previous assistance issued on September 23, 2026'])), '2026-09-23');
+  assert.strictEqual(lastIssuedDate(page(['Previous assistance issued on October 1, 2026'])), '2026-10-01');
+  assert.strictEqual(lastIssuedDate(page(['Here is your payment information'])), null);
+  assert.strictEqual(lastIssuedDate(null), null);
+});
+
 console.log(`\n${passed} passed, 0 failed`);

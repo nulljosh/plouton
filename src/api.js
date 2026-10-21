@@ -16,7 +16,7 @@ const { normalizeReadIds } = require('./read-ids');
 const { attemptHttpLogin, fetchAllSections } = require('./http-scraper');
 const widgetToken = require('./widget-token');
 const { parseMessages, hasMoreMessages, countMessages } = require('./parse-messages');
-const { nextPaymentDate } = require('./pay-dates');
+const { nextPaymentDate, lastIssuedDate } = require('./pay-dates');
 const helper = require('./programs/helper');
 const { buildOpenData } = require('./programs/open-data');
 const { listProvinces } = require('./programs/provinces');
@@ -2654,6 +2654,7 @@ function extractMobileData(scraperResult, income = null, earnings = null, assets
     assets,
     year_review: yearReview,
     next_date: nextDate,
+    last_issued: lastIssuedDate(scraperResult),
     messages,
     // First page only -- the portal hides older rows behind "Show More Messages".
     has_more_messages: hasMoreMessages(messagesAllText)

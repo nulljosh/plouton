@@ -37,6 +37,11 @@ enum Scheduler {
         return nil
     }
 
+    static func chequeLanded(lastIssued: String?, seen: String?) -> Bool {
+        guard let lastIssued, let seen else { return false }
+        return lastIssued > seen
+    }
+
     static func paydayReminderFireDate(paymentDate: Date, from now: Date, calendar: Calendar = .current) -> Date? {
         guard let dayBefore = calendar.date(byAdding: .day, value: -1, to: paymentDate) else { return nil }
         var components = calendar.dateComponents([.year, .month, .day], from: max(dayBefore, now))
@@ -96,5 +101,12 @@ precondition(Scheduler.earningsWarning(earned: 14_400, exemption: 18_000)?.level
 precondition(Scheduler.earningsWarning(earned: 18_500, exemption: 18_000)?.level == "over", "FAIL earnings over")
 precondition(Scheduler.earningsWarning(earned: 500, exemption: 0) == nil, "FAIL no exemption")
 print("ok  earnings warning levels")
+
+// Cheque landed: only a newer issue date than the last sync saw, never on the first sync.
+precondition(Scheduler.chequeLanded(lastIssued: "2026-10-21", seen: "2026-09-23"), "FAIL newer cheque")
+precondition(!Scheduler.chequeLanded(lastIssued: "2026-10-21", seen: "2026-10-21"), "FAIL same cheque")
+precondition(!Scheduler.chequeLanded(lastIssued: "2026-10-21", seen: nil), "FAIL first sync")
+precondition(!Scheduler.chequeLanded(lastIssued: nil, seen: "2026-09-23"), "FAIL no data")
+print("ok  cheque landed")
 
 print("all payday scheduler checks passed")

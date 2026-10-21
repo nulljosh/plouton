@@ -56,5 +56,13 @@ test('missing data shows a safe default, not a crash', () => {
   assert.strictEqual(v.report.filed, false);
 });
 
+test('the printed copy for the person themselves has no expiry and the same fields', () => {
+  const v = H.buildHelperView({ pwd: {}, rdsp: {}, cdb: {}, income: null, reportMonths: {}, expiresAt: null });
+  assert.strictEqual(v.expiresAt, null);
+  assert.deepStrictEqual(v.programs.map((p) => p.id), ['pwd', 'rdsp', 'cdb']);
+  const page = require('fs').readFileSync(require('path').join(__dirname, '..', 'web', 'helper.html'), 'utf8');
+  assert.ok(page.includes("'/api/print-summary'") && page.includes('@media print'), 'helper.html has the print mode');
+});
+
 console.log(`\nResults: ${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

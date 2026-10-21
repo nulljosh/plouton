@@ -1078,6 +1078,7 @@ function HelpersTool({dark}) {
       <div style={label}>{T('Trusted helper')}</div>
       <div style={card}>
         <div style={{fontSize:13,color:t.mutedMid,lineHeight:1.5}}>{T('Give a caseworker, advocate or family member a link. They see your next payment date, your monthly amount, your application status and whether your report is filed. Nothing else: no messages, no documents, no rent, no ID.')}</div>
+        <a href="/helper#print" target="_blank" rel="noopener" style={{display:'inline-block',marginTop:12,fontSize:13,fontWeight:600,color:t.accent,textDecoration:'none'}}>{T('Print a one-page summary for an appointment')}</a>
         {data.helpers.map(h => (
           <div key={h.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:10,padding:'10px 0',borderTop:`1px solid ${t.border}`,marginTop:12}}>
             <div><div style={{fontSize:14,fontWeight:600,color:t.text}}>{h.name}</div><div style={{fontSize:11,color:t.mutedMid,marginTop:2}}>{T('Link works until')} {when(h.expiresAt)}</div></div>

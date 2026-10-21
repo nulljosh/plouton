@@ -123,6 +123,7 @@ targets:
       - path: Tests
         excludes:
           - test_payday_dates.swift # standalone `swift` script, top-level code
+          - test_offline_cache.swift # standalone, piped with OfflineCache.swift into `swift -`
     dependencies:
       - target: Talli
     settings:

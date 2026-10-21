@@ -483,6 +483,7 @@ final class AppState {
         readMessageIds = []
         KeychainHelper.clearCredentials()
         clearCookies()
+        OfflineCache.clear()
         let shared = UserDefaults(suiteName: "group.com.heyitsmejosh.tally")
         shared?.removeObject(forKey: "api_token")
     }
